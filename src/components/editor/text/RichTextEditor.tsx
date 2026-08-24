@@ -20,7 +20,7 @@ const SEP = "w-px h-5 bg-zinc-300 mx-1 dark:bg-zinc-800";
 
 export default function RichTextEditor({ initialHtml, onTextChange }: RichTextEditorProps) {
   const editorRef = useRef<HTMLDivElement>(null);
-  const [currentFont, setCurrentFont] = useState("Arial");
+  const [currentFont, setCurrentFont] = useState("Times New Roman");
   const [activeCmds, setActiveCmds] = useState<Set<string>>(new Set());
   const [isEmpty, setIsEmpty] = useState(true);
 
@@ -133,7 +133,7 @@ export default function RichTextEditor({ initialHtml, onTextChange }: RichTextEd
         </button>
         <div className={SEP} />
         <select value={currentFont} onChange={(e) => { setCurrentFont(e.target.value); execCmd("fontName", e.target.value); }} className={SEL}>
-          {["Arial", "Inter", "Roboto", "Montserrat", "Poppins", "Times New Roman", "Courier New"].map((f) => (<option key={f} value={f}>{f}</option>))}
+          {["Times New Roman", "Inter", "Roboto", "Montserrat", "Poppins", "Courier New"].map((f) => (<option key={f} value={f}>{f}</option>))}
         </select>
         <div className={SEP} />
         <button onClick={() => handleAlign("left")} title="Căn trái" className={TB + (activeCmds.has("justifyLeft") ? TB_ON : TB_OFF)}>

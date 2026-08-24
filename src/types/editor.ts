@@ -54,7 +54,7 @@ export interface HistoryState {
 }
 
 export const DEFAULT_TEXT_STYLE: TextStyle = {
-  fontFamily: "Inter",
+  fontFamily: "Times New Roman",
   fontSize: 32,
   fontWeight: 400,
   fontStyle: "normal",
@@ -74,7 +74,6 @@ export const FONT_OPTIONS = [
   "Montserrat",
   "Poppins",
   "Noto Sans",
-  "Arial",
   "Times New Roman",
 ];
 

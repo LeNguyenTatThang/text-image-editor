@@ -162,7 +162,7 @@ describe("Editor Store", () => {
       expect(style.color).toBe("#FF0000");
       expect(style.fontWeight).toBe(700);
       // Other defaults should remain
-      expect(style.fontFamily).toBe("Inter");
+      expect(style.fontFamily).toBe("Times New Roman");
       expect(style.opacity).toBe(1);
     });
 
