@@ -122,8 +122,8 @@ export default function ImageWorkspace() {
             <div className="text-zinc-300 dark:text-zinc-700 text-[10px] mt-2 px-3 py-1 rounded-full bg-zinc-200 dark:bg-zinc-800/40">Drag & drop, click hoặc Ctrl+V để dán ảnh</div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 max-[449px]:grid-cols-2 gap-3 px-5 py-3 h-full items-center overflow-y-auto">
-            {images.map((img, index) => (<ImageCard key={`${img.filename}-${index}`} image={img} onRemove={() => removeImage(index)} />))}
+          <div className="flex flex-wrap gap-3 px-5 py-3 h-full items-start content-start overflow-y-auto max-[449px]:grid max-[449px]:grid-cols-2 max-[449px]:flex-nowrap">
+            {images.map((img, index) => (<div key={`${img.filename}-${index}`} className="w-[calc(33.333%-8px)] min-w-[120px] max-[449px]:w-full"><ImageCard image={img} onRemove={() => removeImage(index)} /></div>))}
           </div>
         )}
       </div>
