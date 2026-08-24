@@ -84,22 +84,22 @@ export default function ExportDialog() {
 
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-          <div className="bg-zinc-900 border border-zinc-700 rounded-xl p-6 w-full max-w-md shadow-2xl">
-            <h3 className="text-lg font-semibold text-white mb-4">Xuất ảnh</h3>
+          <div className="bg-zinc-900 dark:bg-zinc-900 bg-white border border-zinc-700 dark:border-zinc-700 border-zinc-300 rounded-xl p-6 w-full max-w-md shadow-2xl">
+            <h3 className="text-lg font-semibold text-white dark:text-white text-zinc-900 mb-4">Xuất ảnh</h3>
 
             <div className="space-y-4">
               <div>
-                <label className="text-xs text-zinc-400 block mb-1">Tên file</label>
+                <label className="text-xs text-zinc-400 dark:text-zinc-400 text-zinc-600 block mb-1">Tên file</label>
                 <input
                   type="text"
                   value={exportFilename}
                   readOnly
-                  className="w-full bg-zinc-800 border border-zinc-700 text-zinc-200 text-sm rounded px-3 py-2 focus:outline-none"
+                  className="w-full bg-zinc-800 dark:bg-zinc-800 bg-zinc-100 border border-zinc-700 dark:border-zinc-700 border-zinc-300 text-zinc-200 dark:text-zinc-200 text-zinc-800 text-sm rounded px-3 py-2 focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="text-xs text-zinc-400 block mb-1">Định dạng</label>
+                <label className="text-xs text-zinc-400 dark:text-zinc-400 text-zinc-600 block mb-1">Định dạng</label>
                 <div className="flex gap-2">
                   {(["png", "jpeg", "webp"] as ExportFormat[]).map((f) => (
                     <button
@@ -110,7 +110,7 @@ export default function ExportDialog() {
                       className={`flex-1 px-3 py-2 text-sm rounded transition-colors uppercase ${
                         format === f
                           ? "bg-blue-600 text-white"
-                          : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
+                          : "bg-zinc-800 dark:bg-zinc-800 bg-zinc-100 text-zinc-300 dark:text-zinc-300 text-zinc-700 hover:bg-zinc-700 dark:hover:bg-zinc-700 hover:bg-zinc-200"
                       }`}
                     >
                       {f}
@@ -121,7 +121,7 @@ export default function ExportDialog() {
 
               {format !== "png" && (
                 <div>
-                  <label className="text-xs text-zinc-400 block mb-1">
+                  <label className="text-xs text-zinc-400 dark:text-zinc-400 text-zinc-600 block mb-1">
                     Chất lượng: {quality}%
                   </label>
                   <input
@@ -137,7 +137,7 @@ export default function ExportDialog() {
               )}
 
               <div>
-                <label className="text-xs text-zinc-400 block mb-1">Tỷ lệ</label>
+                <label className="text-xs text-zinc-400 dark:text-zinc-400 text-zinc-600 block mb-1">Tỷ lệ</label>
                 <div className="flex gap-2">
                   {(["1x", "2x", "3x"] as ExportScale[]).map((s) => (
                     <button
@@ -146,7 +146,7 @@ export default function ExportDialog() {
                       className={`flex-1 px-3 py-2 text-sm rounded transition-colors ${
                         scale === s
                           ? "bg-blue-600 text-white"
-                          : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
+                          : "bg-zinc-800 dark:bg-zinc-800 bg-zinc-100 text-zinc-300 dark:text-zinc-300 text-zinc-700 hover:bg-zinc-700 dark:hover:bg-zinc-700 hover:bg-zinc-200"
                       }`}
                     >
                       {s}
@@ -159,7 +159,7 @@ export default function ExportDialog() {
             <div className="flex gap-3 mt-6">
               <button
                 onClick={() => setOpen(false)}
-                className="flex-1 px-4 py-2 text-sm rounded bg-zinc-800 text-zinc-300 hover:bg-zinc-700 transition-colors"
+                className="flex-1 px-4 py-2 text-sm rounded bg-zinc-800 dark:bg-zinc-800 bg-zinc-100 text-zinc-300 dark:text-zinc-300 text-zinc-700 hover:bg-zinc-700 dark:hover:bg-zinc-700 hover:bg-zinc-200 transition-colors"
               >
                 Hủy
               </button>

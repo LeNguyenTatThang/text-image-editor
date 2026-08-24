@@ -154,13 +154,13 @@ describe("Editor Store", () => {
       useEditorStore.getState().updateTextStyle(id, {
         fontSize: 48,
         color: "#FF0000",
-        fontWeight: "bold",
+        fontWeight: 700,
       });
 
       const style = useEditorStore.getState().present.textItems[0].style;
       expect(style.fontSize).toBe(48);
       expect(style.color).toBe("#FF0000");
-      expect(style.fontWeight).toBe("bold");
+      expect(style.fontWeight).toBe(700);
       // Other defaults should remain
       expect(style.fontFamily).toBe("Inter");
       expect(style.opacity).toBe(1);

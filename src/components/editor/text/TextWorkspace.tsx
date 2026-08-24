@@ -2,10 +2,14 @@
 
 import RichTextEditor from "./RichTextEditor";
 
-export default function TextWorkspace() {
+interface TextWorkspaceProps {
+  onTextChange?: (info: { charCount: number; lineCount: number }) => void;
+}
+
+export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
   return (
     <div className="flex flex-col overflow-hidden h-full">
-      <RichTextEditor />
+      <RichTextEditor onTextChange={onTextChange} />
     </div>
   );
 }

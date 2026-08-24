@@ -1,7 +1,7 @@
 export interface TextStyle {
   fontFamily: string;
   fontSize: number;
-  fontWeight: "normal" | "medium" | "semibold" | "bold";
+  fontWeight: number;
   fontStyle: "normal" | "italic";
   color: string;
   textAlign: "left" | "center" | "right";
@@ -56,7 +56,7 @@ export interface HistoryState {
 export const DEFAULT_TEXT_STYLE: TextStyle = {
   fontFamily: "Inter",
   fontSize: 32,
-  fontWeight: "normal",
+  fontWeight: 400,
   fontStyle: "normal",
   color: "#FFFFFF",
   textAlign: "center",
@@ -78,9 +78,10 @@ export const FONT_OPTIONS = [
   "Times New Roman",
 ];
 
-export const FONT_WEIGHT_OPTIONS: { label: string; value: TextStyle["fontWeight"] }[] = [
-  { label: "Normal", value: "normal" },
-  { label: "Medium", value: "medium" },
-  { label: "Semibold", value: "semibold" },
-  { label: "Bold", value: "bold" },
+export const FONT_WEIGHT_OPTIONS: { label: string; value: number }[] = [
+  { label: "400", value: 400 },
+  { label: "500", value: 500 },
+  { label: "600", value: 600 },
+  { label: "700", value: 700 },
+  { label: "800", value: 800 },
 ];
