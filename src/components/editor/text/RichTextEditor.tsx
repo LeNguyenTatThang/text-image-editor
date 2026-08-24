@@ -4,6 +4,7 @@ import { useCallback, useRef, useState, useEffect } from "react";
 
 interface RichTextEditorProps {
   initialHtml?: string;
+  onPushToEditor?: (html: string) => void;
 }
 
 const TOOLBAR_BUTTONS = [
