@@ -97,12 +97,50 @@ export default function RichTextEditor({ initialHtml }: RichTextEditorProps) {
     }
   }, [execCmd]);
 
+  const handleCopy = useCallback(async () => {
+    const editor = editorRef.current;
+    if (!editor) return;
+
+    const html = editor.innerHTML;
+    const text = editor.textContent || "";
+
+    try {
+      const htmlBlob = new Blob([html], { type: "text/html" });
+      const textBlob = new Blob([text], { type: "text/plain" });
+      const item = new ClipboardItem({
+        "text/html": htmlBlob,
+        "text/plain": textBlob,
+      });
+      await navigator.clipboard.write([item]);
+    } catch {
+      // Fallback: select all and execCommand copy
+      const range = document.createRange();
+      range.selectNodeContents(editor);
+      const sel = window.getSelection();
+      sel?.removeAllRanges();
+      sel?.addRange(range);
+      document.execCommand("copy");
+      sel?.removeAllRanges();
+    }
+  }, []);
+
   return (
     <div className="flex flex-col h-full">
       <div className="flex items-center justify-between px-4 py-2.5 border-b border-zinc-800/80">
         <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-semibold">
           Trình soạn thảo
         </span>
+        <button
+          onClick={handleCopy}
+          disabled={isEmpty}
+          className="flex items-center gap-1.5 px-2.5 py-1 text-[11px] rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
+          title="Sao chép đã format"
+        >
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+          </svg>
+          Sao chép
+        </button>
       </div>
 
       {/* Toolbar */}
