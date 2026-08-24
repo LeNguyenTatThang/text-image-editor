@@ -122,7 +122,7 @@ export default function ImageWorkspace() {
             <div className="text-zinc-300 dark:text-zinc-700 text-[10px] mt-2 px-3 py-1 rounded-full bg-zinc-200 dark:bg-zinc-800/40">Drag & drop, click hoặc Ctrl+V để dán ảnh</div>
           </div>
         ) : (
-          <div className="grid grid-cols-3 max-[449px]:grid-cols-2 gap-3 px-5 py-3 h-full items-start content-start overflow-y-auto">
+          <div className="grid grid-cols-2 min-[500px]:grid-cols-4 min-[1000px]:grid-cols-5 gap-3 px-5 py-3 h-full items-start content-start overflow-y-auto">
             {images.map((img, index) => (<ImageCard key={`${img.filename}-${index}`} image={img} onRemove={() => removeImage(index)} />))}
           </div>
         )}
