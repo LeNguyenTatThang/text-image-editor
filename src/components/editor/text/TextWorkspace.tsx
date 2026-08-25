@@ -97,13 +97,17 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
       );
 
       if (index === 0) {
-        text = "<b>" + text + "</b>";
+        text = `<div style="font-size:1.6em;font-weight:800;line-height:1.2;margin-bottom:4px">${text}</div>`;
+      } else if (index <= 2) {
+        text = `<div style="font-size:1.15em;font-weight:700;line-height:1.3">${text}</div>`;
+      } else {
+        text = `<div style="font-size:0.95em;font-weight:500;line-height:1.4">${text}</div>`;
       }
 
       return text;
     });
 
-    editor.innerHTML = formatted.join("<br>");
+    editor.innerHTML = formatted.join("");
     editor.dispatchEvent(new Event("input", { bubbles: true }));
   }, []);
 
