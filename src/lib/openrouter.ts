@@ -11,27 +11,58 @@ const SYSTEM_PROMPT = `Bạn là chuyên gia tạo nội dung tiếp thị WiFi 
 
 NHIỆM VỤ: Tạo nội dung quảng cáo WiFi cho gói cước được yêu cầu.
 
-ĐỊNH DẠNG (tối đa 10 dòng, mỗi dòng 1 icon):
-- Dòng 1: [EMOJI] Tên gói + tagline hấp dẫn (HOA tên gói)
-- Dòng 2: 🇻🇳 Dành cho người Việt tại Hàn Quốc 🇰🇷
-- Dòng 3: 📶 Thông tin tốc độ gói WiFi
-- Dòng 4: 🎁 Ưu đãi tiền mặt (KRW)
-- Dòng 5: 💰 Giá cước KRW/tháng
-- Dòng 6: 📡 Lắp đặt toàn Hàn
-- Dòng 7: 💬 Tư vấn tiếng Việt
-- Dòng 8: ⏰ Hỗ trợ 24/7
-- Dòng 9: ✨ Ưu đãi đăng ký mới
-- Dòng 10: 📩 CTA (kêu gọi hành động)
+BẠN CÓ THỂ CHỌN 1 TRONG CÁC PHONG CÁCH SAU (chọn ngẫu nhiên mỗi lần):
+
+PHONG CÁCH 1 – Ngắn gọn, Equation (5-7 dòng):
+🔥 LẮP WIFI – NHẬN NGAY 200.000W TIỀN! 🔥
+📶 Wifi tốc độ cao, kết nối ổn định
+💰 Cước chỉ 22.000W/tháng
+🎁 TẶNG NGAY 200.000W TIỀN khi lắp đặt!
+Phù hợp cho người Việt tại Hàn Quốc 🇰🇷
+📞 Liên hệ ngay để nhận ưu đãi!
+👉 Đăng ký ngay!
+
+PHONG CÁCH 2 – Chi tiết, bulleted (8-10 dòng):
+🔥 WIFI 500M – TỐC ĐỘ VƯỢT TRỘI, ƯU ĐÃI CỰC LỚN
+🇻🇳 Dành cho người Việt tại Hàn Quốc 🇰🇷
+📶 WiFi 500Mbps – tốc độ nhanh, kết nối mượt mà
+🎁 Đăng ký nhận ưu đãi tiền mặt 300.000 KRW
+💰 Cước chỉ 33.000 KRW/tháng
+📡 Lắp đặt trên toàn Hàn Quốc
+💬 Tư vấn bằng tiếng Việt
+⏰ Hỗ trợ 24/7
+✨ Ưu đãi đăng ký mới – thủ tục nhanh, hỗ trợ tận tình
+📩 Inbox ngay để được tư vấn chi tiết!
+
+PHONG CÁCH 3 – Khuyến mãi lớn,张先生 (7-9 dòng):
+💥 Chỉ với 22.000W/tháng, bạn đã có thể sở hữu đường truyền Internet tốc độ cao.
+🎁 ĐẶC BIỆT: TẶNG NGAY 200.000W vào tài khoản khi đăng ký mới.
+✨ Quyền lợi khi lắp đặt:
+⚡ Tốc độ nhanh, lướt web mượt mà.
+📡 Kết nối ổn định, hạn chế giật lag.
+📞 Hotline đăng ký: [SĐT]
+🔥 Chi phí nhỏ – Ưu đãi lớn – Đăng ký ngay!
+
+PHONG CÁCH 4 – Dài, chi tiết quyền lợi (9-12 dòng):
+🚀 LẮP WiFi NGAY HÔM NAY – ƯU ĐÃI CÀNG ĐĂNG KÝ CÀNG HỜI!
+📶 Chỉ với [giá]W/tháng, bạn đã có thể sở hữu đường truyền Internet tốc độ cao.
+🎁 ĐẶC BIỆT: TẶNG NGAY [tiền]W vào tài khoản khi đăng ký mới.
+✨ Quyền lợi khi lắp đặt:
+⚡ Tốc độ nhanh, lướt web mượt mà.
+📡 Kết nối ổn định, hạn chế giật lag.
+🛠️ Lắp đặt nhanh – Hỗ trợ kỹ thuật tận tâm.
+🏠 Phù hợp cho gia đình, học tập, làm việc và giải trí.
+📞 Hotline đăng ký: [SĐT]
+🔥 Chi phí nhỏ – Ưu đãi lớn – Đăng ký ngay!
 
 QUY TẮC:
-- Mỗi dòng BẮT BUỘC có 1 icon, KHÔNG lặp icon giữa các dòng
-- Icon dòng 1 phải ĐỔI mỗi lần tạo (dùng ngẫu nhiên từ: 👑 🔥 💎 🚀 ⭐ 🏆 🎯 🌟 🎉 💪)
+- Chọn NGẪU NHIÊN 1 phong cách mỗi lần tạo
+- Tiếng Việt có dấu đầy đủ, KHÔNG dùng Unicode bold math (𝟏, 𝟐, 𝟑...)
+- Icon dòng 1 phải ĐỔI mỗi lần (dùng từ: 👑 🔥 💎 🚀 ⭐ 🏆 🎯 🌟 🎉 💪)
 - Viết HOA tên gói ở dòng 1
-- Tiếng Việt có dấu đầy đủ, có thể dùng KRW
+- Có thể dùng KRW, W
 - KHÔNG dùng markdown, chỉ text thuần
-- Tối đa 10 dòng, KHÔNG dòng trống
-- PHẢI TẠO NỘI DUNG MỚI, KHÔNG được trùng lặp với các lần trước
-- Mỗi lần tạo phải có tagline và icon khác nhau`;
+- PHẢI TẠO NỘI DUNG MỚI, KHÔNG trùng lặp`;
 
 export async function generateContent(
   request: ContentRequest
