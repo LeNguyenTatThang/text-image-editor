@@ -23,12 +23,55 @@ const PRESET_PACKAGES: PackageForm[] = [
 ];
 
 export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
-  const [loading, setLoading] = useState(false);
+  const [loadingPackage, setLoadingPackage] = useState<string | null>(null);
   const [stage, setStage] = useState("");
   const [error, setError] = useState<string | null>(null);
 
+  const typeContent = useCallback(async (html: string) => {
+    const editor = document.querySelector("[data-rich-editor]");
+    if (!editor) return;
+
+    const lines = html.split(/\n/).filter((l) => l.trim().length > 0);
+    editor.innerHTML = "";
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      const lineDiv = document.createElement("div");
+
+      if (i === 0) {
+        lineDiv.style.fontSize = "1.6em";
+        lineDiv.style.fontWeight = "800";
+        lineDiv.style.lineHeight = "1.2";
+        lineDiv.style.marginBottom = "4px";
+      } else if (i <= 2) {
+        lineDiv.style.fontSize = "1.15em";
+        lineDiv.style.fontWeight = "700";
+        lineDiv.style.lineHeight = "1.3";
+      } else {
+        lineDiv.style.fontSize = "0.95em";
+        lineDiv.style.fontWeight = "500";
+        lineDiv.style.lineHeight = "1.4";
+      }
+
+      editor.appendChild(lineDiv);
+
+      for (let j = 0; j < line.length; j++) {
+        lineDiv.textContent += line[j];
+        editor.dispatchEvent(new Event("input", { bubbles: true }));
+        await new Promise((r) => setTimeout(r, 8));
+      }
+
+      if (i < lines.length - 1) {
+        editor.appendChild(document.createElement("br"));
+        await new Promise((r) => setTimeout(r, 30));
+      }
+    }
+
+    editor.dispatchEvent(new Event("input", { bubbles: true }));
+  }, []);
+
   const generateForPackage = useCallback(async (preset: PackageForm) => {
-    setLoading(true);
+    setLoadingPackage(preset.name);
     setStage("Đang gửi yêu cầu...");
     setError(null);
 
@@ -54,27 +97,22 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
         throw new Error(errData.error || "Lỗi khi tạo nội dung");
       }
 
-      setStage("Đang định dạng...");
+      setStage("Đang hiển thị...");
       const result: ContentResponse = await response.json();
 
       if (!result.content) {
         throw new Error("Không nhận được nội dung từ AI");
       }
 
-      const editor = document.querySelector("[data-rich-editor]");
-      if (editor) {
-        const formatted = result.content.replace(/\n/g, "<br>");
-        editor.innerHTML = formatted;
-        editor.dispatchEvent(new Event("input", { bubbles: true }));
-      }
+      await typeContent(result.content);
       toast.success("Đã tạo nội dung AI");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Đã xảy ra lỗi");
     } finally {
-      setLoading(false);
+      setLoadingPackage(null);
       setStage("");
     }
-  }, []);
+  }, [typeContent]);
 
   const autoFormat = useCallback(() => {
     const editor = document.querySelector("[data-rich-editor]");
@@ -114,73 +152,46 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
   return (
     <div className="flex flex-col overflow-hidden h-full">
       <div className="flex items-center gap-2 px-4 py-2 border-b border-zinc-200 dark:border-zinc-800/60">
-        {PRESET_PACKAGES.map((preset) => (
-          <button
-            key={preset.name}
-            onClick={() => generateForPackage(preset)}
-            disabled={loading}
-            className="flex items-center gap-1 px-2.5 py-1 text-[11px] font-medium rounded-md bg-gradient-to-r from-violet-600 to-purple-600 text-white hover:from-violet-500 hover:to-purple-500 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm active:scale-[0.97]"
-            title={`Tạo nội dung cho gói ${preset.name}`}
-          >
-            {loading ? (
-              <svg
-                className="w-3 h-3 animate-spin"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                />
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                />
-              </svg>
-            ) : (
-              <svg
-                className="w-3 h-3"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 10V3L4 14h7v7l9-11h-7z"
-                />
-              </svg>
-            )}
-            {preset.name}
-          </button>
-        ))}
+        {PRESET_PACKAGES.map((preset) => {
+          const isLoading = loadingPackage === preset.name;
+          const isAnyLoading = loadingPackage !== null;
+          return (
+            <button
+              key={preset.name}
+              onClick={() => generateForPackage(preset)}
+              disabled={isAnyLoading}
+              className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-medium rounded-md text-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm active:scale-[0.97] ${
+                isLoading
+                  ? "bg-gradient-to-r from-blue-500 to-cyan-500 animate-pulse"
+                  : "bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500"
+              }`}
+              title={`Tạo nội dung cho gói ${preset.name}`}
+            >
+              {isLoading ? (
+                <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+              ) : (
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              )}
+              {preset.name}
+            </button>
+          );
+        })}
 
         <div className="w-px h-5 bg-zinc-300 mx-1 dark:bg-zinc-800" />
 
         <button
           onClick={autoFormat}
-          disabled={loading}
+          disabled={loadingPackage !== null}
           className="flex items-center gap-1 px-2.5 py-1 text-[11px] font-medium rounded-md bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-400 hover:to-orange-400 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm active:scale-[0.97]"
           title="Tự động định dạng: bôi đậm giá tiền, nổi bật ưu đãi"
         >
-          <svg
-            className="w-3 h-3"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
-            />
+          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
           </svg>
           Định dạng
         </button>
@@ -192,7 +203,7 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
         </div>
       )}
 
-      {loading && stage && (
+      {loadingPackage && stage && (
         <div className="px-4 py-1.5 bg-blue-50 dark:bg-blue-900/20 border-b border-blue-200 dark:border-blue-800 flex items-center gap-2">
           <div className="w-3 h-3 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
           <p className="text-[11px] text-blue-600 dark:text-blue-400">{stage}</p>
