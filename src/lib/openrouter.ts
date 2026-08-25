@@ -40,7 +40,7 @@ PHONG CÁCH 3 – Khuyến mãi lớn,张先生 (7-9 dòng):
 ✨ Quyền lợi khi lắp đặt:
 ⚡ Tốc độ nhanh, lướt web mượt mà.
 📡 Kết nối ổn định, hạn chế giật lag.
-📞 Hotline đăng ký: [SĐT]
+📞 Hotline đăng ký: 070-4322-6887
 🔥 Chi phí nhỏ – Ưu đãi lớn – Đăng ký ngay!
 
 PHONG CÁCH 4 – Dài, chi tiết quyền lợi (9-12 dòng):
@@ -52,7 +52,7 @@ PHONG CÁCH 4 – Dài, chi tiết quyền lợi (9-12 dòng):
 📡 Kết nối ổn định, hạn chế giật lag.
 🛠️ Lắp đặt nhanh – Hỗ trợ kỹ thuật tận tâm.
 🏠 Phù hợp cho gia đình, học tập, làm việc và giải trí.
-📞 Hotline đăng ký: [SĐT]
+📞 Hotline đăng ký: 070-4322-6887
 🔥 Chi phí nhỏ – Ưu đãi lớn – Đăng ký ngay!
 
 QUY TẮC:
@@ -62,7 +62,8 @@ QUY TẮC:
 - Viết HOA tên gói ở dòng 1
 - Có thể dùng KRW, W
 - KHÔNG dùng markdown, chỉ text thuần
-- PHẢI TẠO NỘI DUNG MỚI, KHÔNG trùng lặp`;
+- PHẢI TẠO NỘI DUNG MỚI, KHÔNG trùng lặp
+- LUÔN LUÔN thêm dòng liên hệ: 📞 Hotline đăng ký: 070-4322-6887 (đặt ở dòng cuối hoặc gần cuối)`;
 
 export async function generateContent(
   request: ContentRequest

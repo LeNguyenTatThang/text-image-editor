@@ -27,6 +27,61 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
   const [stage, setStage] = useState("");
   const [error, setError] = useState<string | null>(null);
 
+  const autoFormat = useCallback(() => {
+    const editor = document.querySelector("[data-rich-editor]");
+    if (!editor) return;
+
+    const raw = editor.innerHTML;
+    let lines: string[];
+
+    if (raw.includes("<h1") || raw.includes("<h2") || raw.includes("<p")) {
+      const tmp = document.createElement("div");
+      tmp.innerHTML = raw;
+      lines = [];
+      for (const child of Array.from(tmp.childNodes)) {
+        if (child.nodeType === Node.TEXT_NODE) {
+          const t = child.textContent?.trim();
+          if (t) lines.push(t);
+        } else if (child instanceof HTMLElement) {
+          const t = child.textContent?.trim();
+          if (t) lines.push(t);
+        }
+      }
+    } else {
+      lines = raw.split(/<br\s*\/?>/i).map((l) => {
+        const tmp = document.createElement("div");
+        tmp.innerHTML = l;
+        return tmp.textContent || "";
+      });
+    }
+
+    lines = lines.filter((l) => l.trim().length > 0);
+
+    const formatted = lines.map((text, index) => {
+      let t = text;
+
+      t = t.replace(
+        /(\d{1,3}(?:\.\d{3})*)\s*(KRW|₫|VND|W|w| đồng|đ)/gi,
+        "<b>$1 $2</b>"
+      );
+      t = t.replace(
+        /(100M|500M|1G|2G|300M|200M)\b/g,
+        "<b>$1</b>"
+      );
+
+      if (index === 0) {
+        return `<h1 style="font-size:1.6em;font-weight:800;line-height:1.2;margin:0 0 4px 0">${t}</h1>`;
+      } else if (index <= 2) {
+        return `<h2 style="font-size:1.15em;font-weight:700;line-height:1.3;margin:0">${t}</h2>`;
+      } else {
+        return `<p style="font-size:0.95em;font-weight:500;line-height:1.4;margin:0">${t}</p>`;
+      }
+    });
+
+    editor.innerHTML = formatted.join("");
+    editor.dispatchEvent(new Event("input", { bubbles: true }));
+  }, []);
+
   const typeContent = useCallback(async (html: string) => {
     const editor = document.querySelector("[data-rich-editor]");
     if (!editor) return;
@@ -37,7 +92,6 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
       const openTags: string[] = [];
-      let visibleIndex = 0;
 
       for (let j = 0; j < line.length; j++) {
         if (line[j] === "<") {
@@ -53,16 +107,13 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
           }
         }
 
-        visibleIndex++;
-
         let built = line.slice(0, j + 1);
         for (let k = openTags.length - 1; k >= 0; k--) {
           const tagName = openTags[k].match(/<(\w+)/)?.[1] || "span";
           built += `</${tagName}>`;
         }
 
-        const wrapper =
-          i === 0 ? "h1" : i <= 2 ? "h2" : "p";
+        const wrapper = i === 0 ? "h1" : i <= 2 ? "h2" : "p";
         const styles =
           i === 0
             ? 'style="font-size:1.6em;font-weight:800;line-height:1.2;margin:0 0 4px 0"'
@@ -121,6 +172,7 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
       }
 
       await typeContent(result.content);
+      autoFormat();
       toast.success("Đã tạo nội dung AI");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Đã xảy ra lỗi");
@@ -128,62 +180,7 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
       setLoadingPackage(null);
       setStage("");
     }
-  }, [typeContent]);
-
-  const autoFormat = useCallback(() => {
-    const editor = document.querySelector("[data-rich-editor]");
-    if (!editor) return;
-
-    const raw = editor.innerHTML;
-    let lines: string[];
-
-    if (raw.includes("<h1") || raw.includes("<h2") || raw.includes("<p")) {
-      const tmp = document.createElement("div");
-      tmp.innerHTML = raw;
-      lines = [];
-      for (const child of Array.from(tmp.childNodes)) {
-        if (child.nodeType === Node.TEXT_NODE) {
-          const t = child.textContent?.trim();
-          if (t) lines.push(t);
-        } else if (child instanceof HTMLElement) {
-          const t = child.textContent?.trim();
-          if (t) lines.push(t);
-        }
-      }
-    } else {
-      lines = raw.split(/<br\s*\/?>/i).map((l) => {
-        const tmp = document.createElement("div");
-        tmp.innerHTML = l;
-        return tmp.textContent || "";
-      });
-    }
-
-    lines = lines.filter((l) => l.trim().length > 0);
-
-    const formatted = lines.map((text, index) => {
-      let t = text;
-
-      t = t.replace(
-        /(\d{1,3}(?:\.\d{3})*)\s*(KRW|₫|VND|W|w| đồng|đ)/gi,
-        "<b>$1 $2</b>"
-      );
-      t = t.replace(
-        /(100M|500M|1G|2G|300M|200M)\b/g,
-        "<b>$1</b>"
-      );
-
-      if (index === 0) {
-        return `<h1 style="font-size:1.6em;font-weight:800;line-height:1.2;margin:0 0 4px 0">${t}</h1>`;
-      } else if (index <= 2) {
-        return `<h2 style="font-size:1.15em;font-weight:700;line-height:1.3;margin:0">${t}</h2>`;
-      } else {
-        return `<p style="font-size:0.95em;font-weight:500;line-height:1.4;margin:0">${t}</p>`;
-      }
-    });
-
-    editor.innerHTML = formatted.join("");
-    editor.dispatchEvent(new Event("input", { bubbles: true }));
-  }, []);
+  }, [typeContent, autoFormat]);
 
   return (
     <div className="flex flex-col overflow-hidden h-full">
