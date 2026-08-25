@@ -1,6 +1,9 @@
 "use client";
 
 import { useCallback, useRef, useState, useEffect } from "react";
+import { toast } from "sonner";
+import FloatingMenu from "./FloatingMenu";
+import RewriteDialog from "./RewriteDialog";
 
 interface RichTextEditorProps {
   initialHtml?: string;
@@ -23,6 +26,11 @@ export default function RichTextEditor({ initialHtml, onTextChange }: RichTextEd
   const [currentFont, setCurrentFont] = useState("Times New Roman");
   const [activeCmds, setActiveCmds] = useState<Set<string>>(new Set());
   const [isEmpty, setIsEmpty] = useState(true);
+
+  const [rewriteOpen, setRewriteOpen] = useState(false);
+  const [rewriteVersions, setRewriteVersions] = useState<string[]>([]);
+  const [rewriteLoading, setRewriteLoading] = useState(false);
+  const savedSelection = useRef<{ range: Range; text: string } | null>(null);
 
   const emitTextChange = useCallback(() => {
     if (!editorRef.current || !onTextChange) return;
@@ -95,6 +103,7 @@ export default function RichTextEditor({ initialHtml, onTextChange }: RichTextEd
       const htmlBlob = new Blob([html], { type: "text/html" });
       const textBlob = new Blob([text], { type: "text/plain" });
       await navigator.clipboard.write([new ClipboardItem({ "text/html": htmlBlob, "text/plain": textBlob })]);
+      toast.success("Đã sao chép nội dung");
     } catch {
       const range = document.createRange();
       range.selectNodeContents(editor);
@@ -103,8 +112,75 @@ export default function RichTextEditor({ initialHtml, onTextChange }: RichTextEd
       sel?.addRange(range);
       document.execCommand("copy");
       sel?.removeAllRanges();
+      toast.success("Đã sao chép nội dung");
     }
   }, []);
+
+  const handleRewrite = useCallback(async (selectedText: string) => {
+    const sel = window.getSelection();
+    if (sel && sel.rangeCount > 0) {
+      savedSelection.current = {
+        range: sel.getRangeAt(0).cloneRange(),
+        text: selectedText,
+      };
+    }
+
+    setRewriteOpen(true);
+    setRewriteLoading(true);
+    setRewriteVersions([]);
+
+    try {
+      const editor = editorRef.current;
+      const fullText = editor?.textContent || "";
+      const response = await fetch("/api/rewrite-text", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: selectedText, context: fullText }),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData.error || "Lỗi khi viết lại");
+      }
+
+      const result = await response.json();
+      setRewriteVersions(result.versions);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Đã xảy ra lỗi");
+      setRewriteOpen(false);
+    } finally {
+      setRewriteLoading(false);
+    }
+  }, []);
+
+  const handleSelectVersion = useCallback((text: string) => {
+    if (savedSelection.current) {
+      const { range } = savedSelection.current;
+      range.deleteContents();
+      range.insertNode(document.createTextNode(text));
+
+      const sel = window.getSelection();
+      sel?.removeAllRanges();
+      sel?.addRange(range);
+    }
+
+    setRewriteOpen(false);
+    savedSelection.current = null;
+    editorRef.current?.focus();
+    updateActiveCommands();
+    toast.success("Đã áp dụng");
+  }, [updateActiveCommands]);
+
+  const handleRewriteClose = useCallback(() => {
+    setRewriteOpen(false);
+    savedSelection.current = null;
+  }, []);
+
+  const handleRewriteRetry = useCallback(() => {
+    if (savedSelection.current) {
+      handleRewrite(savedSelection.current.text);
+    }
+  }, [handleRewrite]);
 
   return (
     <div className="flex flex-col h-full">
@@ -177,7 +253,17 @@ export default function RichTextEditor({ initialHtml, onTextChange }: RichTextEd
           className="w-full h-full text-sm text-zinc-800 bg-white border border-zinc-200 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 overflow-y-auto leading-relaxed transition-all duration-200 min-h-[120px] dark:text-zinc-200 dark:bg-zinc-900/60 dark:border-zinc-800"
           suppressContentEditableWarning
         />
+        <FloatingMenu editorRef={editorRef} onRewrite={handleRewrite} />
       </div>
+
+      <RewriteDialog
+        open={rewriteOpen}
+        versions={rewriteVersions}
+        loading={rewriteLoading}
+        onSelect={handleSelectVersion}
+        onClose={handleRewriteClose}
+        onRetry={handleRewriteRetry}
+      />
     </div>
   );
 }

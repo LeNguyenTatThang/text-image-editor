@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { toast } from "sonner";
 import RichTextEditor from "./RichTextEditor";
 import { PackageInfo, ContentResponse } from "@/types/content";
 
@@ -23,10 +24,12 @@ const PRESET_PACKAGES: PackageForm[] = [
 
 export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
   const [loading, setLoading] = useState(false);
+  const [stage, setStage] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   const generateForPackage = useCallback(async (preset: PackageForm) => {
     setLoading(true);
+    setStage("Đang gửi yêu cầu...");
     setError(null);
 
     try {
@@ -39,6 +42,7 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
         },
       ];
 
+      setStage("AI đang viết nội dung...");
       const response = await fetch("/api/generate-content", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -50,6 +54,7 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
         throw new Error(errData.error || "Lỗi khi tạo nội dung");
       }
 
+      setStage("Đang định dạng...");
       const result: ContentResponse = await response.json();
 
       if (!result.content) {
@@ -62,10 +67,12 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
         editor.innerHTML = formatted;
         editor.dispatchEvent(new Event("input", { bubbles: true }));
       }
+      toast.success("Đã tạo nội dung AI");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Đã xảy ra lỗi");
     } finally {
       setLoading(false);
+      setStage("");
     }
   }, []);
 
@@ -178,6 +185,13 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
       {error && (
         <div className="px-4 py-1.5 bg-red-50 dark:bg-red-900/20 border-b border-red-200 dark:border-red-800">
           <p className="text-[11px] text-red-600 dark:text-red-400">{error}</p>
+        </div>
+      )}
+
+      {loading && stage && (
+        <div className="px-4 py-1.5 bg-blue-50 dark:bg-blue-900/20 border-b border-blue-200 dark:border-blue-800 flex items-center gap-2">
+          <div className="w-3 h-3 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
+          <p className="text-[11px] text-blue-600 dark:text-blue-400">{stage}</p>
         </div>
       )}
 

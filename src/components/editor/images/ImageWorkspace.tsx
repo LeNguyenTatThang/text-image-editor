@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState, useRef, useEffect } from "react";
+import { toast } from "sonner";
 import JSZip from "jszip";
 import ImageCard from "./ImageCard";
 import type { ImageCardData } from "./ImageCard";
@@ -36,6 +37,7 @@ export default function ImageWorkspace() {
     });
     if (valid.length === 0) return;
     setError(null);
+    toast.success(`Đã thêm ${valid.length} hình ảnh`);
     const startIndex = images.length;
     const placeholders: ImageCardData[] = valid.map((f) => ({ dataUrl: "", filename: f.name, status: "loading" as const, processMessage: "Đang đọc file..." }));
     setImages((prev) => [...prev, ...placeholders]);
@@ -72,6 +74,7 @@ export default function ImageWorkspace() {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+    toast.success("Đã tải xuống file ZIP");
   }, [images]);
 
   useEffect(() => {

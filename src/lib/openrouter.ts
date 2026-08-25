@@ -1,5 +1,10 @@
 import { ContentRequest, ContentResponse } from "@/types/content";
 
+export interface RewriteResponse {
+  versions: string[];
+  model: string;
+}
+
 const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
 
 const SYSTEM_PROMPT = `Bạn là chuyên gia tạo nội dung tiếp thị WiFi tại Hàn Quốc cho người Việt.
@@ -178,5 +183,78 @@ YÊU CẦU:
           totalTokens: data.usage.total_tokens,
         }
       : undefined,
+  };
+}
+
+const REWRITE_SYSTEM_PROMPT = `Bạn là chuyên gia viết lại nội dung tiếp thị WiFi tại Hàn Quốc cho người Việt.
+
+NHIỆM VỤ: Viết lại đoạn text được cho thành 3 phiên bản khác nhau.
+
+QUY TẮC:
+- Mỗi phiên bản viết lại phải có phong cách khác nhau (hấp dẫn, chuyên nghiệp, thân thiện)
+- Giữ nguyên ý nghĩa và thông tin quan trọng (giá, tên gói, ưu đãi)
+- Ngắn gọn, dễ đọc, phù hợp cho ảnh quảng cáo
+- Tiếng Việt, có thể dùng emoji
+- Trả về ĐÚNG 3 phiên bản, phân tách bằng xuống dòng
+- KHÔNG đánh số thứ tự, KHÔNG dùng markdown
+- Mỗi phiên bản chỉ 1-2 dòng`;
+
+export async function rewriteText(
+  text: string,
+  context?: string
+): Promise<RewriteResponse> {
+  const userPrompt = context
+    ? `Nội dung trong ảnh: ${context}\n\nĐoạn cần viết lại: "${text}"\n\nViết lại 3 phiên bản:`
+    : `Đoạn cần viết lại: "${text}"\n\nViết lại 3 phiên bản:`;
+
+  const model = "xiaomi/mimo-v2.5";
+
+  const response = await fetch(OPENROUTER_API_URL, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+      "Content-Type": "application/json",
+      "HTTP-Referer": "https://text-image-editor.app",
+      "X-OpenRouter-Title": "WiFi Text Rewriter",
+    },
+    body: JSON.stringify({
+      model,
+      messages: [
+        { role: "system", content: REWRITE_SYSTEM_PROMPT },
+        { role: "user", content: userPrompt },
+      ],
+      temperature: 0.9,
+      max_tokens: 512,
+    }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.text();
+    throw new Error(`OpenRouter API error: ${response.status} - ${errorData}`);
+  }
+
+  const data = await response.json();
+
+  if (!data.choices || data.choices.length === 0) {
+    throw new Error("No response from OpenRouter");
+  }
+
+  const content = data.choices[0].message?.content
+    ?? data.choices[0].delta?.content
+    ?? "";
+
+  if (!content) {
+    throw new Error("Model không trả về nội dung");
+  }
+
+  const versions = content
+    .split("\n")
+    .map((line: string) => line.trim())
+    .filter((line: string) => line.length > 0)
+    .slice(0, 3);
+
+  return {
+    versions,
+    model: data.model,
   };
 }

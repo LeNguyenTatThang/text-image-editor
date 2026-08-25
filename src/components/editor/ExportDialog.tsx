@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { toast } from "sonner";
 import { useEditorStore } from "@/store/editor.store";
 import { generateRvFilename } from "@/lib/filename";
 
@@ -65,12 +66,14 @@ export default function ExportDialog() {
           URL.revokeObjectURL(url);
           setExporting(false);
           setOpen(false);
+          toast.success("Đã xuất ảnh thành công");
         },
         mimeType,
         format === "png" ? undefined : qualityNum
       );
     } catch {
       setExporting(false);
+      toast.error("Lỗi khi xuất ảnh");
     }
   }, [image, format, quality, scale, exportFilename]);
 

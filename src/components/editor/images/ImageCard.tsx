@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback } from "react";
+import { toast } from "sonner";
 import { generateRvFilename } from "@/lib/filename";
 import { formatFileSize } from "@/lib/imageProcessor";
 
@@ -39,15 +40,21 @@ export default function ImageCard({ image, onRemove }: ImageCardProps) {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    toast.success(`Đã tải xuống ${downloadName}`);
   }, [image.dataUrl, image.processedDataUrl, downloadName]);
 
   return (
     <div className="group">
       <div className="relative rounded-xl overflow-hidden border border-zinc-300 hover:border-zinc-400 transition-all duration-200 bg-zinc-50 dark:border-zinc-800 dark:hover:border-zinc-600 dark:bg-zinc-900">
         {isLoading ? (
-          <div className="w-full h-28 bg-zinc-50 dark:bg-zinc-900 flex flex-col items-center justify-center gap-2">
+          <div className="w-full h-28 bg-zinc-50 dark:bg-zinc-900 flex flex-col items-center justify-center gap-2 px-3">
             <div className="w-6 h-6 border-2 border-zinc-300 border-t-blue-500 rounded-full animate-spin dark:border-zinc-700" />
-            <div className="text-[10px] text-zinc-400 dark:text-zinc-600 text-center px-2">{image.processMessage || "Đang xử lý..."}</div>
+            <div className="w-full">
+              <div className="text-[10px] text-zinc-400 dark:text-zinc-600 text-center mb-1">{image.processMessage || "Đang xử lý..."}</div>
+              <div className="w-full h-1 bg-zinc-200 dark:bg-zinc-700 rounded-full overflow-hidden">
+                <div className="h-full bg-blue-500 rounded-full animate-progress" />
+              </div>
+            </div>
           </div>
         ) : isError ? (
           <div className="w-full h-28 bg-zinc-50 dark:bg-zinc-900 flex flex-col items-center justify-center gap-2">
