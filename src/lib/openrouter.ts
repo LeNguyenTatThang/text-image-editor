@@ -9,79 +9,29 @@ const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
 
 const SYSTEM_PROMPT = `Bạn là chuyên gia tạo nội dung tiếp thị WiFi tại Hàn Quốc cho người Việt.
 
-ĐỊNH DẠNG BẮT BUỘC (tối đa 10 dòng):
+NHIỆM VỤ: Tạo nội dung quảng cáo WiFi cho gói cước được yêu cầu.
 
-Dòng 1: [EMOJI_HEADLINE] Tên gói – TAGLINE HOA
-Dòng 2: 🇻🇳 Dành cho người Việt tại Hàn Quốc 🇰🇷
-Dòng 3: 📶 Thông tin gói WiFi
-Dòng 4: 🎁 Ưu đãi tiền mặt (KRW)
-Dòng 5: 💰 Giá cước KRW/tháng
-Dòng 6: 📡 Lắp đặt toàn Hàn
-Dòng 7: 💬 Tư vấn tiếng Việt
-Dòng 8: ⏰ Hỗ trợ 24/7
-Dòng 9: ✨ Ưu đãi đăng ký mới
-Dòng 10: 📩 CTA
+ĐỊNH DẠNG (tối đa 10 dòng, mỗi dòng 1 icon):
+- Dòng 1: [EMOJI] Tên gói + tagline hấp dẫn (HOA tên gói)
+- Dòng 2: 🇻🇳 Dành cho người Việt tại Hàn Quốc 🇰🇷
+- Dòng 3: 📶 Thông tin tốc độ gói WiFi
+- Dòng 4: 🎁 Ưu đãi tiền mặt (KRW)
+- Dòng 5: 💰 Giá cước KRW/tháng
+- Dòng 6: 📡 Lắp đặt toàn Hàn
+- Dòng 7: 💬 Tư vấn tiếng Việt
+- Dòng 8: ⏰ Hỗ trợ 24/7
+- Dòng 9: ✨ Ưu đãi đăng ký mới
+- Dòng 10: 📩 CTA (kêu gọi hành động)
 
 QUY TẮC:
+- Mỗi dòng BẮT BUỘC có 1 icon, KHÔNG lặp icon giữa các dòng
+- Icon dòng 1 phải ĐỔI mỗi lần tạo (dùng ngẫu nhiên từ: 👑 🔥 💎 🚀 ⭐ 🏆 🎯 🌟 🎉 💪)
+- Viết HOA tên gói ở dòng 1
+- Tiếng Việt có dấu đầy đủ, có thể dùng KRW
+- KHÔNG dùng markdown, chỉ text thuần
 - Tối đa 10 dòng, KHÔNG dòng trống
-- Mỗi dòng 1 icon, KHÔNG lặp icon
-- Icon headline thay đổi mỗi lần: 👑 🔥 💎 🚀 ⭐ 🏆 🎯 🌟 🎉 💪
-- Viết HOA tên gói dòng 1
-- Tiếng Việt, KRW, không markdown
-- Chỉ trả text thuần túy
-
-KIỂU HEADLINE DÒNG 1 – PHẢI CHỌN NGẪU NHIÊN 1 TRONG CÁC KIỂU BÊN DƯỚI (KHÔNG ĐƯỢC LẶP):
-
-Kiểu 1 (số bold): 𝟑𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐃𝐀𝐍𝐆 𝐂𝐇Ờ 𝐁Ạ𝐍! 𝐂𝐇𝐈 𝐂𝐀𝐍 𝐃𝐀𝐍𝐆 𝐊𝐈 𝐖𝐈𝐅𝐈:
-Kiểu 2 (tagline bold): 𝐖𝐈𝐅𝐈 𝟏𝟎𝟎𝐌 – 𝐊𝐄𝐓 𝐍𝐎𝐈 Ổ𝐍 𝐃𝐈𝐍𝐇, 𝐔𝐔 𝐃𝐀𝐈 𝐇𝐀𝐏 𝐃𝐀𝐍
-Kiểu 3 (cam kết bold): 𝐇𝐎𝐍 𝐍𝐆𝐎𝐀𝐈 𝟑𝟎𝟎,𝟎𝟎𝟎 𝐊𝐇𝐀𝐂𝐇 𝐇𝐀𝐍𝐆 𝐃𝐀 𝐓𝐈𝐍 𝐔𝐘!
-Kiểu 4 (ưu đãi bold): 𝐆𝐈𝐀 𝐂𝐔𝐎𝐂 𝐂𝐇𝐈 𝐓𝐔 𝟐𝟐,𝟎𝟎𝟎 𝐊𝐑𝐖/𝐓𝐇𝐀𝐍𝐆
-Kiểu 5 (khẩn trương): 🔥 𝐎𝐅𝐅𝐄𝐑 𝐇𝐎𝐓 – 𝟓𝟎𝟎𝐌𝐖 𝐆𝐈𝐀𝐌 𝟐𝟎𝟎,𝟎𝟎𝟎𝐊𝐖!
-Kiểu 6 (ưu đãi lớn): 💎 𝟏𝐆 𝐖𝐈𝐅𝐈 – 𝐆𝐈𝐀𝐌 𝟑𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐊𝐇𝐈 𝐃𝐀𝐍𝐆 𝐊𝐈
-Kiểu 7 (combo): 🚀 𝐂𝐎𝐌𝐁𝐎 𝐖𝐈𝐅𝐈 + 𝐓𝐈𝐄𝐍𝐂𝐀𝐒𝐇 – 𝐆𝐈𝐀𝐌 𝐍𝐆𝐀𝐘 𝟐𝟎𝟎,𝟎𝟎𝟎𝐊𝐖
-Kiểu 8 (siêu tiết kiệm): ⭐ 𝐓𝐈𝐄𝐓 𝐊𝐈𝐄𝐌 𝐌𝐎𝐈 𝐍𝐆𝐀𝐘 – 𝟏𝟎𝟎𝐌 𝐂𝐇𝐈 𝟐𝟐,𝟎𝟎𝟎𝐊𝐖
-Kiểu 9 (hàng đầu): 🏆 𝐒𝐎 #𝟏 𝐕𝐄 𝐖𝐈𝐅𝐈 𝐆𝐈𝐀 𝐑𝙀 – 𝟓𝟎𝟎𝐌 𝟑𝟑,𝟎𝟎𝟎𝐊𝐖
-Kiểu 10 (CAM KẾT): 🎯 𝟏𝟎𝟎% 𝐇𝐀𝐈 𝐋𝐎𝐍𝐆 – 𝐖𝐈𝐅𝐈 𝟏𝐆𝐈𝐁 𝐂𝐇𝐈 𝟑𝟖,𝟓𝟎𝟎𝐊𝐖
-Kiểu 11 (siêu sốc): 🌟 𝐒𝐇𝐎𝐂𝐊! 𝟐𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐓𝐈𝐄𝐍𝐂𝐀𝐒𝐇 𝐂𝐇𝐎 𝟏𝟎𝟎𝐌𝐖
-Kiểu 12 (combo hot): 🎉 𝐂𝐎𝐌𝐁𝐎 𝐇𝐎𝐓 – 𝟏𝐆𝐖𝐈𝐅𝐈 + 𝟑𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌
-Kiểu 13 (ưu đãi sốc): 💪 𝟑𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌 𝐍𝐆𝐀𝐘 – 𝟏𝟎𝟎𝐌 𝐂𝐇𝐈 𝟐𝟐,𝟎𝟎𝟎𝐊𝐖
-Kiểu 14 (tốc độ): 🔥 𝐓𝐎𝐂 Đ𝐎 𝟏𝐆𝐁𝐏𝐒 – 𝟑𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌 𝐍𝐆𝐀𝐘!
-Kiểu 15 (combo giá sốc): 💎 𝟏𝐆𝐖𝐈𝐅𝐈 + 𝟐𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌 – 𝐂𝐇𝐈 𝟑𝟖,𝟓𝟎𝟎𝐊𝐖
-Kiểu 16 (cam kết): 🚀 𝟏𝟎𝟎𝐌𝐖 + 𝟐𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌 – 𝟐𝟐,𝟎𝟎𝟎𝐊𝐖/𝐓𝐇𝐀𝐍𝐆
-Kiểu 17 (ưu đãi): ⭐ 𝟓𝟎𝟎𝐌𝐖 + 𝟑𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌 – 𝟑𝟑,𝟎𝟎𝟎𝐊𝐖/𝐓𝐇𝐀𝐍𝐆
-Kiểu 18 (siêu tiết kiệm): 🏆 𝟏𝐆𝐖𝐈𝐅𝐈 + 𝟐𝟔𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌 – 𝟑𝟖,𝟓𝟎𝟎𝐊𝐖/𝐓𝐇𝐀𝐍𝐆
-Kiểu 19 (hấp dẫn): 🎯 𝟏𝟎𝟎𝐌 – 𝟐𝟐,𝟎𝟎𝟎𝐊𝐖 + 𝟐𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌
-Kiểu 20 (tuyệt vời): 🌟 𝟓𝟎𝟎𝐌 – 𝟑𝟑,𝟎𝟎𝟎𝐊𝐖 + 𝟑𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌
-Kiểu 21 (combo): 🎉 𝟏𝐆 – 𝟑𝟖,𝟓𝟎𝟎𝐊𝐖 + 𝟐𝟔𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌
-Kiểu 22 (hot): 💪 𝟏𝟎𝟎𝐌 𝐇𝐎𝐓 – 𝐂𝐇𝐈 𝟐𝟐,𝟎𝟎𝟎𝐊𝐖/𝐓𝐇𝐀𝐍𝐆!
-Kiểu 23 (ưu đãi sốc): 🔥 𝟓𝟎𝟎𝐌 𝐒𝐈𝐄𝐔 𝐇𝐎𝐓 – 𝟑𝟑,𝟎𝟎𝟎𝐊𝐖 + 𝟑𝟎𝟎,𝟎𝟎𝟎𝐊𝐖
-Kiểu 24 (cam kết): 💎 𝟏𝐆 𝐂𝐀𝐌 𝐊𝐄𝐓 – 𝟑𝟖,𝟓𝟎𝟎𝐊𝐖 + 𝟐𝟔𝟎,𝟎𝟎𝟎𝐊𝐖
-Kiểu 25 (tốc độ): 🚀 𝟏𝟎𝟎𝐌𝐖 𝐆𝐈𝐀𝐌 𝟐𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 – 𝐂𝐇𝐈 𝟐𝟐,𝟎𝟎𝟎𝐊𝐖/𝐓𝐇𝐀𝐍𝐆
-Kiểu 26 (ưu đãi): ⭐ 𝟓𝟎𝟎𝐌𝐖 𝐆𝐈𝐀𝐌 𝟑𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 – 𝟑𝟑,𝟎𝟎𝟎𝐊𝐖/𝐓𝐇𝐀𝐍𝐆
-Kiểu 27 (siêu tiết kiệm): 🏆 𝟏𝐆𝐁𝐏𝐒 𝐆𝐈𝐀𝐌 𝟐𝟔𝟎,𝟎𝟎𝟎𝐊𝐖 – 𝟑𝟖,𝟓𝟎𝟎𝐊𝐖/𝐓𝐇𝐀𝐍𝐆
-Kiểu 28 (hấp dẫn): 🎯 𝟑𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌 𝐍𝐆𝐀𝐘 – 𝟏𝟎𝟎𝐌 𝐂𝐇𝐈 𝟐𝟐,𝟎𝟎𝟎𝐊𝐖!
-Kiểu 29 (tuyệt vời): 🌟 𝟐𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌 – 𝟏𝟎𝟎𝐌 𝟐𝟐,𝟎𝟎𝟎 + 𝟓𝟎𝟎𝐌 𝟑𝟑,𝟎𝟎𝟎
-Kiểu 30 (combo hot): 🎉 𝟏𝐆 + 𝟑𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌 – 𝐂𝐇𝐈 𝟑𝟖,𝟓𝟎𝟎𝐊𝐖/𝐓𝐇𝐀𝐍𝐆
-Kiểu 31 (sốc): 💪 𝐒𝐇𝐎𝐂𝐊! 𝟏𝟎𝟎𝐌𝐖 = 𝟐𝟐,𝟎𝟎𝟎𝐊𝐖 + 𝟐𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌
-Kiểu 32 (ưu đãi lớn): 🔥 𝟓𝟎𝟎𝐌𝐖 = 𝟑𝟑,𝟎𝟎𝟎𝐊𝐖 + 𝟑𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌
-Kiểu 33 (cam kết): 💎 𝟏𝐆 = 𝟑𝟖,𝟓𝟎𝟎𝐊𝐖 + 𝟐𝟔𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌
-Kiểu 34 (tốc độ): 🚀 𝟏𝟎𝟎𝐌 𝐂𝐇𝐈 𝟐𝟐,𝟎𝟎𝟎𝐊𝐖 – 𝐆𝐈𝐀𝐌 𝐍𝐆𝐀𝐘 𝟐𝟎𝟎,𝟎𝟎𝟎𝐊𝐖!
-Kiểu 35 (ưu đãi): ⭐ 𝟓𝟎𝟎𝐌 𝟑𝟑,𝟎𝟎𝟎𝐊𝐖 – 𝐆𝐈𝐀𝐌 𝟑𝟎𝟎,𝟎𝟎𝟎𝐊𝐖
-Kiểu 36 (siêu tiết kiệm): 🏆 𝟏𝐆 𝟑𝟖,𝟓𝟎𝟎𝐊𝐖 – 𝐆𝐈𝐀𝐌 𝟐𝟔𝟎,𝟎𝟎𝟎𝐊𝐖
-Kiểu 37 (hấp dẫn): 🎯 𝟑𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌 – 𝐌𝐔𝐀 𝐍𝐆𝐀𝐘 𝟏𝟎𝟎𝐌!
-Kiểu 38 (tuyệt vời): 🌟 𝟐𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌 – 𝟓𝟎𝟎𝐌 𝟑𝟑,𝟎𝟎𝟎𝐊𝐖
-Kiểu 39 (combo hot): 🎉 𝟑𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌 + 𝟏𝐆 𝟑𝟖,𝟓𝟎𝟎𝐊𝐖
-Kiểu 40 (sốc): 💪 𝐒𝐎 #𝟏 𝐆𝐈𝐀𝐌 𝟑𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 – 𝟏𝟎𝟎𝐌 𝟐𝟐,𝟎𝟎𝟎!
-Kiểu 41 (ưu đãi lớn): 🔥 𝟏𝟎𝟎𝐌 + 𝟐𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌 – 𝐂𝐇𝐈 𝟐𝟐,𝟎𝟎𝟎𝐊𝐖
-Kiểu 42 (cam kết): 💎 𝟓𝟎𝟎𝐌 + 𝟑𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌 – 𝟑𝟑,𝟎𝟎𝟎𝐊𝐖
-Kiểu 43 (tốc độ): 🚀 𝟏𝐆 + 𝟐𝟔𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌 – 𝟑𝟖,𝟓𝟎𝟎𝐊𝐖
-Kiểu 44 (ưu đãi): ⭐ 𝟏𝟎𝟎𝐌 – 𝟐𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌 + 𝟐𝟐,𝟎𝟎𝟎𝐊𝐖
-Kiểu 45 (siêu tiết kiệm): 🏆 𝟓𝟎𝟎𝐌 – 𝟑𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌 + 𝟑𝟑,𝟎𝟎𝟎𝐊𝐖
-Kiểu 46 (hấp dẫn): 🎯 𝟏𝐆 – 𝟐𝟔𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌 + 𝟑𝟖,𝟓𝟎𝟎𝐊𝐖
-Kiểu 47 (tuyệt vời): 🌟 𝟑𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌 𝟏𝟎𝟎𝐌 – 𝟐𝟐,𝟎𝟎𝟎𝐊𝐖
-Kiểu 48 (combo hot): 🎉 𝟐𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌 𝟓𝟎𝟎𝐌 – 𝟑𝟑,𝟎𝟎𝟎𝐊𝐖
-Kiểu 49 (sốc): 💪 𝟐𝟔𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌 𝟏𝐆 – 𝟑𝟖,𝟓𝟎𝟎𝐊𝐖
-Kiểu 50 (ưu đãi lớn): 🔥 𝟏𝟎𝟎𝐌𝐖 = 𝟐𝟐,𝟎𝟎𝟎𝐊𝐖 + 𝟐𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌`;
+- PHẢI TẠO NỘI DUNG MỚI, KHÔNG được trùng lặp với các lần trước
+- Mỗi lần tạo phải có tagline và icon khác nhau`;
 
 export async function generateContent(
   request: ContentRequest
@@ -96,42 +46,7 @@ export async function generateContent(
     })
     .join("\n");
 
-  const userPrompt = `Tạo nội dung WiFi cho gói: ${packageText}
-
-PHẢI CHỌN NGẪU NHIÊN 1 KIỂU HEADLINE DÒNG 1 TỪ DANH SÁCH BÊN DƯỚI (không lặp kiểu):
-
-VD Kiểu 1 (số bold): 𝟑𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐃𝐀𝐍𝐆 𝐂𝐇Ờ 𝐁Ạ𝐍! 𝐂𝐇𝐈 𝐂𝐀𝐍 𝐃𝐀𝐍𝐆 𝐊𝐈 𝐖𝐈𝐅𝐈:
-VD Kiểu 2 (tagline bold): 𝐖𝐈𝐅𝐈 𝟏𝟎𝟎𝐌 – 𝐊𝐄𝐓 𝐍𝐎𝐈 Ổ𝐍 𝐃𝐈𝐍𝐇, 𝐔𝐔 𝐃𝐀𝐈 𝐇𝐀𝐏 𝐃𝐀𝐍
-VD Kiểu 3 (cam kết bold): 𝐇𝐎𝐍 𝐍𝐆𝐎𝐀𝐈 𝟑𝟎𝟎,𝟎𝟎𝟎 𝐊𝐇𝐀𝐂𝐇 𝐇𝐀𝐍𝐆 𝐃𝐀 𝐓𝐈𝐍 𝐔𝐘!
-VD Kiểu 4 (ưu đãi bold): 𝐆𝐈𝐀 𝐂𝐔𝐎𝐂 𝐂𝐇𝐈 𝐓𝐔 𝟐𝟐,𝟎𝟎𝟎 𝐊𝐑𝐖/𝐓𝐇𝐀𝐍𝐆
-VD Kiểu 5 (khẩn trương): 🔥 𝐎𝐅𝐅𝐄𝐑 𝐇𝐎𝐓 – 𝟓𝟎𝟎𝐌𝐖 𝐆𝐈𝐀𝐌 𝟐𝟎𝟎,𝟎𝟎𝟎𝐊𝐖!
-VD Kiểu 6 (ưu đãi lớn): 💎 𝟏𝐆 𝐖𝐈𝐅𝐈 – 𝐆𝐈𝐀𝐌 𝟑𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐊𝐇𝐈 𝐃𝐀𝐍𝐆 𝐊𝐈
-VD Kiểu 7 (combo): 🚀 𝐂𝐎𝐌𝐁𝐎 𝐖𝐈𝐅𝐈 + 𝐓𝐈𝐄𝐍𝐂𝐀𝐒𝐇 – 𝐆𝐈𝐀𝐌 𝐍𝐆𝐀𝐘 𝟐𝟎𝟎,𝟎𝟎𝟎𝐊𝐖
-VD Kiểu 8 (siêu tiết kiệm): ⭐ 𝐓𝐈𝐄𝐓 𝐊𝐈𝐄𝐌 𝐌𝐎𝐈 𝐍𝐆𝐀𝐘 – 𝟏𝟎𝟎𝐌 𝐂𝐇𝐈 𝟐𝟐,𝟎𝟎𝟎𝐊𝐖
-VD Kiểu 9 (hàng đầu): 🏆 𝐒𝐎 #𝟏 𝐕𝐄 𝐖𝐈𝐅𝐈 𝐆𝐈𝐀 𝐑𝐄 – 𝟓𝟎𝟎𝐌 𝟑𝟑,𝟎𝟎𝟎𝐊𝐖
-VD Kiểu 10 (CAM KẾT): 🎯 𝟏𝟎𝟎% 𝐇𝐀𝐈 𝐋𝐎𝐍𝐆 – 𝐖𝐈𝐅𝐈 𝟏𝐆𝐈𝐁 𝐂𝐇𝐈 𝟑𝟖,𝟓𝟎𝟎𝐊𝐖
-VD Kiểu 11 (siêu sốc): 🌟 𝐒𝐇𝐎𝐂𝐊! 𝟐𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐓𝐈𝐄𝐍𝐂𝐀𝐒𝐇 𝐂𝐇𝐎 𝟏𝟎𝟎𝐌𝐖
-VD Kiểu 12 (combo hot): 🎉 𝐂𝐎𝐌𝐁𝐎 𝐇𝐎𝐓 – 𝟏𝐆𝐖𝐈𝐅𝐈 + 𝟑𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌
-VD Kiểu 13 (ưu đãi sốc): 💪 𝟑𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌 𝐍𝐆𝐀𝐘 – 𝟏𝟎𝟎𝐌 𝐂𝐇𝐈 𝟐𝟐,𝟎𝟎𝟎𝐊𝐖
-VD Kiểu 14 (tốc độ): 🔥 𝐓𝐎𝐂 Đ𝐎 𝟏𝐆𝐁𝐏𝐒 – 𝟑𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌 𝐍𝐆𝐀𝐘!
-VD Kiểu 15 (combo giá sốc): 💎 𝟏𝐆𝐖𝐈𝐅𝐈 + 𝟐𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌 – 𝐂𝐇𝐈 𝟑𝟖,𝟓𝟎𝟎𝐊𝐖
-VD Kiểu 16 (cam kết): 🚀 𝟏𝟎𝟎𝐌𝐖 + 𝟐𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌 – 𝟐𝟐,𝟎𝟎𝟎𝐊𝐖/𝐓𝐇𝐀𝐍𝐆
-VD Kiểu 17 (ưu đãi): ⭐ 𝟓𝟎𝟎𝐌𝐖 + 𝟑𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌 – 𝟑𝟑,𝟎𝟎𝟎𝐊𝐖/𝐓𝐇𝐀𝐍𝐆
-VD Kiểu 18 (siêu tiết kiệm): 🏆 𝟏𝐆𝐖𝐈𝐅𝐈 + 𝟐𝟔𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌 – 𝟑𝟖,𝟓𝟎𝟎𝐊𝐖/𝐓𝐇𝐀𝐍𝐆
-VD Kiểu 19 (hấp dẫn): 🎯 𝟏𝟎𝟎𝐌 – 𝟐𝟐,𝟎𝟎𝟎𝐊𝐖 + 𝟐𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌
-VD Kiểu 20 (tuyệt vời): 🌟 𝟓𝟎𝟎𝐌 – 𝟑𝟑,𝟎𝟎𝟎𝐊𝐖 + 𝟑𝟎𝟎,𝟎𝟎𝟎𝐊𝐖 𝐆𝐈𝐀𝐌
-
-QUY TẮC HEADLINE:
-- CHỌN NGẪU NHIÊN 1 trong 20 kiểu trên (VD Kiểu 1 → Kiểu 20)
-- KHÔNG được dùng lại kiểu headline của gói trước
-- Icon headline PHẢI ĐỔI mỗi lần: 👑 🔥 💎 🚀 ⭐ 🏆 🎯 🌟 🎉 💪
-
-YÊU CẦU:
-- Tối đa 10 dòng, không dòng trống
-- Mỗi dòng 1 icon, KHÔNG lặp icon
-- Icon headline phải ĐỔI mỗi lần (👑 🔥 💎 🚀 ⭐ 🏆 🎯 🌟 🎉 💪)
-- Viết HOA tên gói dòng 1
-- KHÔNG dùng markdown, chỉ text thuần`;
+  const userPrompt = `Tạo nội dung WiFi cho gói:\n${packageText}\n\nTạo nội dung mới với tagline và icon dòng 1 khác nhau mỗi lần.`;
 
   const model = "xiaomi/mimo-v2.5";
 
@@ -149,7 +64,7 @@ YÊU CẦU:
         { role: "system", content: SYSTEM_PROMPT },
         { role: "user", content: userPrompt },
       ],
-      temperature: 0.9,
+      temperature: 1.0,
       max_tokens: 1024,
     }),
   });
@@ -194,7 +109,7 @@ QUY TẮC:
 - Mỗi phiên bản viết lại phải có phong cách khác nhau (hấp dẫn, chuyên nghiệp, thân thiện)
 - Giữ nguyên ý nghĩa và thông tin quan trọng (giá, tên gói, ưu đãi)
 - Ngắn gọn, dễ đọc, phù hợp cho ảnh quảng cáo
-- Tiếng Việt, có thể dùng emoji
+- Tiếng Việt có dấu đầy đủ, có thể dùng emoji
 - Trả về ĐÚNG 3 phiên bản, phân tách bằng xuống dòng
 - KHÔNG đánh số thứ tự, KHÔNG dùng markdown
 - Mỗi phiên bản chỉ 1-2 dòng`;
@@ -223,7 +138,7 @@ export async function rewriteText(
         { role: "system", content: REWRITE_SYSTEM_PROMPT },
         { role: "user", content: userPrompt },
       ],
-      temperature: 0.9,
+      temperature: 1.0,
       max_tokens: 512,
     }),
   });
