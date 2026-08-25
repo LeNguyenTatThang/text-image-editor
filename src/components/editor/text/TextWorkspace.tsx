@@ -36,33 +36,37 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
 
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
-      const lineDiv = document.createElement("div");
+      let tag: HTMLElement;
 
       if (i === 0) {
-        lineDiv.style.fontSize = "1.6em";
-        lineDiv.style.fontWeight = "800";
-        lineDiv.style.lineHeight = "1.2";
-        lineDiv.style.marginBottom = "4px";
+        tag = document.createElement("h1");
+        tag.style.fontSize = "1.6em";
+        tag.style.fontWeight = "800";
+        tag.style.lineHeight = "1.2";
+        tag.style.margin = "0 0 4px 0";
       } else if (i <= 2) {
-        lineDiv.style.fontSize = "1.15em";
-        lineDiv.style.fontWeight = "700";
-        lineDiv.style.lineHeight = "1.3";
+        tag = document.createElement("h2");
+        tag.style.fontSize = "1.15em";
+        tag.style.fontWeight = "700";
+        tag.style.lineHeight = "1.3";
+        tag.style.margin = "0";
       } else {
-        lineDiv.style.fontSize = "0.95em";
-        lineDiv.style.fontWeight = "500";
-        lineDiv.style.lineHeight = "1.4";
+        tag = document.createElement("p");
+        tag.style.fontSize = "0.95em";
+        tag.style.fontWeight = "500";
+        tag.style.lineHeight = "1.4";
+        tag.style.margin = "0";
       }
 
-      editor.appendChild(lineDiv);
+      editor.appendChild(tag);
 
       for (let j = 0; j < line.length; j++) {
-        lineDiv.textContent += line[j];
+        tag.textContent += line[j];
         editor.dispatchEvent(new Event("input", { bubbles: true }));
         await new Promise((r) => setTimeout(r, 8));
       }
 
       if (i < lines.length - 1) {
-        editor.appendChild(document.createElement("br"));
         await new Promise((r) => setTimeout(r, 30));
       }
     }
@@ -135,11 +139,11 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
       );
 
       if (index === 0) {
-        text = `<div style="font-size:1.6em;font-weight:800;line-height:1.2;margin-bottom:4px">${text}</div>`;
+        text = `<h1 style="font-size:1.6em;font-weight:800;line-height:1.2;margin:0 0 4px 0">${text}</h1>`;
       } else if (index <= 2) {
-        text = `<div style="font-size:1.15em;font-weight:700;line-height:1.3">${text}</div>`;
+        text = `<h2 style="font-size:1.15em;font-weight:700;line-height:1.3;margin:0">${text}</h2>`;
       } else {
-        text = `<div style="font-size:0.95em;font-weight:500;line-height:1.4">${text}</div>`;
+        text = `<p style="font-size:0.95em;font-weight:500;line-height:1.4;margin:0">${text}</p>`;
       }
 
       return text;
