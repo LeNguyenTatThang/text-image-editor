@@ -36,39 +36,51 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
 
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
-      let tag: HTMLElement;
-
-      if (i === 0) {
-        tag = document.createElement("h1");
-        tag.style.fontSize = "1.6em";
-        tag.style.fontWeight = "800";
-        tag.style.lineHeight = "1.2";
-        tag.style.margin = "0 0 4px 0";
-      } else if (i <= 2) {
-        tag = document.createElement("h2");
-        tag.style.fontSize = "1.15em";
-        tag.style.fontWeight = "700";
-        tag.style.lineHeight = "1.3";
-        tag.style.margin = "0";
-      } else {
-        tag = document.createElement("p");
-        tag.style.fontSize = "0.95em";
-        tag.style.fontWeight = "500";
-        tag.style.lineHeight = "1.4";
-        tag.style.margin = "0";
-      }
-
-      editor.appendChild(tag);
+      const openTags: string[] = [];
+      let visibleIndex = 0;
 
       for (let j = 0; j < line.length; j++) {
-        tag.textContent += line[j];
+        if (line[j] === "<") {
+          const closeIdx = line.indexOf(">", j);
+          if (closeIdx !== -1) {
+            const tag = line.slice(j, closeIdx + 1);
+            if (tag.startsWith("</")) {
+              openTags.pop();
+            } else if (!tag.endsWith("/>")) {
+              openTags.push(tag);
+            }
+            continue;
+          }
+        }
+
+        visibleIndex++;
+
+        let built = line.slice(0, j + 1);
+        for (let k = openTags.length - 1; k >= 0; k--) {
+          const tagName = openTags[k].match(/<(\w+)/)?.[1] || "span";
+          built += `</${tagName}>`;
+        }
+
+        const wrapper =
+          i === 0 ? "h1" : i <= 2 ? "h2" : "p";
+        const styles =
+          i === 0
+            ? 'style="font-size:1.6em;font-weight:800;line-height:1.2;margin:0 0 4px 0"'
+            : i <= 2
+              ? 'style="font-size:1.15em;font-weight:700;line-height:1.3;margin:0"'
+              : 'style="font-size:0.95em;font-weight:500;line-height:1.4;margin:0"';
+
+        const prevLines = lines.slice(0, i).map((l) => {
+          const w = l === lines[0] ? "h1" : i <= 2 ? "h2" : "p";
+          return `<${w}>${l}</${w}>`;
+        }).join("");
+
+        editor.innerHTML = prevLines + `<${wrapper} ${styles}>${built}</${wrapper}>`;
         editor.dispatchEvent(new Event("input", { bubbles: true }));
-        await new Promise((r) => setTimeout(r, 8));
+        await new Promise((r) => setTimeout(r, 12));
       }
 
-      if (i < lines.length - 1) {
-        await new Promise((r) => setTimeout(r, 30));
-      }
+      await new Promise((r) => setTimeout(r, 25));
     }
 
     editor.dispatchEvent(new Event("input", { bubbles: true }));
@@ -122,31 +134,51 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
     const editor = document.querySelector("[data-rich-editor]");
     if (!editor) return;
 
-    const lines = editor.innerHTML.split(/<br\s*\/?>/i);
-    const formatted = lines.map((line, index) => {
-      const tmp = document.createElement("div");
-      tmp.innerHTML = line;
-      let text = tmp.textContent || "";
+    const raw = editor.innerHTML;
+    let lines: string[];
 
-      text = text.replace(
+    if (raw.includes("<h1") || raw.includes("<h2") || raw.includes("<p")) {
+      const tmp = document.createElement("div");
+      tmp.innerHTML = raw;
+      lines = [];
+      for (const child of Array.from(tmp.childNodes)) {
+        if (child.nodeType === Node.TEXT_NODE) {
+          const t = child.textContent?.trim();
+          if (t) lines.push(t);
+        } else if (child instanceof HTMLElement) {
+          const t = child.textContent?.trim();
+          if (t) lines.push(t);
+        }
+      }
+    } else {
+      lines = raw.split(/<br\s*\/?>/i).map((l) => {
+        const tmp = document.createElement("div");
+        tmp.innerHTML = l;
+        return tmp.textContent || "";
+      });
+    }
+
+    lines = lines.filter((l) => l.trim().length > 0);
+
+    const formatted = lines.map((text, index) => {
+      let t = text;
+
+      t = t.replace(
         /(\d{1,3}(?:\.\d{3})*)\s*(KRW|₫|VND|W|w| đồng|đ)/gi,
         "<b>$1 $2</b>"
       );
-
-      text = text.replace(
+      t = t.replace(
         /(100M|500M|1G|2G|300M|200M)\b/g,
         "<b>$1</b>"
       );
 
       if (index === 0) {
-        text = `<h1 style="font-size:1.6em;font-weight:800;line-height:1.2;margin:0 0 4px 0">${text}</h1>`;
+        return `<h1 style="font-size:1.6em;font-weight:800;line-height:1.2;margin:0 0 4px 0">${t}</h1>`;
       } else if (index <= 2) {
-        text = `<h2 style="font-size:1.15em;font-weight:700;line-height:1.3;margin:0">${text}</h2>`;
+        return `<h2 style="font-size:1.15em;font-weight:700;line-height:1.3;margin:0">${t}</h2>`;
       } else {
-        text = `<p style="font-size:0.95em;font-weight:500;line-height:1.4;margin:0">${text}</p>`;
+        return `<p style="font-size:0.95em;font-weight:500;line-height:1.4;margin:0">${t}</p>`;
       }
-
-      return text;
     });
 
     editor.innerHTML = formatted.join("");
