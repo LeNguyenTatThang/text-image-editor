@@ -19,7 +19,7 @@ interface PackageForm {
 const PRESET_PACKAGES: PackageForm[] = [
   { name: "100M", speed: "100Mbps", price: "22.000", bonus: "200.000" },
   { name: "500M", speed: "500Mbps", price: "33.000", bonus: "300.000" },
-  { name: "1G", speed: "1Gbps", price: "38.500", bonus: "260.000" },
+  { name: "1G", speed: "1Gbps", price: "38.500", bonus: "380.000" },
 ];
 
 export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
