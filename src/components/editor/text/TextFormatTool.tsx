@@ -259,16 +259,7 @@ export default function TextFormatTool() {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-center gap-2 px-4 py-2.5 border-b border-zinc-200 dark:border-zinc-800/80">
-        <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-semibold">
-          Chuyển đổi text
-        </span>
-        <span className="text-[10px] text-zinc-400 dark:text-zinc-600">
-          {STYLES.length} kiểu định dạng • Hỗ trợ tiếng Việt
-        </span>
-      </div>
-
-      <div className="flex flex-1 min-h-0 overflow-hidden">
+      <div className="flex-1 flex min-h-0 overflow-hidden">
         {/* LEFT: Input */}
         <div className="w-1/2 flex flex-col border-r border-zinc-200 dark:border-zinc-800">
           <div className="px-3 py-2 border-b border-zinc-200 dark:border-zinc-800/60">
