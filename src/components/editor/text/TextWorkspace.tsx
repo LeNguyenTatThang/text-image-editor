@@ -3,7 +3,7 @@
 import { useState, useCallback } from "react";
 import { toast } from "sonner";
 import RichTextEditor from "./RichTextEditor";
-import { PackageInfo, ContentResponse } from "@/types/content";
+import { PackageInfo, ContentResponse, ContentType } from "@/types/content";
 
 interface TextWorkspaceProps {
   onTextChange?: (info: { charCount: number; lineCount: number }) => void;
@@ -20,6 +20,11 @@ const PRESET_PACKAGES: PackageForm[] = [
   { name: "100M", speed: "100Mbps", price: "22.000", bonus: "200.000" },
   { name: "500M", speed: "500Mbps", price: "33.000", bonus: "300.000" },
   { name: "1G", speed: "1Gbps", price: "38.500", bonus: "380.000" },
+];
+
+const CONTENT_TYPE_BUTTONS: { type: ContentType; label: string; color: string }[] = [
+  { type: "short", label: "Ngắn", color: "from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400" },
+  { type: "feedback", label: "Feedback", color: "from-rose-500 to-pink-500 hover:from-rose-400 hover:to-pink-400" },
 ];
 
 export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
@@ -66,6 +71,10 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
       );
       t = t.replace(
         /(100M|500M|1G|2G|300M|200M)\b/g,
+        "<b>$1</b>"
+      );
+      t = t.replace(
+        /(\d{3}[-.]?\d{3,4}[-.]?\d{4})/g,
         "<b>$1</b>"
       );
 
@@ -137,7 +146,7 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
     editor.dispatchEvent(new Event("input", { bubbles: true }));
   }, []);
 
-  const generateForPackage = useCallback(async (preset: PackageForm) => {
+  const generateForPackage = useCallback(async (preset: PackageForm, contentType: ContentType = "package") => {
     setLoadingPackage(preset.name);
     setStage("Đang gửi yêu cầu...");
     setError(null);
@@ -156,7 +165,7 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
       const response = await fetch("/api/generate-content", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ packages: packageData, style: "promotional" }),
+        body: JSON.stringify({ packages: packageData, contentType, style: "promotional" }),
       });
 
       if (!response.ok) {
@@ -211,6 +220,40 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
                 </svg>
               )}
               {preset.name}
+            </button>
+          );
+        })}
+
+        <div className="w-px h-5 bg-zinc-300 mx-1 dark:bg-zinc-800" />
+
+        {CONTENT_TYPE_BUTTONS.map((btn) => {
+          const isLoading = loadingPackage === btn.type;
+          const isAnyLoading = loadingPackage !== null;
+          return (
+            <button
+              key={btn.type}
+              onClick={() => generateForPackage(PRESET_PACKAGES[0], btn.type)}
+              disabled={isAnyLoading}
+              className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-medium rounded-md text-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm active:scale-[0.97] bg-gradient-to-r ${btn.color} ${
+                isLoading ? "animate-pulse" : ""
+              }`}
+              title={`Tạo ${btn.label}`}
+            >
+              {isLoading ? (
+                <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+              ) : btn.type === "short" ? (
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                </svg>
+              ) : (
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+              )}
+              {btn.label}
             </button>
           );
         })}

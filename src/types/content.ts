@@ -5,8 +5,11 @@ export interface PackageInfo {
   bonus?: string;
 }
 
+export type ContentType = "package" | "short" | "feedback";
+
 export interface ContentRequest {
   packages: PackageInfo[];
+  contentType?: ContentType;
   style?: "casual" | "formal" | "promotional";
   language?: "vi" | "en";
 }
