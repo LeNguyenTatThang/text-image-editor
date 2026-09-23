@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import { toast } from "sonner";
 import RichTextEditor from "./RichTextEditor";
+import TextFormatTool from "./TextFormatTool";
 import { PackageInfo, ContentResponse, ContentType } from "@/types/content";
 
 interface TextWorkspaceProps {
@@ -31,6 +32,7 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
   const [loadingPackage, setLoadingPackage] = useState<string | null>(null);
   const [stage, setStage] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<"ai" | "format">("ai");
 
   const autoFormat = useCallback(() => {
     const editor = document.querySelector("[data-rich-editor]");
@@ -193,100 +195,138 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
 
   return (
     <div className="flex flex-col overflow-hidden h-full">
-      <div className="flex items-center gap-2 px-4 py-2 border-b border-zinc-200 dark:border-zinc-800/60">
-        {PRESET_PACKAGES.map((preset) => {
-          const isLoading = loadingPackage === preset.name;
-          const isAnyLoading = loadingPackage !== null;
-          return (
-            <button
-              key={preset.name}
-              onClick={() => generateForPackage(preset)}
-              disabled={isAnyLoading}
-              className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-medium rounded-md text-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm active:scale-[0.97] ${
-                isLoading
-                  ? "bg-gradient-to-r from-blue-500 to-cyan-500 animate-pulse"
-                  : "bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500"
-              }`}
-              title={`Tạo nội dung cho gói ${preset.name}`}
-            >
-              {isLoading ? (
-                <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                </svg>
-              ) : (
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              )}
-              {preset.name}
-            </button>
-          );
-        })}
-
-        <div className="w-px h-5 bg-zinc-300 mx-1 dark:bg-zinc-800" />
-
-        {CONTENT_TYPE_BUTTONS.map((btn) => {
-          const isLoading = loadingPackage === btn.type;
-          const isAnyLoading = loadingPackage !== null;
-          return (
-            <button
-              key={btn.type}
-              onClick={() => generateForPackage(PRESET_PACKAGES[0], btn.type)}
-              disabled={isAnyLoading}
-              className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-medium rounded-md text-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm active:scale-[0.97] bg-gradient-to-r ${btn.color} ${
-                isLoading ? "animate-pulse" : ""
-              }`}
-              title={`Tạo ${btn.label}`}
-            >
-              {isLoading ? (
-                <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                </svg>
-              ) : btn.type === "short" ? (
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-                </svg>
-              ) : (
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                </svg>
-              )}
-              {btn.label}
-            </button>
-          );
-        })}
-
-        <div className="w-px h-5 bg-zinc-300 mx-1 dark:bg-zinc-800" />
-
+      {/* Tab Bar */}
+      <div className="flex items-center gap-1 px-3 py-1.5 border-b border-zinc-200 dark:border-zinc-800/60 bg-zinc-50/50 dark:bg-zinc-900/30">
         <button
-          onClick={autoFormat}
-          disabled={loadingPackage !== null}
-          className="flex items-center gap-1 px-2.5 py-1 text-[11px] font-medium rounded-md bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-400 hover:to-orange-400 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm active:scale-[0.97]"
-          title="Tự động định dạng: bôi đậm giá tiền, nổi bật ưu đãi"
+          onClick={() => setActiveTab("ai")}
+          className={`flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-medium rounded-md transition-all duration-200 ${
+            activeTab === "ai"
+              ? "bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-sm"
+              : "text-zinc-500 hover:text-zinc-800 hover:bg-zinc-200 dark:text-zinc-400 dark:hover:text-zinc-200 dark:hover:bg-zinc-800"
+          }`}
         >
-          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
           </svg>
-          Định dạng
+          AI Content
+        </button>
+        <button
+          onClick={() => setActiveTab("format")}
+          className={`flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-medium rounded-md transition-all duration-200 ${
+            activeTab === "format"
+              ? "bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-sm"
+              : "text-zinc-500 hover:text-zinc-800 hover:bg-zinc-200 dark:text-zinc-400 dark:hover:text-zinc-200 dark:hover:bg-zinc-800"
+          }`}
+        >
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
+          </svg>
+          Text Format
         </button>
       </div>
 
-      {error && (
-        <div className="px-4 py-1.5 bg-red-50 dark:bg-red-900/20 border-b border-red-200 dark:border-red-800">
-          <p className="text-[11px] text-red-600 dark:text-red-400">{error}</p>
-        </div>
+      {/* AI Content Tab */}
+      {activeTab === "ai" && (
+        <>
+          <div className="flex items-center gap-2 px-4 py-2 border-b border-zinc-200 dark:border-zinc-800/60">
+            {PRESET_PACKAGES.map((preset) => {
+              const isLoading = loadingPackage === preset.name;
+              const isAnyLoading = loadingPackage !== null;
+              return (
+                <button
+                  key={preset.name}
+                  onClick={() => generateForPackage(preset)}
+                  disabled={isAnyLoading}
+                  className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-medium rounded-md text-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm active:scale-[0.97] ${
+                    isLoading
+                      ? "bg-gradient-to-r from-blue-500 to-cyan-500 animate-pulse"
+                      : "bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500"
+                  }`}
+                  title={`Tạo nội dung cho gói ${preset.name}`}
+                >
+                  {isLoading ? (
+                    <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                  ) : (
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  )}
+                  {preset.name}
+                </button>
+              );
+            })}
+
+            <div className="w-px h-5 bg-zinc-300 mx-1 dark:bg-zinc-800" />
+
+            {CONTENT_TYPE_BUTTONS.map((btn) => {
+              const isLoading = loadingPackage === btn.type;
+              const isAnyLoading = loadingPackage !== null;
+              return (
+                <button
+                  key={btn.type}
+                  onClick={() => generateForPackage(PRESET_PACKAGES[0], btn.type)}
+                  disabled={isAnyLoading}
+                  className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-medium rounded-md text-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm active:scale-[0.97] bg-gradient-to-r ${btn.color} ${
+                    isLoading ? "animate-pulse" : ""
+                  }`}
+                  title={`Tạo ${btn.label}`}
+                >
+                  {isLoading ? (
+                    <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                  ) : btn.type === "short" ? (
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                    </svg>
+                  ) : (
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
+                  )}
+                  {btn.label}
+                </button>
+              );
+            })}
+
+            <div className="w-px h-5 bg-zinc-300 mx-1 dark:bg-zinc-800" />
+
+            <button
+              onClick={autoFormat}
+              disabled={loadingPackage !== null}
+              className="flex items-center gap-1 px-2.5 py-1 text-[11px] font-medium rounded-md bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-400 hover:to-orange-400 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm active:scale-[0.97]"
+              title="Tự động định dạng: bôi đậm giá tiền, nổi bật ưu đãi"
+            >
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+              </svg>
+              Định dạng
+            </button>
+          </div>
+
+          {error && (
+            <div className="px-4 py-1.5 bg-red-50 dark:bg-red-900/20 border-b border-red-200 dark:border-red-800">
+              <p className="text-[11px] text-red-600 dark:text-red-400">{error}</p>
+            </div>
+          )}
+
+          {loadingPackage && stage && (
+            <div className="px-4 py-1.5 bg-blue-50 dark:bg-blue-900/20 border-b border-blue-200 dark:border-blue-800 flex items-center gap-2">
+              <div className="w-3 h-3 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
+              <p className="text-[11px] text-blue-600 dark:text-blue-400">{stage}</p>
+            </div>
+          )}
+
+          <RichTextEditor onTextChange={onTextChange} />
+        </>
       )}
 
-      {loadingPackage && stage && (
-        <div className="px-4 py-1.5 bg-blue-50 dark:bg-blue-900/20 border-b border-blue-200 dark:border-blue-800 flex items-center gap-2">
-          <div className="w-3 h-3 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
-          <p className="text-[11px] text-blue-600 dark:text-blue-400">{stage}</p>
-        </div>
-      )}
-
-      <RichTextEditor onTextChange={onTextChange} />
+      {/* Text Format Tab */}
+      {activeTab === "format" && <TextFormatTool />}
     </div>
   );
 }

@@ -62,29 +62,32 @@ Mẫu 5: WiFi [tốc độ] giá [giá]W/tháng – đăng ký nhận ngay [ti�
 ═══════════════════════════════════════
 LOẠI 3: CONTENT FEEDBACK
 ═══════════════════════════════════════
-Chọn NGẪU NHIÊN 1 trong 2 dạng:
+Tạo NGẪU NHIÊN 1 trong 2 dạng (CHỈ trả về nội dung, KHÔNG ghi "Dạng A" hay "Dạng B"):
 
-Dạng A – Feedback khách thật:
-Chị/Anh [tên giả] đăng ký WiFi [tốc độ], được hỗ trợ lắp đặt ngay trong ngày 📶
+Dạng A:
+Anh/Chị khách ở [địa điểm] đăng ký WiFi [tốc độ], được hỗ trợ lắp đặt ngay trong ngày 📶
 Nhanh gọn, thuận tiện, có mạng dùng ngay 💙 nhận [tiền]W
 📞 070-4322-6887
 
-Dạng B – CTA feedback:
+Dạng B:
 Ưu đãi tháng này vẫn còn – tặng đến [tiền]W!
 Feedback khách vẫn đều đều, lắp đặt vẫn liên tục 📶
 📞 070-4322-6887
+
+ĐỊA ĐIỂM (chọn ngẫu nhiên): Busan, Incheon, Seoul, Daegu, Daejeon, Gwangju, Ulsan, Suwon, Changwon, Sejong, Goyang, Yongin, Bucheon, Ansan, Anyang, Namyangju, Hwaseong, Pyeongtaek, Siheung, Gimhae
 
 ═══════════════════════════════════════
 QUY TẮC CHUNG:
 ═══════════════════════════════════════
 - Tiếng Việt có dấu đầy đủ
 - KHÔNG dùng Unicode bold math (𝟏, 𝟐, 𝟑...)
-- Icon dòng 1 phải ĐỔI mỗi lần (dùng từ: 👑 🔥 💎 🚀 ⭐ 🏆 🎯 🌟 🎉 💪 📶 🎯)
+- Icon dòng 1 phải ĐỔI mỗi lần (dùng từ: 👑 🔥 💎 🚀 ⭐ 🏆 🎯 🌟 🎉 💪 📶)
 - Có thể dùng KRW hoặc W
 - KHÔNG dùng markdown, chỉ text thuần
 - PHẢI TẠO NỘI DUNG MỚI, KHÔNG trùng lặp
 - LUÔN LUÔN có số điện thoại: 070-4322-6887 (ở cuối hoặc gần cuối)
-- Mỗi content khoảng 5 dòng (hoặc 1-2 dòng cho loại ngắn)`;
+- Mỗi content khoảng 5 dòng (hoặc 1-2 dòng cho loại ngắn)
+- CHỈ TRẢ VỀ NỘI DUNG QUẢNG CÁO, KHÔNG ghi "Phong cách A", "Dạng B", "Mẫu 1" hay bất kỳ nhãn nào khác`;
 
 export async function generateContent(
   request: ContentRequest
