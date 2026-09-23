@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { toast } from "sonner";
 
-// Mathematical Bold (U+1D400)
 const BOLD_UPPER: Record<string, string> = Object.fromEntries(
   "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map((c, i) => [c, String.fromCodePoint(0x1d400 + i)])
 );
@@ -14,7 +13,6 @@ const BOLD_DIGIT: Record<string, string> = Object.fromEntries(
   "0123456789".split("").map((c, i) => [c, String.fromCodePoint(0x1d7ce + i)])
 );
 
-// Mathematical Italic (U+1D434)
 const ITALIC_UPPER: Record<string, string> = Object.fromEntries(
   "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map((c, i) => [c, String.fromCodePoint(0x1d434 + i)])
 );
@@ -22,7 +20,6 @@ const ITALIC_LOWER: Record<string, string> = Object.fromEntries(
   "abcdefghijklmnopqrstuvwxyz".split("").map((c, i) => [c, String.fromCodePoint(0x1d44e + i)])
 );
 
-// Mathematical Sans-Serif (U+1D5A0)
 const SANS_UPPER: Record<string, string> = Object.fromEntries(
   "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map((c, i) => [c, String.fromCodePoint(0x1d5a0 + i)])
 );
@@ -33,7 +30,6 @@ const SANS_DIGIT: Record<string, string> = Object.fromEntries(
   "0123456789".split("").map((c, i) => [c, String.fromCodePoint(0x1d7e2 + i)])
 );
 
-// Mathematical Sans-Serif Bold (U+1D5D4)
 const SANS_BOLD_UPPER: Record<string, string> = Object.fromEntries(
   "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map((c, i) => [c, String.fromCodePoint(0x1d5d4 + i)])
 );
@@ -41,7 +37,6 @@ const SANS_BOLD_LOWER: Record<string, string> = Object.fromEntries(
   "abcdefghijklmnopqrstuvwxyz".split("").map((c, i) => [c, String.fromCodePoint(0x1d5ee + i)])
 );
 
-// Mathematical Double-Struck (U+1D538)
 const DOUBLE_UPPER: Record<string, string> = Object.fromEntries(
   "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map((c, i) => [c, String.fromCodePoint(0x1d538 + i)])
 );
@@ -52,7 +47,6 @@ const DOUBLE_DIGIT: Record<string, string> = Object.fromEntries(
   "0123456789".split("").map((c, i) => [c, String.fromCodePoint(0x1d7d8 + i)])
 );
 
-// Mathematical Monospace (U+1D670)
 const MONO_UPPER: Record<string, string> = Object.fromEntries(
   "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map((c, i) => [c, String.fromCodePoint(0x1d670 + i)])
 );
@@ -63,7 +57,6 @@ const MONO_DIGIT: Record<string, string> = Object.fromEntries(
   "0123456789".split("").map((c, i) => [c, String.fromCodePoint(0x1d7e2 + i)])
 );
 
-// Mathematical Script (U+1D49C)
 const SCRIPT_UPPER: Record<string, string> = Object.fromEntries(
   "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map((c, i) => [c, String.fromCodePoint(0x1d49c + i)])
 );
@@ -71,7 +64,6 @@ const SCRIPT_LOWER: Record<string, string> = Object.fromEntries(
   "abcdefghijklmnopqrstuvwxyz".split("").map((c, i) => [c, String.fromCodePoint(0x1d4b0 + i)])
 );
 
-// Mathematical Fraktur (U+1D504)
 const FRAKTUR_UPPER: Record<string, string> = Object.fromEntries(
   "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map((c, i) => [c, String.fromCodePoint(0x1d504 + i)])
 );
@@ -79,7 +71,6 @@ const FRAKTUR_LOWER: Record<string, string> = Object.fromEntries(
   "abcdefghijklmnopqrstuvwxyz".split("").map((c, i) => [c, String.fromCodePoint(0x1d51e + i)])
 );
 
-// Circled letters (U+24B6)
 const CIRCLED_UPPER: Record<string, string> = Object.fromEntries(
   "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map((c, i) => [c, String.fromCodePoint(0x24b6 + i)])
 );
@@ -90,12 +81,10 @@ const CIRCLED_DIGIT: Record<string, string> = Object.fromEntries(
   "0123456789".split("").map((c, i) => [c, String.fromCodePoint(0x2460 + i)])
 );
 
-// Squared letters (U+1F130)
 const SQUARED_UPPER: Record<string, string> = Object.fromEntries(
   "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map((c, i) => [c, String.fromCodePoint(0x1f130 + i)])
 );
 
-// Fullwidth (U+FF21)
 const FULLWIDTH_UPPER: Record<string, string> = Object.fromEntries(
   "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map((c, i) => [c, String.fromCodePoint(0xff21 + i)])
 );
@@ -106,7 +95,6 @@ const FULLWIDTH_DIGIT: Record<string, string> = Object.fromEntries(
   "0123456789".split("").map((c, i) => [c, String.fromCodePoint(0xff10 + i)])
 );
 
-// Small Caps mapping
 const SMALLCAPS_MAP: Record<string, string> = {
   a: "\u0251", b: "\u0253", c: "\u0254", d: "\u0256", e: "\u0259",
   f: "\u0283", g: "\u0261", h: "\u0266", i: "\u026a", j: "\u029d",
@@ -116,7 +104,6 @@ const SMALLCAPS_MAP: Record<string, string> = {
   z: "\u0291",
 };
 
-// Superscript mapping
 const SUPERSCRIPT_MAP: Record<string, string> = {
   a: "\u1d43", b: "\u1d47", c: "\u1d9c", d: "\u1d48", e: "\u1d49",
   f: "\u1da0", g: "\u1d4d", h: "\u02b0", i: "\u2071", j: "\u2b0d",
@@ -142,108 +129,38 @@ function mapChars(text: string, upper: Record<string, string>, lower: Record<str
     .join("");
 }
 
-function toBold(text: string): string {
-  return mapChars(text, BOLD_UPPER, BOLD_LOWER, BOLD_DIGIT);
-}
-
-function toItalic(text: string): string {
-  return mapChars(text, ITALIC_UPPER, ITALIC_LOWER);
-}
-
-function toDouble(text: string): string {
-  return mapChars(text, DOUBLE_UPPER, DOUBLE_LOWER, DOUBLE_DIGIT);
-}
-
-function toMonospace(text: string): string {
-  return mapChars(text, MONO_UPPER, MONO_LOWER, MONO_DIGIT);
-}
-
-function toScript(text: string): string {
-  return mapChars(text, SCRIPT_UPPER, SCRIPT_LOWER);
-}
-
-function toFraktur(text: string): string {
-  return mapChars(text, FRAKTUR_UPPER, FRAKTUR_LOWER);
-}
-
-function toSansSerif(text: string): string {
-  return mapChars(text, SANS_UPPER, SANS_LOWER, SANS_DIGIT);
-}
-
-function toSansSerifBold(text: string): string {
-  return mapChars(text, SANS_BOLD_UPPER, SANS_BOLD_LOWER);
-}
-
-function toCircled(text: string): string {
-  return mapChars(text, CIRCLED_UPPER, CIRCLED_LOWER, CIRCLED_DIGIT);
-}
-
-function toSquared(text: string): string {
-  return mapChars(text, SQUARED_UPPER, {});
-}
-
-function toFullwidth(text: string): string {
-  return mapChars(text, FULLWIDTH_UPPER, FULLWIDTH_LOWER, FULLWIDTH_DIGIT);
-}
-
-function toSmallCaps(text: string): string {
-  return text
-    .split("")
-    .map((ch) => (ch >= "A" && ch <= "Z") ? ch : SMALLCAPS_MAP[ch.toLowerCase()] || ch)
-    .join("");
-}
-
-function toSuperscript(text: string): string {
-  return text.split("").map((ch) => SUPERSCRIPT_MAP[ch] || ch).join("");
-}
-
-function toUnderline(text: string): string {
-  return text.split("").map((ch) => ch + "\u0332").join("");
-}
-
-function toStrikethrough(text: string): string {
-  return text.split("").map((ch) => ch + "\u0336").join("");
-}
-
-function toReverse(text: string): string {
-  return text.split("").reverse().join("");
-}
-
-interface StyledRow {
-  label: string;
-  transform: (text: string) => string;
-  color: string;
-}
-
-const STYLES: StyledRow[] = [
-  { label: "Bold", transform: toBold, color: "from-violet-500 to-purple-500" },
-  { label: "Italic", transform: toItalic, color: "from-blue-500 to-indigo-500" },
-  { label: "Underline", transform: toUnderline, color: "from-emerald-500 to-teal-500" },
-  { label: "Strikethrough", transform: toStrikethrough, color: "from-rose-500 to-pink-500" },
-  { label: "Monospace", transform: toMonospace, color: "from-zinc-600 to-zinc-700" },
-  { label: "Small Caps", transform: toSmallCaps, color: "from-amber-500 to-orange-500" },
-  { label: "Fancy", transform: toScript, color: "from-fuchsia-500 to-pink-500" },
-  { label: "Double", transform: toDouble, color: "from-cyan-500 to-blue-500" },
-  { label: "Reverse", transform: toReverse, color: "from-slate-500 to-gray-600" },
-  { label: "Sans Serif", transform: toSansSerif, color: "from-teal-500 to-emerald-500" },
-  { label: "Sans Bold", transform: toSansSerifBold, color: "from-indigo-500 to-violet-500" },
-  { label: "Fraktur", transform: toFraktur, color: "from-red-600 to-rose-600" },
-  { label: "Circled", transform: toCircled, color: "from-pink-500 to-fuchsia-500" },
-  { label: "Squared", transform: toSquared, color: "from-orange-500 to-amber-500" },
-  { label: "Fullwidth", transform: toFullwidth, color: "from-sky-500 to-blue-500" },
-  { label: "Superscript", transform: toSuperscript, color: "from-purple-500 to-indigo-500" },
-];
+const STYLES = [
+  { label: "Bold", transform: (t: string) => mapChars(t, BOLD_UPPER, BOLD_LOWER, BOLD_DIGIT), icon: "B" },
+  { label: "Italic", transform: (t: string) => mapChars(t, ITALIC_UPPER, ITALIC_LOWER), icon: "I" },
+  { label: "Underline", transform: (t: string) => t.split("").map((ch) => ch + "\u0332").join(""), icon: "U" },
+  { label: "Strikethrough", transform: (t: string) => t.split("").map((ch) => ch + "\u0336").join(""), icon: "S" },
+  { label: "Monospace", transform: (t: string) => mapChars(t, MONO_UPPER, MONO_LOWER, MONO_DIGIT), icon: "M" },
+  { label: "Small Caps", transform: (t: string) => t.split("").map((ch) => (ch >= "A" && ch <= "Z") ? ch : SMALLCAPS_MAP[ch.toLowerCase()] || ch).join(""), icon: "SC" },
+  { label: "Fancy", transform: (t: string) => mapChars(t, SCRIPT_UPPER, SCRIPT_LOWER), icon: "F" },
+  { label: "Double", transform: (t: string) => mapChars(t, DOUBLE_UPPER, DOUBLE_LOWER, DOUBLE_DIGIT), icon: "D" },
+  { label: "Reverse", transform: (t: string) => t.split("").reverse().join(""), icon: "R" },
+  { label: "Sans Serif", transform: (t: string) => mapChars(t, SANS_UPPER, SANS_LOWER, SANS_DIGIT), icon: "SS" },
+  { label: "Sans Bold", transform: (t: string) => mapChars(t, SANS_BOLD_UPPER, SANS_BOLD_LOWER), icon: "SB" },
+  { label: "Fraktur", transform: (t: string) => mapChars(t, FRAKTUR_UPPER, FRAKTUR_LOWER), icon: "FK" },
+  { label: "Circled", transform: (t: string) => mapChars(t, CIRCLED_UPPER, CIRCLED_LOWER, CIRCLED_DIGIT), icon: "Ⓒ" },
+  { label: "Squared", transform: (t: string) => mapChars(t, SQUARED_UPPER, {}), icon: " Sq" },
+  { label: "Fullwidth", transform: (t: string) => mapChars(t, FULLWIDTH_UPPER, FULLWIDTH_LOWER, FULLWIDTH_DIGIT), icon: "FW" },
+  { label: "Superscript", transform: (t: string) => t.split("").map((ch) => SUPERSCRIPT_MAP[ch] || ch).join(""), icon: "Sup" },
+] as const;
 
 export default function TextFormatTool() {
   const [input, setInput] = useState("");
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
+  const results = useMemo(() => {
+    if (!input.trim()) return STYLES.map(() => "");
+    return STYLES.map((style) => style.transform(input));
+  }, [input]);
+
   const handleCopy = useCallback(async (text: string, index: number) => {
+    if (!text) return;
     try {
       await navigator.clipboard.writeText(text);
-      setCopiedIndex(index);
-      toast.success("Đã sao chép");
-      setTimeout(() => setCopiedIndex(null), 1500);
     } catch {
       const textarea = document.createElement("textarea");
       textarea.value = text;
@@ -251,77 +168,81 @@ export default function TextFormatTool() {
       textarea.select();
       document.execCommand("copy");
       document.body.removeChild(textarea);
-      setCopiedIndex(index);
-      toast.success("Đã sao chép");
-      setTimeout(() => setCopiedIndex(null), 1500);
     }
+    setCopiedIndex(index);
+    toast.success("Đã sao chép");
+    setTimeout(() => setCopiedIndex(null), 1200);
   }, []);
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex-1 flex min-h-0 overflow-hidden">
-        {/* LEFT: Input */}
-        <div className="w-1/2 flex flex-col border-r border-zinc-200 dark:border-zinc-800">
-          <div className="px-3 py-2 border-b border-zinc-200 dark:border-zinc-800/60">
-            <span className="text-[10px] font-medium text-zinc-500 uppercase tracking-wider">Input</span>
-          </div>
-          <div className="flex-1 p-3 min-h-0">
-            <textarea
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Nhập text cần chuyển đổi..."
-              className="w-full h-full text-sm text-zinc-800 bg-white border border-zinc-200 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 resize-none overflow-y-auto leading-relaxed transition-all duration-200 min-h-[120px] dark:text-zinc-200 dark:bg-zinc-900/60 dark:border-zinc-800"
-            />
-          </div>
+    <div className="flex flex-1 min-h-0 overflow-hidden">
+      {/* LEFT: Input */}
+      <div className="w-1/2 flex flex-col border-r border-zinc-200/60 dark:border-zinc-800/60">
+        <div className="px-3 py-2 border-b border-zinc-200/60 dark:border-zinc-800/60 bg-zinc-50/50 dark:bg-zinc-900/30">
+          <span className="text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Input</span>
         </div>
+        <div className="flex-1 p-3 min-h-0">
+          <textarea
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Nhập text cần chuyển đổi..."
+            className="w-full h-full text-sm text-zinc-800 bg-white border border-zinc-200/80 rounded-xl px-4 py-3 focus:outline-none focus:border-[#1677FF]/50 focus:ring-2 focus:ring-[#1677FF]/10 resize-none overflow-y-auto leading-relaxed transition-all duration-150 min-h-[120px] dark:text-zinc-200 dark:bg-zinc-900/60 dark:border-zinc-800 dark:focus:border-[#00D9FF]/50 dark:focus:ring-[#00D9FF]/10 placeholder:text-zinc-300 dark:placeholder:text-zinc-600"
+          />
+        </div>
+      </div>
 
-        {/* RIGHT: Output */}
-        <div className="w-1/2 flex flex-col min-h-0">
-          <div className="px-3 py-2 border-b border-zinc-200 dark:border-zinc-800/60">
-            <span className="text-[10px] font-medium text-zinc-500 uppercase tracking-wider">Output</span>
-          </div>
-          <div className="flex-1 overflow-y-auto p-3 space-y-2">
-            {STYLES.map((style, i) => {
-              const result = input.trim() ? style.transform(input) : "";
-              const isCopied = copiedIndex === i;
-              return (
-                <div
-                  key={style.label}
-                  className="group flex items-center gap-2 p-2.5 rounded-lg bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-100 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-200"
-                >
-                  <div className="flex-1 min-w-0">
-                    <div className="text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 mb-1 uppercase tracking-wider">
+      {/* RIGHT: Output */}
+      <div className="w-1/2 flex flex-col min-h-0">
+        <div className="px-3 py-2 border-b border-zinc-200/60 dark:border-zinc-800/60 bg-zinc-50/50 dark:bg-zinc-900/30">
+          <span className="text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Output</span>
+        </div>
+        <div className="flex-1 overflow-y-auto p-2 space-y-1">
+          {STYLES.map((style, i) => {
+            const result = results[i];
+            const isCopied = copiedIndex === i;
+            return (
+              <div
+                key={style.label}
+                className="animate-slide-in group flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-[#1677FF]/5 dark:hover:bg-[#00D9FF]/5 border border-transparent hover:border-[#1677FF]/10 dark:hover:border-[#00D9FF]/10 transition-all duration-150"
+                style={{ animationDelay: `${i * 20}ms` }}
+              >
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1.5 mb-0.5">
+                    <span className="inline-flex items-center justify-center w-5 h-5 rounded text-[9px] font-bold bg-[#1677FF]/10 text-[#1677FF] dark:bg-[#00D9FF]/10 dark:text-[#00D9FF]">
+                      {style.icon}
+                    </span>
+                    <span className="text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
                       {style.label}
-                    </div>
-                    <div className={`text-sm truncate leading-relaxed ${result ? "text-zinc-800 dark:text-zinc-200" : "text-zinc-300 dark:text-zinc-600"}`}>
-                      {result || "—"}
-                    </div>
+                    </span>
                   </div>
-                  <button
-                    onClick={() => handleCopy(result, i)}
-                    disabled={!result}
-                    className={`flex items-center gap-1 px-2.5 py-1.5 text-[10px] font-medium rounded-md transition-all duration-200 shadow-sm active:scale-[0.95] disabled:opacity-30 disabled:cursor-not-allowed ${
-                      isCopied
-                        ? "bg-green-500 text-white"
-                        : `bg-gradient-to-r ${style.color} text-white hover:opacity-90`
-                    }`}
-                    title={`Copy ${style.label}`}
-                  >
-                    {isCopied ? (
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                    ) : (
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
-                      </svg>
-                    )}
-                    {isCopied ? "OK" : "Copy"}
-                  </button>
+                  <div className={`text-sm truncate leading-relaxed font-medium ${result ? "text-zinc-700 dark:text-zinc-300" : "text-zinc-200 dark:text-zinc-700"}`}>
+                    {result || "\u2014"}
+                  </div>
                 </div>
-              );
-            })}
-          </div>
+                <button
+                  onClick={() => handleCopy(result, i)}
+                  disabled={!result}
+                  className={`flex items-center gap-1 px-2 py-1 text-[10px] font-semibold rounded-md transition-all duration-150 shadow-sm active:scale-95 disabled:opacity-0 disabled:group-hover:opacity-0 ${
+                    isCopied
+                      ? "bg-[#00D9FF] text-[#020B2D]"
+                      : "bg-[#1677FF] text-white hover:bg-[#1677FF]/90 dark:bg-[#00D9FF] dark:text-[#020B2D] dark:hover:bg-[#00D9FF]/90"
+                  }`}
+                  title={`Copy ${style.label}`}
+                >
+                  {isCopied ? (
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                    </svg>
+                  ) : (
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                    </svg>
+                  )}
+                  {isCopied ? "OK" : "Copy"}
+                </button>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

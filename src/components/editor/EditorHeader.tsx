@@ -11,7 +11,7 @@ export default function EditorHeader() {
   const { theme, toggle } = useTheme();
 
   return (
-    <header className="h-14 border-b border-zinc-200 dark:border-zinc-800/80 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-sm flex items-center px-5 gap-4">
+    <header className="h-14 border-b border-zinc-200/60 dark:border-zinc-800/60 bg-white/95 dark:bg-[#020B2D]/95 backdrop-blur-sm flex items-center px-5 gap-4">
       <div className="flex items-center gap-1">
         <button
           onClick={undo}
@@ -37,8 +37,8 @@ export default function EditorHeader() {
 
       <div className="flex-1 flex justify-center">
         <div className="flex items-center gap-2">
-          <span className="text-sm font-semibold text-zinc-800 dark:text-zinc-200">RV Image Editor</span>
-          <span className="text-[10px] text-zinc-400 dark:text-zinc-600 bg-zinc-200 dark:bg-zinc-800 px-2 py-0.5 rounded-full">v1.0</span>
+          <span className="text-sm font-bold text-[#020B2D] dark:text-[#F5FAFF]">RV Image Editor</span>
+          <span className="text-[10px] font-semibold text-[#1677FF] dark:text-[#00D9FF] bg-[#1677FF]/10 dark:bg-[#00D9FF]/10 px-2 py-0.5 rounded-full">v1.0</span>
         </div>
       </div>
 

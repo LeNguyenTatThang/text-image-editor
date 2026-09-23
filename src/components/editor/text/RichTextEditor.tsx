@@ -244,12 +244,12 @@ export default function RichTextEditor({ initialHtml, onTextChange }: RichTextEd
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-center justify-between px-4 py-2.5 border-b border-zinc-200 dark:border-zinc-800/80">
-        <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-semibold">
+      <div className="flex items-center justify-between px-4 py-2.5 border-b border-zinc-200/60 dark:border-zinc-800/60 bg-zinc-50/50 dark:bg-zinc-900/30">
+        <span className="text-[10px] text-zinc-400 dark:text-zinc-500 uppercase tracking-wider font-semibold">
           Trình soạn thảo
         </span>
         <button onClick={handleCopyUnicodeBold} disabled={isEmpty}
-          className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-medium rounded-lg bg-violet-600 text-white hover:bg-violet-500 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm shadow-violet-600/20 hover:shadow-violet-500/30 active:scale-[0.98]"
+          className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold rounded-lg bg-[#1677FF] text-white hover:bg-[#1677FF]/90 transition-all duration-150 disabled:opacity-30 disabled:cursor-not-allowed shadow-sm shadow-[#1677FF]/20 hover:shadow-[#1677FF]/30 active:scale-[0.98] dark:bg-[#00D9FF] dark:text-[#020B2D] dark:hover:bg-[#00D9FF]/90 dark:shadow-[#00D9FF]/20"
           title="Sao chép Unicode Bold cho Facebook cá nhân (dấu tiếng Việt giữ nguyên)">
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
           Copy
@@ -257,7 +257,7 @@ export default function RichTextEditor({ initialHtml, onTextChange }: RichTextEd
       </div>
 
       {/* Toolbar */}
-      <div className="flex items-center gap-0.5 px-3 py-2 border-b border-zinc-200 dark:border-zinc-800/60 overflow-x-auto">
+      <div className="flex items-center gap-0.5 px-3 py-2 border-b border-zinc-200/60 dark:border-zinc-800/60 overflow-x-auto">
         <button onClick={() => execCmd("bold")} title="Đậm (Ctrl+B)" className={TB + (activeCmds.has("bold") ? TB_ON : TB_OFF)}>
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M6 4h8a4 4 0 014 4 4 4 0 01-4 4H6z M6 12h9a4 4 0 014 4 4 4 0 01-4 4H6z" /></svg>
         </button>

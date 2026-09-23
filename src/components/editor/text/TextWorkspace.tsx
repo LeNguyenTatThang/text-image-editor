@@ -196,13 +196,13 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
   return (
     <div className="flex flex-col overflow-hidden h-full">
       {/* Tab Bar */}
-      <div className="flex items-center gap-1 px-3 py-1.5 border-b border-zinc-200 dark:border-zinc-800/60 bg-zinc-50/50 dark:bg-zinc-900/30">
+      <div className="flex items-center gap-1 px-3 py-1.5 border-b border-zinc-200/60 dark:border-zinc-800/60 bg-zinc-50/50 dark:bg-zinc-900/30">
         <button
           onClick={() => setActiveTab("format")}
-          className={`flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-medium rounded-md transition-all duration-200 ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold rounded-lg transition-all duration-150 ${
             activeTab === "format"
-              ? "bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-sm"
-              : "text-zinc-500 hover:text-zinc-800 hover:bg-zinc-200 dark:text-zinc-400 dark:hover:text-zinc-200 dark:hover:bg-zinc-800"
+              ? "bg-[#1677FF] text-white shadow-md shadow-[#1677FF]/20 dark:bg-[#00D9FF] dark:text-[#020B2D] dark:shadow-[#00D9FF]/20"
+              : "text-zinc-500 hover:text-[#1677FF] hover:bg-[#1677FF]/5 dark:text-zinc-400 dark:hover:text-[#00D9FF] dark:hover:bg-[#00D9FF]/5"
           }`}
         >
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -212,10 +212,10 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
         </button>
         <button
           onClick={() => setActiveTab("ai")}
-          className={`flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-medium rounded-md transition-all duration-200 ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold rounded-lg transition-all duration-150 ${
             activeTab === "ai"
-              ? "bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-sm"
-              : "text-zinc-500 hover:text-zinc-800 hover:bg-zinc-200 dark:text-zinc-400 dark:hover:text-zinc-200 dark:hover:bg-zinc-800"
+              ? "bg-[#1677FF] text-white shadow-md shadow-[#1677FF]/20 dark:bg-[#00D9FF] dark:text-[#020B2D] dark:shadow-[#00D9FF]/20"
+              : "text-zinc-500 hover:text-[#1677FF] hover:bg-[#1677FF]/5 dark:text-zinc-400 dark:hover:text-[#00D9FF] dark:hover:bg-[#00D9FF]/5"
           }`}
         >
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -228,7 +228,7 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
       {/* AI Content Tab */}
       {activeTab === "ai" && (
         <>
-          <div className="flex items-center gap-2 px-4 py-2 border-b border-zinc-200 dark:border-zinc-800/60">
+          <div className="flex items-center gap-2 px-4 py-2 border-b border-zinc-200/60 dark:border-zinc-800/60">
             {PRESET_PACKAGES.map((preset) => {
               const isLoading = loadingPackage === preset.name;
               const isAnyLoading = loadingPackage !== null;
@@ -237,10 +237,10 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
                   key={preset.name}
                   onClick={() => generateForPackage(preset)}
                   disabled={isAnyLoading}
-                  className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-medium rounded-md text-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm active:scale-[0.97] ${
+                  className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-lg text-white transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm active:scale-[0.97] ${
                     isLoading
-                      ? "bg-gradient-to-r from-blue-500 to-cyan-500 animate-pulse"
-                      : "bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500"
+                      ? "bg-[#00D9FF] text-[#020B2D] animate-pulse-glow"
+                      : "bg-[#1677FF] hover:bg-[#1677FF]/90 dark:bg-[#00D9FF] dark:text-[#020B2D] dark:hover:bg-[#00D9FF]/90"
                   }`}
                   title={`Tạo nội dung cho gói ${preset.name}`}
                 >
@@ -259,7 +259,7 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
               );
             })}
 
-            <div className="w-px h-5 bg-zinc-300 mx-1 dark:bg-zinc-800" />
+            <div className="w-px h-5 bg-zinc-200 dark:bg-zinc-800 mx-1" />
 
             {CONTENT_TYPE_BUTTONS.map((btn) => {
               const isLoading = loadingPackage === btn.type;
@@ -269,8 +269,8 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
                   key={btn.type}
                   onClick={() => generateForPackage(PRESET_PACKAGES[0], btn.type)}
                   disabled={isAnyLoading}
-                  className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-medium rounded-md text-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm active:scale-[0.97] bg-gradient-to-r ${btn.color} ${
-                    isLoading ? "animate-pulse" : ""
+                  className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-lg text-white transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm active:scale-[0.97] bg-gradient-to-r ${btn.color} ${
+                    isLoading ? "animate-pulse-glow" : ""
                   }`}
                   title={`Tạo ${btn.label}`}
                 >
@@ -293,12 +293,12 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
               );
             })}
 
-            <div className="w-px h-5 bg-zinc-300 mx-1 dark:bg-zinc-800" />
+            <div className="w-px h-5 bg-zinc-200 dark:bg-zinc-800 mx-1" />
 
             <button
               onClick={autoFormat}
               disabled={loadingPackage !== null}
-              className="flex items-center gap-1 px-2.5 py-1 text-[11px] font-medium rounded-md bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-400 hover:to-orange-400 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm active:scale-[0.97]"
+              className="flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-lg bg-[#1677FF]/10 text-[#1677FF] hover:bg-[#1677FF]/20 dark:bg-[#00D9FF]/10 dark:text-[#00D9FF] dark:hover:bg-[#00D9FF]/20 transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.97]"
               title="Tự động định dạng: bôi đậm giá tiền, nổi bật ưu đãi"
             >
               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">

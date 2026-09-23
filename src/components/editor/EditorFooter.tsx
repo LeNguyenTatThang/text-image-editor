@@ -11,7 +11,7 @@ export default function EditorFooter({ charCount = 0, lineCount = 0 }: EditorFoo
   const resetEditor = useEditorStore((s) => s.resetEditor);
 
   return (
-    <footer className="h-11 border-t border-zinc-200 dark:border-zinc-800/80 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-sm flex items-center px-5 justify-between">
+    <footer className="h-11 border-t border-zinc-200/60 dark:border-zinc-800/60 bg-white/95 dark:bg-[#020B2D]/95 backdrop-blur-sm flex items-center px-5 justify-between">
       <span className="text-[11px] text-zinc-400 dark:text-zinc-500 tabular-nums">
         {charCount} ký tự | {lineCount} dòng
       </span>

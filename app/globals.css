@@ -3,18 +3,33 @@
 @variant dark (&:is(.dark *));
 
 :root {
-  --background: #ffffff;
-  --foreground: #18181b;
+  --background: #F5FAFF;
+  --foreground: #020B2D;
+  --electric-blue: #1677FF;
+  --cyan: #00D9FF;
+  --navy: #020B2D;
+  --white: #F5FAFF;
+  --electric-blue-light: #1677FF15;
+  --cyan-light: #00D9FF15;
 }
 
 .dark {
-  --background: #09090b;
-  --foreground: #fafafa;
+  --background: #020B2D;
+  --foreground: #F5FAFF;
+  --electric-blue: #1677FF;
+  --cyan: #00D9FF;
+  --navy: #020B2D;
+  --white: #F5FAFF;
+  --electric-blue-light: #1677FF20;
+  --cyan-light: #00D9FF20;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-electric-blue: #1677FF;
+  --color-cyan-brand: #00D9FF;
+  --color-navy: #020B2D;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -52,4 +67,41 @@ html, body, #__next {
 
 .animate-fade-in {
   animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.animate-slide-in {
+  animation: slideIn 0.15s ease-out;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(22, 119, 255, 0.4); }
+  50% { box-shadow: 0 0 0 6px rgba(22, 119, 255, 0); }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1677FF40;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #1677FF80;
 }
