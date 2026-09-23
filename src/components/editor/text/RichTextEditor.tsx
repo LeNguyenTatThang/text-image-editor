@@ -248,17 +248,11 @@ export default function RichTextEditor({ initialHtml, onTextChange }: RichTextEd
         <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-semibold">
           Trình soạn thảo
         </span>
-        <button onClick={handleCopy} disabled={isEmpty}
-          className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-500 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm shadow-blue-600/20 hover:shadow-blue-500/30 active:scale-[0.98]"
-          title="Sao chép HTML format (dành cho nhóm Facebook)">
-          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
-          Sao chép (Nhóm)
-        </button>
         <button onClick={handleCopyUnicodeBold} disabled={isEmpty}
           className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-medium rounded-lg bg-violet-600 text-white hover:bg-violet-500 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm shadow-violet-600/20 hover:shadow-violet-500/30 active:scale-[0.98]"
           title="Sao chép Unicode Bold cho Facebook cá nhân (dấu tiếng Việt giữ nguyên)">
-          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
-          Copy (FB cá nhân)
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
+          Copy
         </button>
       </div>
 

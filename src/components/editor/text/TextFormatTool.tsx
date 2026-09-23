@@ -290,51 +290,46 @@ export default function TextFormatTool() {
             <span className="text-[10px] font-medium text-zinc-500 uppercase tracking-wider">Output</span>
           </div>
           <div className="flex-1 overflow-y-auto p-3 space-y-2">
-            {!input.trim() ? (
-              <div className="flex items-center justify-center h-full text-sm text-zinc-400 dark:text-zinc-600">
-                Chưa có nội dung
-              </div>
-            ) : (
-              STYLES.map((style, i) => {
-                const result = style.transform(input);
-                const isCopied = copiedIndex === i;
-                return (
-                  <div
-                    key={style.label}
-                    className="group flex items-center gap-2 p-2.5 rounded-lg bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-100 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-200"
-                  >
-                    <div className="flex-1 min-w-0">
-                      <div className="text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 mb-1 uppercase tracking-wider">
-                        {style.label}
-                      </div>
-                      <div className="text-sm text-zinc-800 dark:text-zinc-200 truncate leading-relaxed">
-                        {result}
-                      </div>
+            {STYLES.map((style, i) => {
+              const result = input.trim() ? style.transform(input) : "";
+              const isCopied = copiedIndex === i;
+              return (
+                <div
+                  key={style.label}
+                  className="group flex items-center gap-2 p-2.5 rounded-lg bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-100 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-200"
+                >
+                  <div className="flex-1 min-w-0">
+                    <div className="text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 mb-1 uppercase tracking-wider">
+                      {style.label}
                     </div>
-                    <button
-                      onClick={() => handleCopy(result, i)}
-                      className={`flex items-center gap-1 px-2.5 py-1.5 text-[10px] font-medium rounded-md transition-all duration-200 shadow-sm active:scale-[0.95] ${
-                        isCopied
-                          ? "bg-green-500 text-white"
-                          : `bg-gradient-to-r ${style.color} text-white hover:opacity-90`
-                      }`}
-                      title={`Copy ${style.label}`}
-                    >
-                      {isCopied ? (
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                      ) : (
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
-                        </svg>
-                      )}
-                      {isCopied ? "OK" : "Copy"}
-                    </button>
+                    <div className={`text-sm truncate leading-relaxed ${result ? "text-zinc-800 dark:text-zinc-200" : "text-zinc-300 dark:text-zinc-600"}`}>
+                      {result || "—"}
+                    </div>
                   </div>
-                );
-              })
-            )}
+                  <button
+                    onClick={() => handleCopy(result, i)}
+                    disabled={!result}
+                    className={`flex items-center gap-1 px-2.5 py-1.5 text-[10px] font-medium rounded-md transition-all duration-200 shadow-sm active:scale-[0.95] disabled:opacity-30 disabled:cursor-not-allowed ${
+                      isCopied
+                        ? "bg-green-500 text-white"
+                        : `bg-gradient-to-r ${style.color} text-white hover:opacity-90`
+                    }`}
+                    title={`Copy ${style.label}`}
+                  >
+                    {isCopied ? (
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    ) : (
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                      </svg>
+                    )}
+                    {isCopied ? "OK" : "Copy"}
+                  </button>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
