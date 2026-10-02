@@ -18,9 +18,9 @@ interface PackageForm {
 }
 
 const PRESET_PACKAGES: PackageForm[] = [
-  { name: "100M", speed: "100Mbps", price: "22.000", bonus: "200.000" },
-  { name: "500M", speed: "500Mbps", price: "33.000", bonus: "300.000" },
-  { name: "1G", speed: "1Gbps", price: "38.500", bonus: "380.000" },
+  { name: "100M", speed: "100Mbps", price: "23.100", bonus: "190.000" },
+  { name: "500M", speed: "500Mbps", price: "34.100", bonus: "280.000" },
+  { name: "1G", speed: "1Gbps", price: "39.600", bonus: "280.000" },
 ];
 
 const CONTENT_TYPE_BUTTONS: { type: ContentType; label: string; color: string }[] = [
