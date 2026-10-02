@@ -19,31 +19,31 @@ LOẠI 1: CONTENT THEO GÓI (100M / 500M / 1G)
 Chọn NGẪU NHIÊN 1 trong 5 phong cách bên dưới mỗi lần tạo. Mỗi content KHOẢNG 5 DÒNG.
 
 Phong cách A – Bật mí giá:
-💎 WiFi [tốc độ] – [giá]W/tháng, quá rẻ cho người Việt tại Hàn!
-🎁 Đăng ký nhận ngay [tiền]W + modem miễn phí
+💎 WiFi [tốc độ] – [giá]원/tháng, quá rẻ cho người Việt tại Hàn!
+🎁 Đăng ký nhận ngay [tiền]원 + modem miễn phí
 📡 Lắp đặt nhanh, hỗ trợ toàn Hàn
 📞 070-4322-6887
 
 Phong cách B – Nhấn ưu đãi:
-🚀 Gói [tốc độ] –仅 [giá]W/tháng, nhận [tiền]W tiền tặng!
+🚀 Gói [tốc độ] –仅 [giá]원/tháng, nhận [tiền]원 tiền tặng!
 ⚡ Tốc độ ổn định, đáp ứng mọi nhu cầu
 🏠 Lắp nhanh, hỗ trợ tận tâm
 📞 070-4322-6887
 
 Phong cách C – Khẳng định chất lượng:
-⭐ WiFi [tốc độ] – giá chỉ [giá]W/tháng
+⭐ WiFi [tốc độ] – giá chỉ [giá]원/tháng
 📶 Kết nối mượt, streaming – học tập – làm việc đều ổn
-🎁 Ưu đãi đăng ký: [tiền]W + modem
+🎁 Ưu đãi đăng ký: [tiền]원 + modem
 📞 070-4322-6887
 
 Phong cách D – Review ngắn gọn:
-🎯 Gói [tốc độ] – [giá]W/tháng – phù hợp nhu cầu hằng ngày
-🎁 Đăng ký tháng này nhận [tiền]W
+🎯 Gói [tốc độ] – [giá]원/tháng – phù hợp nhu cầu hằng ngày
+🎁 Đăng ký tháng này nhận [tiền]원
 🔧 Lắp đặt nhanh, hỗ trợ 24/7
 📞 070-4322-6887
 
 Phong cách E – Equation/Icon:
-📶 [Tốc độ] | [giá]W/tháng | Nhận [tiền]W
+📶 [Tốc độ] | [giá]원/tháng | Nhận [tiền]원
 ⚡ Ổn định – Nhanh – Giá rẻ
 🇰🇷 Lắp toàn Hàn, miễn phí modem
 📞 070-4322-6887
@@ -53,11 +53,11 @@ LOẠI 2: CONTENT NGẮN (1-2 dòng)
 ═══════════════════════════════════════
 Chọn NGẪU NHIÊN 1 trong 5 mẫu sau mỗi lần:
 
-Mẫu 1: WiFi [tốc độ] – [giá]W/tháng, tặng [tiền]W. Đăng ký ngay! 📞 070-4322-6887
-Mẫu 2: Gói [tốc độ] giá rẻ – chỉ [giá]W/tháng + nhận [tiền]W. 📞 070-4322-6887
-Mẫu 3: Lắp WiFi [tốc độ] – [giá]W/tháng, modem miễn phí. 📞 070-4322-6887
-Mẫu 4: 📶 [Tốc độ] | [giá]W/tháng | Tặng [tiền]W | Hotline: 070-4322-6887
-Mẫu 5: WiFi [tốc độ] giá [giá]W/tháng – đăng ký nhận ngay [tiền]W. 📞 070-4322-6887
+Mẫu 1: WiFi [tốc độ] – [giá]원/tháng, tặng [tiền]원. Đăng ký ngay! 📞 070-4322-6887
+Mẫu 2: Gói [tốc độ] giá rẻ – chỉ [giá]원/tháng + nhận [tiền]원. 📞 070-4322-6887
+Mẫu 3: Lắp WiFi [tốc độ] – [giá]원/tháng, modem miễn phí. 📞 070-4322-6887
+Mẫu 4: 📶 [Tốc độ] | [giá]원/tháng | Tặng [tiền]원 | Hotline: 070-4322-6887
+Mẫu 5: WiFi [tốc độ] giá [giá]원/tháng – đăng ký nhận ngay [tiền]원. 📞 070-4322-6887
 
 ═══════════════════════════════════════
 LOẠI 3: CONTENT FEEDBACK
@@ -66,11 +66,11 @@ Tạo NGẪU NHIÊN 1 trong 2 dạng (CHỈ trả về nội dung, KHÔNG ghi "D
 
 Dạng A:
 Anh/Chị khách ở [địa điểm] đăng ký WiFi [tốc độ], được hỗ trợ lắp đặt ngay trong ngày 📶
-Nhanh gọn, thuận tiện, có mạng dùng ngay 💙 nhận [tiền]W
+Nhanh gọn, thuận tiện, có mạng dùng ngay 💙 nhận [tiền]원
 📞 070-4322-6887
 
 Dạng B:
-Ưu đãi tháng này vẫn còn – tặng đến [tiền]W!
+Ưu đãi tháng này vẫn còn – tặng đến [tiền]원!
 Feedback khách vẫn đều đều, lắp đặt vẫn liên tục 📶
 📞 070-4322-6887
 
@@ -82,7 +82,7 @@ QUY TẮC CHUNG:
 - Tiếng Việt có dấu đầy đủ
 - KHÔNG dùng Unicode bold math (𝟏, 𝟐, 𝟑...)
 - Icon dòng 1 phải ĐỔI mỗi lần (dùng từ: 👑 🔥 💎 🚀 ⭐ 🏆 🎯 🌟 🎉 💪 📶)
-- Có thể dùng KRW hoặc W
+- Đơn vị tiền tệ: dùng KRW hoặc 원 (ký hiệu won Hàn), KHÔNG dùng "W"
 - KHÔNG dùng markdown, chỉ text thuần
 - PHẢI TẠO NỘI DUNG MỚI, KHÔNG trùng lặp
 - LUÔN LUÔN có số điện thoại: 070-4322-6887 (ở cuối hoặc gần cuối)

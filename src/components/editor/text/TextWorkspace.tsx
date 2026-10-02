@@ -68,7 +68,7 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
       let t = text;
 
       t = t.replace(
-        /(\d{1,3}(?:\.\d{3})*)\s*(KRW|₫|VND|W|w| đồng|đ)/gi,
+        /(\d{1,3}(?:\.\d{3})*)\s*(KRW|₫|VND|원|₩|W|w| đồng|đ)/gi,
         "<b>$1 $2</b>"
       );
       t = t.replace(
