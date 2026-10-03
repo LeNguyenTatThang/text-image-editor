@@ -4,7 +4,14 @@ import { useState, useCallback } from "react";
 import { toast } from "sonner";
 import RichTextEditor from "./RichTextEditor";
 import TextFormatTool from "./TextFormatTool";
-import { PackageInfo, ContentResponse, ContentType } from "@/types/content";
+import { PackageInfo, ContentResponse, ContentType, SimInfo } from "@/types/content";
+import {
+  SIM_CARRIERS,
+  SimPlan,
+  formatWon,
+  getSimPlans,
+  simPlanLabel,
+} from "@/lib/sim-plans";
 
 interface TextWorkspaceProps {
   onTextChange?: (info: { charCount: number; lineCount: number }) => void;
@@ -15,12 +22,19 @@ interface PackageForm {
   speed: string;
   price: string;
   bonus: string;
+  contentType: ContentType;
 }
 
-const PRESET_PACKAGES: PackageForm[] = [
-  { name: "100M", speed: "100Mbps", price: "23.100", bonus: "190.000" },
-  { name: "500M", speed: "500Mbps", price: "34.100", bonus: "280.000" },
-  { name: "1G", speed: "1Gbps", price: "39.600", bonus: "280.000" },
+const PRESET_PACKAGES_3Y: PackageForm[] = [
+  { name: "100M", speed: "100Mbps", price: "23.100", bonus: "190.000", contentType: "package" },
+  { name: "500M", speed: "500Mbps", price: "34.100", bonus: "280.000", contentType: "package" },
+  { name: "1G", speed: "1Gbps", price: "39.600", bonus: "280.000", contentType: "package" },
+];
+
+const PRESET_PACKAGES_1Y: PackageForm[] = [
+  { name: "100M", speed: "100Mbps", price: "24.200", bonus: "Modem miễn phí", contentType: "package1year" },
+  { name: "500M", speed: "500Mbps", price: "31.900", bonus: "100.000", contentType: "package1year" },
+  { name: "1G", speed: "1Gbps", price: "38.500", bonus: "150.000", contentType: "package1year" },
 ];
 
 const CONTENT_TYPE_BUTTONS: { type: ContentType; label: string; color: string }[] = [
@@ -28,11 +42,25 @@ const CONTENT_TYPE_BUTTONS: { type: ContentType; label: string; color: string }[
   { type: "feedback", label: "Feedback", color: "from-rose-500 to-pink-500 hover:from-rose-400 hover:to-pink-400" },
 ];
 
+const SELECT_CLASS =
+  "h-7 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-2 pr-7 text-[11px] font-semibold text-zinc-700 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[#1677FF]/40 dark:focus:ring-[#00D9FF]/40 cursor-pointer";
+
 export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
   const [loadingPackage, setLoadingPackage] = useState<string | null>(null);
   const [stage, setStage] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"ai" | "format">("format");
+  const [simCarrier, setSimCarrier] = useState<string>("SK");
+  const [simPlanId, setSimPlanId] = useState<string>(getSimPlans("SK")[0]?.id ?? "");
+
+  const simPlans = getSimPlans(simCarrier);
+  const selectedSimPlan =
+    simPlans.find((p) => p.id === simPlanId) ?? simPlans[0];
+
+  const changeSimCarrier = (carrier: string) => {
+    setSimCarrier(carrier);
+    setSimPlanId(getSimPlans(carrier)[0]?.id ?? "");
+  };
 
   const autoFormat = useCallback(() => {
     const editor = document.querySelector("[data-rich-editor]");
@@ -148,12 +176,47 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
     editor.dispatchEvent(new Event("input", { bubbles: true }));
   }, []);
 
-  const generateForPackage = useCallback(async (preset: PackageForm, contentType: ContentType = "package") => {
-    setLoadingPackage(preset.name);
-    setStage("Đang gửi yêu cầu...");
-    setError(null);
+  const runGeneration = useCallback(
+    async (loadingKey: string, stageText: string, payload: Record<string, unknown>) => {
+      setLoadingPackage(loadingKey);
+      setStage("Đang gửi yêu cầu...");
+      setError(null);
 
-    try {
+      try {
+        setStage(stageText);
+        const response = await fetch("/api/generate-content", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...payload, style: "promotional" }),
+        });
+
+        if (!response.ok) {
+          const errData = await response.json();
+          throw new Error(errData.error || "Lỗi khi tạo nội dung");
+        }
+
+        setStage("Đang hiển thị...");
+        const result: ContentResponse = await response.json();
+
+        if (!result.content) {
+          throw new Error("Không nhận được nội dung từ AI");
+        }
+
+        await typeContent(result.content);
+        autoFormat();
+        toast.success("Đã tạo nội dung AI");
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Đã xảy ra lỗi");
+      } finally {
+        setLoadingPackage(null);
+        setStage("");
+      }
+    },
+    [typeContent, autoFormat]
+  );
+
+  const generateForPackage = useCallback(
+    (preset: PackageForm) => {
       const packageData: PackageInfo[] = [
         {
           name: preset.name,
@@ -163,35 +226,71 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
         },
       ];
 
-      setStage("AI đang viết nội dung...");
-      const response = await fetch("/api/generate-content", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ packages: packageData, contentType, style: "promotional" }),
+      return runGeneration(
+        `${preset.contentType}:${preset.name}`,
+        "AI đang viết nội dung...",
+        { packages: packageData, contentType: preset.contentType }
+      );
+    },
+    [runGeneration]
+  );
+
+  const generateForSim = useCallback(
+    (plan: SimPlan) => {
+      const simData: SimInfo = {
+        carrier: plan.carrier,
+        plan: plan.name,
+        policy: plan.policy,
+        data: plan.data,
+        calls: plan.calls,
+        texts: plan.texts,
+        price: formatWon(plan.price),
+        bonusNew: plan.bonusNew > 0 ? formatWon(plan.bonusNew) : undefined,
+        bonusMnp: plan.bonusMnp > 0 ? formatWon(plan.bonusMnp) : undefined,
+      };
+
+      return runGeneration(`sim:${plan.id}`, "AI đang viết nội dung SIM...", {
+        contentType: "sim",
+        sim: simData,
       });
+    },
+    [runGeneration]
+  );
 
-      if (!response.ok) {
-        const errData = await response.json();
-        throw new Error(errData.error || "Lỗi khi tạo nội dung");
-      }
+  const renderPackageButton = (preset: PackageForm) => {
+    const loadingKey = `${preset.contentType}:${preset.name}`;
+    const isLoading = loadingPackage === loadingKey;
+    const isAnyLoading = loadingPackage !== null;
+    const isOneYear = preset.contentType === "package1year";
 
-      setStage("Đang hiển thị...");
-      const result: ContentResponse = await response.json();
-
-      if (!result.content) {
-        throw new Error("Không nhận được nội dung từ AI");
-      }
-
-      await typeContent(result.content);
-      autoFormat();
-      toast.success("Đã tạo nội dung AI");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Đã xảy ra lỗi");
-    } finally {
-      setLoadingPackage(null);
-      setStage("");
-    }
-  }, [typeContent, autoFormat]);
+    return (
+      <button
+        key={loadingKey}
+        onClick={() => generateForPackage(preset)}
+        disabled={isAnyLoading}
+        className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-lg text-white transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm active:scale-[0.97] ${
+          isLoading
+            ? "bg-[#00D9FF] text-[#020B2D] animate-pulse-glow"
+            : isOneYear
+              ? "bg-violet-600 hover:bg-violet-600/90 dark:bg-violet-500 dark:text-white dark:hover:bg-violet-500/90"
+              : "bg-[#1677FF] hover:bg-[#1677FF]/90 dark:bg-[#00D9FF] dark:text-[#020B2D] dark:hover:bg-[#00D9FF]/90"
+        }`}
+        title={`Tạo nội dung ${isOneYear ? "gói 1 năm" : "gói 3 năm"} ${preset.name} – ${preset.price}원`}
+      >
+        {isLoading ? (
+          <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+          </svg>
+        ) : (
+          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+        )}
+        {preset.name}
+      </button>
+    );
+  };
 
   return (
     <div className="flex flex-col overflow-hidden h-full">
@@ -228,84 +327,125 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
       {/* AI Content Tab */}
       {activeTab === "ai" && (
         <>
-          <div className="flex items-center gap-2 px-4 py-2 border-b border-zinc-200/60 dark:border-zinc-800/60">
-            {PRESET_PACKAGES.map((preset) => {
-              const isLoading = loadingPackage === preset.name;
-              const isAnyLoading = loadingPackage !== null;
-              return (
-                <button
-                  key={preset.name}
-                  onClick={() => generateForPackage(preset)}
-                  disabled={isAnyLoading}
-                  className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-lg text-white transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm active:scale-[0.97] ${
-                    isLoading
-                      ? "bg-[#00D9FF] text-[#020B2D] animate-pulse-glow"
-                      : "bg-[#1677FF] hover:bg-[#1677FF]/90 dark:bg-[#00D9FF] dark:text-[#020B2D] dark:hover:bg-[#00D9FF]/90"
-                  }`}
-                  title={`Tạo nội dung cho gói ${preset.name}`}
-                >
-                  {isLoading ? (
-                    <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                    </svg>
-                  ) : (
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                  )}
-                  {preset.name}
-                </button>
-              );
-            })}
+          <div className="flex flex-col gap-1.5 px-4 py-2 border-b border-zinc-200/60 dark:border-zinc-800/60">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="px-1.5 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wider bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+                3 năm
+              </span>
 
-            <div className="w-px h-5 bg-zinc-200 dark:bg-zinc-800 mx-1" />
+              {PRESET_PACKAGES_3Y.map((preset) => renderPackageButton(preset))}
 
-            {CONTENT_TYPE_BUTTONS.map((btn) => {
-              const isLoading = loadingPackage === btn.type;
-              const isAnyLoading = loadingPackage !== null;
-              return (
-                <button
-                  key={btn.type}
-                  onClick={() => generateForPackage(PRESET_PACKAGES[0], btn.type)}
-                  disabled={isAnyLoading}
-                  className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-lg text-white transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm active:scale-[0.97] bg-gradient-to-r ${btn.color} ${
-                    isLoading ? "animate-pulse-glow" : ""
-                  }`}
-                  title={`Tạo ${btn.label}`}
-                >
-                  {isLoading ? (
-                    <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                    </svg>
-                  ) : btn.type === "short" ? (
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-                    </svg>
-                  ) : (
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                    </svg>
-                  )}
-                  {btn.label}
-                </button>
-              );
-            })}
+              <div className="w-px h-5 bg-zinc-200 dark:bg-zinc-800 mx-1" />
 
-            <div className="w-px h-5 bg-zinc-200 dark:bg-zinc-800 mx-1" />
+              {CONTENT_TYPE_BUTTONS.map((btn) => {
+                const isLoading = loadingPackage?.startsWith(`${btn.type}:`) ?? false;
+                const isAnyLoading = loadingPackage !== null;
+                return (
+                  <button
+                    key={btn.type}
+                    onClick={() => generateForPackage({ ...PRESET_PACKAGES_3Y[0], contentType: btn.type })}
+                    disabled={isAnyLoading}
+                    className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-lg text-white transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm active:scale-[0.97] bg-gradient-to-r ${btn.color} ${
+                      isLoading ? "animate-pulse-glow" : ""
+                    }`}
+                    title={`Tạo ${btn.label}`}
+                  >
+                    {isLoading ? (
+                      <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                      </svg>
+                    ) : btn.type === "short" ? (
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                      </svg>
+                    ) : (
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                      </svg>
+                    )}
+                    {btn.label}
+                  </button>
+                );
+              })}
 
-            <button
-              onClick={autoFormat}
-              disabled={loadingPackage !== null}
-              className="flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-lg bg-[#1677FF]/10 text-[#1677FF] hover:bg-[#1677FF]/20 dark:bg-[#00D9FF]/10 dark:text-[#00D9FF] dark:hover:bg-[#00D9FF]/20 transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.97]"
-              title="Tự động định dạng: bôi đậm giá tiền, nổi bật ưu đãi"
-            >
-              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-              </svg>
-              Định dạng
-            </button>
+              <div className="w-px h-5 bg-zinc-200 dark:bg-zinc-800 mx-1" />
+
+              <button
+                onClick={autoFormat}
+                disabled={loadingPackage !== null}
+                className="flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-lg bg-[#1677FF]/10 text-[#1677FF] hover:bg-[#1677FF]/20 dark:bg-[#00D9FF]/10 dark:text-[#00D9FF] dark:hover:bg-[#00D9FF]/20 transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.97]"
+                title="Tự động định dạng: bôi đậm giá tiền, nổi bật ưu đãi"
+              >
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                </svg>
+                Định dạng
+              </button>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="px-1.5 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wider bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400">
+                1 năm
+              </span>
+
+              {PRESET_PACKAGES_1Y.map((preset) => renderPackageButton(preset))}
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="px-1.5 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wider bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-400">
+                SIM
+              </span>
+
+              <select
+                value={simCarrier}
+                onChange={(e) => changeSimCarrier(e.target.value)}
+                disabled={loadingPackage !== null}
+                className={SELECT_CLASS}
+                title="Chọn nhà mạng SIM"
+              >
+                {SIM_CARRIERS.map((carrier) => (
+                  <option key={carrier} value={carrier}>
+                    SIM {carrier}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                value={selectedSimPlan?.id ?? ""}
+                onChange={(e) => setSimPlanId(e.target.value)}
+                disabled={loadingPackage !== null}
+                className={`${SELECT_CLASS} max-w-[260px]`}
+                title="Chọn gói SIM"
+              >
+                {simPlans.map((plan) => (
+                  <option key={plan.id} value={plan.id}>
+                    {simPlanLabel(plan)}
+                  </option>
+                ))}
+              </select>
+
+              <button
+                onClick={() => selectedSimPlan && generateForSim(selectedSimPlan)}
+                disabled={!selectedSimPlan || loadingPackage !== null}
+                className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-lg text-white transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm active:scale-[0.97] bg-gradient-to-r from-sky-500 to-indigo-500 hover:from-sky-400 hover:to-indigo-400 ${
+                  loadingPackage?.startsWith("sim:") ? "animate-pulse-glow" : ""
+                }`}
+                title="Tạo nội dung SIM theo gói đã chọn"
+              >
+                {loadingPackage?.startsWith("sim:") ? (
+                  <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                ) : (
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                  </svg>
+                )}
+                Tạo SIM
+              </button>
+            </div>
           </div>
 
           {error && (

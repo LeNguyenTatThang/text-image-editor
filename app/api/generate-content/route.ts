@@ -6,7 +6,7 @@ export async function POST(request: NextRequest) {
   try {
     const body: ContentRequest = await request.json();
 
-    if (!body.packages || body.packages.length === 0) {
+    if ((!body.packages || body.packages.length === 0) && !body.sim) {
       return Response.json(
         { error: "At least one package is required" },
         { status: 400 }
