@@ -326,143 +326,155 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
 
       {/* AI Content Tab */}
       {activeTab === "ai" && (
-        <>
-          <div className="flex flex-col gap-1.5 px-4 py-2 border-b border-zinc-200/60 dark:border-zinc-800/60">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="px-1.5 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wider bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
-                3 năm
-              </span>
+        <div className="flex flex-1 min-h-0">
+          {/* Left: 40% – nút tạo content */}
+          <div className="w-2/5 min-w-[260px] max-w-[460px] flex flex-col border-r border-zinc-200/60 dark:border-zinc-800/60 bg-zinc-50/30 dark:bg-zinc-900/20 overflow-hidden">
+            {error && (
+              <div className="px-4 py-1.5 bg-red-50 dark:bg-red-900/20 border-b border-red-200 dark:border-red-800">
+                <p className="text-[11px] text-red-600 dark:text-red-400">{error}</p>
+              </div>
+            )}
 
-              {PRESET_PACKAGES_3Y.map((preset) => renderPackageButton(preset))}
+            {loadingPackage && stage && (
+              <div className="px-4 py-1.5 bg-blue-50 dark:bg-blue-900/20 border-b border-blue-200 dark:border-blue-800 flex items-center gap-2">
+                <div className="w-3 h-3 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
+                <p className="text-[11px] text-blue-600 dark:text-blue-400">{stage}</p>
+              </div>
+            )}
 
-              <div className="w-px h-5 bg-zinc-200 dark:bg-zinc-800 mx-1" />
+            <div className="flex-1 overflow-y-auto flex flex-col gap-3 px-4 py-3">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="px-1.5 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wider bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+                  3 năm
+                </span>
 
-              {CONTENT_TYPE_BUTTONS.map((btn) => {
-                const isLoading = loadingPackage?.startsWith(`${btn.type}:`) ?? false;
-                const isAnyLoading = loadingPackage !== null;
-                return (
-                  <button
-                    key={btn.type}
-                    onClick={() => generateForPackage({ ...PRESET_PACKAGES_3Y[0], contentType: btn.type })}
-                    disabled={isAnyLoading}
-                    className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-lg text-white transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm active:scale-[0.97] bg-gradient-to-r ${btn.color} ${
-                      isLoading ? "animate-pulse-glow" : ""
-                    }`}
-                    title={`Tạo ${btn.label}`}
+                {PRESET_PACKAGES_3Y.map((preset) => renderPackageButton(preset))}
+
+                <div className="w-px h-5 bg-zinc-200 dark:bg-zinc-800 mx-1" />
+
+                {CONTENT_TYPE_BUTTONS.map((btn) => {
+                  const isLoading = loadingPackage?.startsWith(`${btn.type}:`) ?? false;
+                  const isAnyLoading = loadingPackage !== null;
+                  return (
+                    <button
+                      key={btn.type}
+                      onClick={() => generateForPackage({ ...PRESET_PACKAGES_3Y[0], contentType: btn.type })}
+                      disabled={isAnyLoading}
+                      className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-lg text-white transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm active:scale-[0.97] bg-gradient-to-r ${btn.color} ${
+                        isLoading ? "animate-pulse-glow" : ""
+                      }`}
+                      title={`Tạo ${btn.label}`}
+                    >
+                      {isLoading ? (
+                        <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                        </svg>
+                      ) : btn.type === "short" ? (
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                        </svg>
+                      ) : (
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                        </svg>
+                      )}
+                      {btn.label}
+                    </button>
+                  );
+                })}
+
+                <div className="w-px h-5 bg-zinc-200 dark:bg-zinc-800 mx-1" />
+
+                <button
+                  onClick={autoFormat}
+                  disabled={loadingPackage !== null}
+                  className="flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-lg bg-[#1677FF]/10 text-[#1677FF] hover:bg-[#1677FF]/20 dark:bg-[#00D9FF]/10 dark:text-[#00D9FF] dark:hover:bg-[#00D9FF]/20 transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.97]"
+                  title="Tự động định dạng: bôi đậm giá tiền, nổi bật ưu đãi"
+                >
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                  </svg>
+                  Định dạng
+                </button>
+              </div>
+
+              <div className="h-px bg-zinc-200/70 dark:bg-zinc-800/70" />
+
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="px-1.5 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wider bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400">
+                  1 năm
+                </span>
+
+                {PRESET_PACKAGES_1Y.map((preset) => renderPackageButton(preset))}
+              </div>
+
+              <div className="h-px bg-zinc-200/70 dark:bg-zinc-800/70" />
+
+              <div className="flex flex-col gap-2">
+                <span className="self-start px-1.5 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wider bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-400">
+                  SIM
+                </span>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  <select
+                    value={simCarrier}
+                    onChange={(e) => changeSimCarrier(e.target.value)}
+                    disabled={loadingPackage !== null}
+                    className={SELECT_CLASS}
+                    title="Chọn nhà mạng SIM"
                   >
-                    {isLoading ? (
+                    {SIM_CARRIERS.map((carrier) => (
+                      <option key={carrier} value={carrier}>
+                        SIM {carrier}
+                      </option>
+                    ))}
+                  </select>
+
+                  <select
+                    value={selectedSimPlan?.id ?? ""}
+                    onChange={(e) => setSimPlanId(e.target.value)}
+                    disabled={loadingPackage !== null}
+                    className={`${SELECT_CLASS} max-w-[260px]`}
+                    title="Chọn gói SIM"
+                  >
+                    {simPlans.map((plan) => (
+                      <option key={plan.id} value={plan.id}>
+                        {simPlanLabel(plan)}
+                      </option>
+                    ))}
+                  </select>
+
+                  <button
+                    onClick={() => selectedSimPlan && generateForSim(selectedSimPlan)}
+                    disabled={!selectedSimPlan || loadingPackage !== null}
+                    className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-lg text-white transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm active:scale-[0.97] bg-gradient-to-r from-sky-500 to-indigo-500 hover:from-sky-400 hover:to-indigo-400 ${
+                      loadingPackage?.startsWith("sim:") ? "animate-pulse-glow" : ""
+                    }`}
+                    title="Tạo nội dung SIM theo gói đã chọn"
+                  >
+                    {loadingPackage?.startsWith("sim:") ? (
                       <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                       </svg>
-                    ) : btn.type === "short" ? (
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-                      </svg>
                     ) : (
                       <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
                       </svg>
                     )}
-                    {btn.label}
+                    Tạo SIM
                   </button>
-                );
-              })}
-
-              <div className="w-px h-5 bg-zinc-200 dark:bg-zinc-800 mx-1" />
-
-              <button
-                onClick={autoFormat}
-                disabled={loadingPackage !== null}
-                className="flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-lg bg-[#1677FF]/10 text-[#1677FF] hover:bg-[#1677FF]/20 dark:bg-[#00D9FF]/10 dark:text-[#00D9FF] dark:hover:bg-[#00D9FF]/20 transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.97]"
-                title="Tự động định dạng: bôi đậm giá tiền, nổi bật ưu đãi"
-              >
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-                </svg>
-                Định dạng
-              </button>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="px-1.5 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wider bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400">
-                1 năm
-              </span>
-
-              {PRESET_PACKAGES_1Y.map((preset) => renderPackageButton(preset))}
-            </div>
-
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="px-1.5 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wider bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-400">
-                SIM
-              </span>
-
-              <select
-                value={simCarrier}
-                onChange={(e) => changeSimCarrier(e.target.value)}
-                disabled={loadingPackage !== null}
-                className={SELECT_CLASS}
-                title="Chọn nhà mạng SIM"
-              >
-                {SIM_CARRIERS.map((carrier) => (
-                  <option key={carrier} value={carrier}>
-                    SIM {carrier}
-                  </option>
-                ))}
-              </select>
-
-              <select
-                value={selectedSimPlan?.id ?? ""}
-                onChange={(e) => setSimPlanId(e.target.value)}
-                disabled={loadingPackage !== null}
-                className={`${SELECT_CLASS} max-w-[260px]`}
-                title="Chọn gói SIM"
-              >
-                {simPlans.map((plan) => (
-                  <option key={plan.id} value={plan.id}>
-                    {simPlanLabel(plan)}
-                  </option>
-                ))}
-              </select>
-
-              <button
-                onClick={() => selectedSimPlan && generateForSim(selectedSimPlan)}
-                disabled={!selectedSimPlan || loadingPackage !== null}
-                className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-lg text-white transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm active:scale-[0.97] bg-gradient-to-r from-sky-500 to-indigo-500 hover:from-sky-400 hover:to-indigo-400 ${
-                  loadingPackage?.startsWith("sim:") ? "animate-pulse-glow" : ""
-                }`}
-                title="Tạo nội dung SIM theo gói đã chọn"
-              >
-                {loadingPackage?.startsWith("sim:") ? (
-                  <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                  </svg>
-                ) : (
-                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                  </svg>
-                )}
-                Tạo SIM
-              </button>
+                </div>
+              </div>
             </div>
           </div>
 
-          {error && (
-            <div className="px-4 py-1.5 bg-red-50 dark:bg-red-900/20 border-b border-red-200 dark:border-red-800">
-              <p className="text-[11px] text-red-600 dark:text-red-400">{error}</p>
-            </div>
-          )}
-
-          {loadingPackage && stage && (
-            <div className="px-4 py-1.5 bg-blue-50 dark:bg-blue-900/20 border-b border-blue-200 dark:border-blue-800 flex items-center gap-2">
-              <div className="w-3 h-3 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
-              <p className="text-[11px] text-blue-600 dark:text-blue-400">{stage}</p>
-            </div>
-          )}
-
-          <RichTextEditor onTextChange={onTextChange} />
-        </>
+          {/* Right: 60% – trình soạn thảo */}
+          <div className="flex-1 min-w-0 flex flex-col">
+            <RichTextEditor onTextChange={onTextChange} />
+          </div>
+        </div>
       )}
 
       {/* Text Format Tab */}
