@@ -371,7 +371,7 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
 
             <div className="flex-1 overflow-y-auto flex flex-col gap-3 px-4 py-4">
               {/* Panel header */}
-              <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-[#1677FF]/15 bg-gradient-to-r from-[#1677FF]/10 to-[#00D9FF]/10 dark:border-[#00D9FF]/20 dark:from-[#00D9FF]/10 dark:to-[#00D9FF]/5">
+              <div className="shrink-0 flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-[#1677FF]/15 bg-gradient-to-r from-[#1677FF]/10 to-[#00D9FF]/10 dark:border-[#00D9FF]/20 dark:from-[#00D9FF]/10 dark:to-[#00D9FF]/5">
                 <span className="shrink-0 w-8 h-8 rounded-lg bg-gradient-to-br from-[#1677FF] to-[#00D9FF] text-white dark:text-[#020B2D] flex items-center justify-center shadow-sm shadow-[#1677FF]/30">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -384,7 +384,7 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
               </div>
 
               {/* Gói 3 năm */}
-              <section className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/70 dark:bg-zinc-900/50 overflow-hidden shadow-sm">
+              <section className="rounded-xl shrink-0 border border-zinc-200 dark:border-zinc-800 bg-white/70 dark:bg-zinc-900/50 overflow-hidden shadow-sm">
                 <header className="flex items-center justify-between gap-2 px-3 py-2 border-b border-zinc-200/70 dark:border-zinc-800/70 bg-zinc-50/80 dark:bg-zinc-800/40">
                   <span className="px-1.5 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wider bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
                     3 năm
@@ -397,7 +397,7 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
               </section>
 
               {/* Gói 1 năm */}
-              <section className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/70 dark:bg-zinc-900/50 overflow-hidden shadow-sm">
+              <section className="rounded-xl shrink-0 border border-zinc-200 dark:border-zinc-800 bg-white/70 dark:bg-zinc-900/50 overflow-hidden shadow-sm">
                 <header className="flex items-center justify-between gap-2 px-3 py-2 border-b border-zinc-200/70 dark:border-zinc-800/70 bg-zinc-50/80 dark:bg-zinc-800/40">
                   <span className="px-1.5 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wider bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400">
                     1 năm
@@ -410,7 +410,7 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
               </section>
 
               {/* SIM */}
-              <section className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/70 dark:bg-zinc-900/50 overflow-hidden shadow-sm">
+              <section className="rounded-xl shrink-0 border border-zinc-200 dark:border-zinc-800 bg-white/70 dark:bg-zinc-900/50 overflow-hidden shadow-sm">
                 <header className="flex items-center justify-between gap-2 px-3 py-2 border-b border-zinc-200/70 dark:border-zinc-800/70 bg-zinc-50/80 dark:bg-zinc-800/40">
                   <span className="px-1.5 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wider bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-400">
                     SIM
@@ -470,7 +470,7 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
               </section>
 
               {/* Kiểu nội dung */}
-              <section className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/70 dark:bg-zinc-900/50 overflow-hidden shadow-sm">
+              <section className="rounded-xl shrink-0 border border-zinc-200 dark:border-zinc-800 bg-white/70 dark:bg-zinc-900/50 overflow-hidden shadow-sm">
                 <header className="flex items-center justify-between gap-2 px-3 py-2 border-b border-zinc-200/70 dark:border-zinc-800/70 bg-zinc-50/80 dark:bg-zinc-800/40">
                   <span className="px-1.5 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wider bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400">
                     Kiểu nội dung
