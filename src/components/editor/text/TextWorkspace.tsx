@@ -43,7 +43,7 @@ const CONTENT_TYPE_BUTTONS: { type: ContentType; label: string; color: string }[
 ];
 
 const SELECT_CLASS =
-  "h-7 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-2 pr-7 text-[11px] font-semibold text-zinc-700 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[#1677FF]/40 dark:focus:ring-[#00D9FF]/40 cursor-pointer";
+  "h-8 w-full rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-2 pr-7 text-[11px] font-semibold text-zinc-700 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[#1677FF]/40 dark:focus:ring-[#00D9FF]/40 cursor-pointer";
 
 export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
   const [loadingPackage, setLoadingPackage] = useState<string | null>(null);
@@ -257,37 +257,64 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
     [runGeneration]
   );
 
-  const renderPackageButton = (preset: PackageForm) => {
+  const renderPackageCard = (preset: PackageForm) => {
     const loadingKey = `${preset.contentType}:${preset.name}`;
     const isLoading = loadingPackage === loadingKey;
     const isAnyLoading = loadingPackage !== null;
     const isOneYear = preset.contentType === "package1year";
+    const bonusText = /^\d/.test(preset.bonus) ? `${preset.bonus}₩` : preset.bonus;
 
     return (
       <button
         key={loadingKey}
         onClick={() => generateForPackage(preset)}
         disabled={isAnyLoading}
-        className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-lg text-white transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm active:scale-[0.97] ${
+        className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg border text-left transition-all duration-150 active:scale-[0.99] disabled:opacity-40 disabled:cursor-not-allowed ${
           isLoading
-            ? "bg-[#00D9FF] text-[#020B2D] animate-pulse-glow"
+            ? "border-[#00D9FF] bg-[#00D9FF]/10 animate-pulse-glow"
             : isOneYear
-              ? "bg-violet-600 hover:bg-violet-600/90 dark:bg-violet-500 dark:text-white dark:hover:bg-violet-500/90"
-              : "bg-[#1677FF] hover:bg-[#1677FF]/90 dark:bg-[#00D9FF] dark:text-[#020B2D] dark:hover:bg-[#00D9FF]/90"
+              ? "bg-white border-violet-200 hover:border-violet-400 hover:shadow-md hover:shadow-violet-500/10 dark:bg-zinc-900/60 dark:border-violet-900/60 dark:hover:border-violet-500"
+              : "bg-white border-zinc-200 hover:border-[#1677FF]/60 hover:shadow-md hover:shadow-[#1677FF]/10 dark:bg-zinc-900/60 dark:border-zinc-800 dark:hover:border-[#00D9FF]/60"
         }`}
-        title={`Tạo nội dung ${isOneYear ? "gói 1 năm" : "gói 3 năm"} ${preset.name} – ${preset.price}원`}
+        title={`Tạo nội dung ${isOneYear ? "gói 1 năm" : "gói 3 năm"} ${preset.name} – ${preset.price}₩`}
       >
-        {isLoading ? (
-          <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-          </svg>
-        ) : (
-          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-          </svg>
-        )}
-        {preset.name}
+        <span
+          className={`shrink-0 w-8 h-8 rounded-lg flex items-center justify-center ${
+            isOneYear
+              ? "bg-violet-500/10 text-violet-600 dark:text-violet-400"
+              : "bg-[#1677FF]/10 text-[#1677FF] dark:bg-[#00D9FF]/10 dark:text-[#00D9FF]"
+          }`}
+        >
+          {isLoading ? (
+            <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+            </svg>
+          ) : (
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          )}
+        </span>
+
+        <span className="flex-1 min-w-0">
+          <span className="flex items-baseline gap-1.5">
+            <span className="text-[12px] font-bold text-zinc-800 dark:text-zinc-100">{preset.name}</span>
+            <span className="text-[10px] font-medium text-zinc-400 dark:text-zinc-500">{preset.speed}</span>
+          </span>
+          <span className="block text-[10px] text-zinc-500 dark:text-zinc-400 truncate">
+            Ưu đãi: {bonusText}
+          </span>
+        </span>
+
+        <span
+          className={`shrink-0 text-right ${
+            isOneYear ? "text-violet-600 dark:text-violet-400" : "text-[#1677FF] dark:text-[#00D9FF]"
+          }`}
+        >
+          <span className="block text-[12px] font-extrabold">{preset.price}₩</span>
+          <span className="block text-[9px] font-semibold opacity-70">/tháng</span>
+        </span>
       </button>
     );
   };
@@ -342,81 +369,112 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
               </div>
             )}
 
-            <div className="flex-1 overflow-y-auto flex flex-col gap-3 px-4 py-3">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="px-1.5 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wider bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
-                  3 năm
-                </span>
-
-                {PRESET_PACKAGES_3Y.map((preset) => renderPackageButton(preset))}
-
-                <div className="w-px h-5 bg-zinc-200 dark:bg-zinc-800 mx-1" />
-
-                {CONTENT_TYPE_BUTTONS.map((btn) => {
-                  const isLoading = loadingPackage?.startsWith(`${btn.type}:`) ?? false;
-                  const isAnyLoading = loadingPackage !== null;
-                  return (
-                    <button
-                      key={btn.type}
-                      onClick={() => generateForPackage({ ...PRESET_PACKAGES_3Y[0], contentType: btn.type })}
-                      disabled={isAnyLoading}
-                      className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-lg text-white transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm active:scale-[0.97] bg-gradient-to-r ${btn.color} ${
-                        isLoading ? "animate-pulse-glow" : ""
-                      }`}
-                      title={`Tạo ${btn.label}`}
-                    >
-                      {isLoading ? (
-                        <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                        </svg>
-                      ) : btn.type === "short" ? (
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-                        </svg>
-                      ) : (
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                        </svg>
-                      )}
-                      {btn.label}
-                    </button>
-                  );
-                })}
-
-                <div className="w-px h-5 bg-zinc-200 dark:bg-zinc-800 mx-1" />
-
-                <button
-                  onClick={autoFormat}
-                  disabled={loadingPackage !== null}
-                  className="flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-lg bg-[#1677FF]/10 text-[#1677FF] hover:bg-[#1677FF]/20 dark:bg-[#00D9FF]/10 dark:text-[#00D9FF] dark:hover:bg-[#00D9FF]/20 transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.97]"
-                  title="Tự động định dạng: bôi đậm giá tiền, nổi bật ưu đãi"
-                >
-                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+            <div className="flex-1 overflow-y-auto flex flex-col gap-3 px-4 py-4">
+              {/* Panel header */}
+              <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-[#1677FF]/15 bg-gradient-to-r from-[#1677FF]/10 to-[#00D9FF]/10 dark:border-[#00D9FF]/20 dark:from-[#00D9FF]/10 dark:to-[#00D9FF]/5">
+                <span className="shrink-0 w-8 h-8 rounded-lg bg-gradient-to-br from-[#1677FF] to-[#00D9FF] text-white dark:text-[#020B2D] flex items-center justify-center shadow-sm shadow-[#1677FF]/30">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
-                  Định dạng
-                </button>
+                </span>
+                <div className="min-w-0">
+                  <p className="text-[12px] font-bold text-zinc-700 dark:text-zinc-200">Tạo nội dung AI</p>
+                  <p className="text-[10px] text-zinc-500 dark:text-zinc-400">Chọn gói, AI sẽ viết nội dung giới thiệu</p>
+                </div>
               </div>
 
-              <div className="h-px bg-zinc-200/70 dark:bg-zinc-800/70" />
+              {/* Gói 3 năm */}
+              <section className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/70 dark:bg-zinc-900/50 overflow-hidden shadow-sm">
+                <header className="flex items-center justify-between gap-2 px-3 py-2 border-b border-zinc-200/70 dark:border-zinc-800/70 bg-zinc-50/80 dark:bg-zinc-800/40">
+                  <span className="px-1.5 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wider bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+                    3 năm
+                  </span>
+                  <span className="text-[10px] text-zinc-400 dark:text-zinc-500">Hợp đồng 36 tháng</span>
+                </header>
+                <div className="p-2 flex flex-col gap-1.5">
+                  {PRESET_PACKAGES_3Y.map((preset) => renderPackageCard(preset))}
+                </div>
+              </section>
 
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="px-1.5 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wider bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400">
-                  1 năm
-                </span>
+              {/* Kiểu nội dung */}
+              <section className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/70 dark:bg-zinc-900/50 overflow-hidden shadow-sm">
+                <header className="flex items-center justify-between gap-2 px-3 py-2 border-b border-zinc-200/70 dark:border-zinc-800/70 bg-zinc-50/80 dark:bg-zinc-800/40">
+                  <span className="px-1.5 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wider bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400">
+                    Kiểu nội dung
+                  </span>
+                  <span className="text-[10px] text-zinc-400 dark:text-zinc-500">Ngắn gọn / phản hồi</span>
+                </header>
+                <div className="p-2 flex flex-col gap-1.5">
+                  <div className="grid grid-cols-2 gap-1.5">
+                    {CONTENT_TYPE_BUTTONS.map((btn) => {
+                      const isLoading = loadingPackage?.startsWith(`${btn.type}:`) ?? false;
+                      const isAnyLoading = loadingPackage !== null;
+                      return (
+                        <button
+                          key={btn.type}
+                          onClick={() => generateForPackage({ ...PRESET_PACKAGES_3Y[0], contentType: btn.type })}
+                          disabled={isAnyLoading}
+                          className={`flex items-center justify-center gap-1 px-2.5 py-1.5 text-[11px] font-semibold rounded-lg text-white transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm active:scale-[0.97] bg-gradient-to-r ${btn.color} ${
+                            isLoading ? "animate-pulse-glow" : ""
+                          }`}
+                          title={`Tạo ${btn.label}`}
+                        >
+                          {isLoading ? (
+                            <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                            </svg>
+                          ) : btn.type === "short" ? (
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                            </svg>
+                          ) : (
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                            </svg>
+                          )}
+                          {btn.label}
+                        </button>
+                      );
+                    })}
+                  </div>
 
-                {PRESET_PACKAGES_1Y.map((preset) => renderPackageButton(preset))}
-              </div>
+                  <button
+                    onClick={autoFormat}
+                    disabled={loadingPackage !== null}
+                    className="w-full flex items-center justify-center gap-1 px-2.5 py-1.5 text-[11px] font-semibold rounded-lg bg-[#1677FF]/10 text-[#1677FF] hover:bg-[#1677FF]/20 dark:bg-[#00D9FF]/10 dark:text-[#00D9FF] dark:hover:bg-[#00D9FF]/20 transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.97]"
+                    title="Tự động định dạng: bôi đậm giá tiền, nổi bật ưu đãi"
+                  >
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                    </svg>
+                    Định dạng lại
+                  </button>
+                </div>
+              </section>
 
-              <div className="h-px bg-zinc-200/70 dark:bg-zinc-800/70" />
+              {/* Gói 1 năm */}
+              <section className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/70 dark:bg-zinc-900/50 overflow-hidden shadow-sm">
+                <header className="flex items-center justify-between gap-2 px-3 py-2 border-b border-zinc-200/70 dark:border-zinc-800/70 bg-zinc-50/80 dark:bg-zinc-800/40">
+                  <span className="px-1.5 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wider bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400">
+                    1 năm
+                  </span>
+                  <span className="text-[10px] text-zinc-400 dark:text-zinc-500">Giá ưu đãi năm đầu</span>
+                </header>
+                <div className="p-2 flex flex-col gap-1.5">
+                  {PRESET_PACKAGES_1Y.map((preset) => renderPackageCard(preset))}
+                </div>
+              </section>
 
-              <div className="flex flex-col gap-2">
-                <span className="self-start px-1.5 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wider bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-400">
-                  SIM
-                </span>
-
-                <div className="flex flex-wrap items-center gap-2">
+              {/* SIM */}
+              <section className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/70 dark:bg-zinc-900/50 overflow-hidden shadow-sm">
+                <header className="flex items-center justify-between gap-2 px-3 py-2 border-b border-zinc-200/70 dark:border-zinc-800/70 bg-zinc-50/80 dark:bg-zinc-800/40">
+                  <span className="px-1.5 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wider bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-400">
+                    SIM
+                  </span>
+                  <span className="text-[10px] text-zinc-400 dark:text-zinc-500">Nhà mạng + gói cước</span>
+                </header>
+                <div className="p-2.5 flex flex-col gap-2">
                   <select
                     value={simCarrier}
                     onChange={(e) => changeSimCarrier(e.target.value)}
@@ -435,7 +493,7 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
                     value={selectedSimPlan?.id ?? ""}
                     onChange={(e) => setSimPlanId(e.target.value)}
                     disabled={loadingPackage !== null}
-                    className={`${SELECT_CLASS} max-w-[260px]`}
+                    className={SELECT_CLASS}
                     title="Chọn gói SIM"
                   >
                     {simPlans.map((plan) => (
@@ -448,7 +506,7 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
                   <button
                     onClick={() => selectedSimPlan && generateForSim(selectedSimPlan)}
                     disabled={!selectedSimPlan || loadingPackage !== null}
-                    className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-lg text-white transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm active:scale-[0.97] bg-gradient-to-r from-sky-500 to-indigo-500 hover:from-sky-400 hover:to-indigo-400 ${
+                    className={`w-full flex items-center justify-center gap-1 px-2.5 py-1.5 text-[11px] font-semibold rounded-lg text-white transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm active:scale-[0.97] bg-gradient-to-r from-sky-500 to-indigo-500 hover:from-sky-400 hover:to-indigo-400 ${
                       loadingPackage?.startsWith("sim:") ? "animate-pulse-glow" : ""
                     }`}
                     title="Tạo nội dung SIM theo gói đã chọn"
@@ -466,7 +524,7 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
                     Tạo SIM
                   </button>
                 </div>
-              </div>
+              </section>
             </div>
           </div>
 
