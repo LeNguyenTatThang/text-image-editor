@@ -396,63 +396,6 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
                 </div>
               </section>
 
-              {/* Kiểu nội dung */}
-              <section className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/70 dark:bg-zinc-900/50 overflow-hidden shadow-sm">
-                <header className="flex items-center justify-between gap-2 px-3 py-2 border-b border-zinc-200/70 dark:border-zinc-800/70 bg-zinc-50/80 dark:bg-zinc-800/40">
-                  <span className="px-1.5 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wider bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400">
-                    Kiểu nội dung
-                  </span>
-                  <span className="text-[10px] text-zinc-400 dark:text-zinc-500">Ngắn gọn / phản hồi</span>
-                </header>
-                <div className="p-2 flex flex-col gap-1.5">
-                  <div className="grid grid-cols-2 gap-1.5">
-                    {CONTENT_TYPE_BUTTONS.map((btn) => {
-                      const isLoading = loadingPackage?.startsWith(`${btn.type}:`) ?? false;
-                      const isAnyLoading = loadingPackage !== null;
-                      return (
-                        <button
-                          key={btn.type}
-                          onClick={() => generateForPackage({ ...PRESET_PACKAGES_3Y[0], contentType: btn.type })}
-                          disabled={isAnyLoading}
-                          className={`flex items-center justify-center gap-1 px-2.5 py-1.5 text-[11px] font-semibold rounded-lg text-white transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm active:scale-[0.97] bg-gradient-to-r ${btn.color} ${
-                            isLoading ? "animate-pulse-glow" : ""
-                          }`}
-                          title={`Tạo ${btn.label}`}
-                        >
-                          {isLoading ? (
-                            <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
-                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                            </svg>
-                          ) : btn.type === "short" ? (
-                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-                            </svg>
-                          ) : (
-                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                            </svg>
-                          )}
-                          {btn.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  <button
-                    onClick={autoFormat}
-                    disabled={loadingPackage !== null}
-                    className="w-full flex items-center justify-center gap-1 px-2.5 py-1.5 text-[11px] font-semibold rounded-lg bg-[#1677FF]/10 text-[#1677FF] hover:bg-[#1677FF]/20 dark:bg-[#00D9FF]/10 dark:text-[#00D9FF] dark:hover:bg-[#00D9FF]/20 transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.97]"
-                    title="Tự động định dạng: bôi đậm giá tiền, nổi bật ưu đãi"
-                  >
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-                    </svg>
-                    Định dạng lại
-                  </button>
-                </div>
-              </section>
-
               {/* Gói 1 năm */}
               <section className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/70 dark:bg-zinc-900/50 overflow-hidden shadow-sm">
                 <header className="flex items-center justify-between gap-2 px-3 py-2 border-b border-zinc-200/70 dark:border-zinc-800/70 bg-zinc-50/80 dark:bg-zinc-800/40">
@@ -522,6 +465,63 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
                       </svg>
                     )}
                     Tạo SIM
+                  </button>
+                </div>
+              </section>
+
+              {/* Kiểu nội dung */}
+              <section className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/70 dark:bg-zinc-900/50 overflow-hidden shadow-sm">
+                <header className="flex items-center justify-between gap-2 px-3 py-2 border-b border-zinc-200/70 dark:border-zinc-800/70 bg-zinc-50/80 dark:bg-zinc-800/40">
+                  <span className="px-1.5 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wider bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400">
+                    Kiểu nội dung
+                  </span>
+                  <span className="text-[10px] text-zinc-400 dark:text-zinc-500">Ngắn gọn / phản hồi</span>
+                </header>
+                <div className="p-2 flex flex-col gap-1.5">
+                  <div className="grid grid-cols-2 gap-1.5">
+                    {CONTENT_TYPE_BUTTONS.map((btn) => {
+                      const isLoading = loadingPackage?.startsWith(`${btn.type}:`) ?? false;
+                      const isAnyLoading = loadingPackage !== null;
+                      return (
+                        <button
+                          key={btn.type}
+                          onClick={() => generateForPackage({ ...PRESET_PACKAGES_3Y[0], contentType: btn.type })}
+                          disabled={isAnyLoading}
+                          className={`flex items-center justify-center gap-1 px-2.5 py-1.5 text-[11px] font-semibold rounded-lg text-white transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm active:scale-[0.97] bg-gradient-to-r ${btn.color} ${
+                            isLoading ? "animate-pulse-glow" : ""
+                          }`}
+                          title={`Tạo ${btn.label}`}
+                        >
+                          {isLoading ? (
+                            <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                            </svg>
+                          ) : btn.type === "short" ? (
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                            </svg>
+                          ) : (
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                            </svg>
+                          )}
+                          {btn.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <button
+                    onClick={autoFormat}
+                    disabled={loadingPackage !== null}
+                    className="w-full flex items-center justify-center gap-1 px-2.5 py-1.5 text-[11px] font-semibold rounded-lg bg-[#1677FF]/10 text-[#1677FF] hover:bg-[#1677FF]/20 dark:bg-[#00D9FF]/10 dark:text-[#00D9FF] dark:hover:bg-[#00D9FF]/20 transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.97]"
+                    title="Tự động định dạng: bôi đậm giá tiền, nổi bật ưu đãi"
+                  >
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                    </svg>
+                    Định dạng
                   </button>
                 </div>
               </section>
