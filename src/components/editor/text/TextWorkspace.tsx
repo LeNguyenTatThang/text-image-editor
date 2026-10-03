@@ -343,42 +343,42 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
               </div>
             )}
 
-            <div className="flex-1 overflow-y-auto flex flex-col gap-3 px-4 py-4">
+            <div className="flex-1 overflow-hidden flex flex-col gap-2 px-3 py-3">
               {/* Gói 3 năm */}
               <section className="rounded-xl shrink-0 border border-zinc-200 dark:border-zinc-800 bg-white/70 dark:bg-zinc-900/50 overflow-hidden shadow-sm">
-                <header className="flex items-center justify-between gap-2 px-3 py-2 border-b border-zinc-200/70 dark:border-zinc-800/70 bg-zinc-50/80 dark:bg-zinc-800/40">
+                <header className="flex items-center justify-between gap-2 px-2.5 py-1.5 border-b border-zinc-200/70 dark:border-zinc-800/70 bg-zinc-50/80 dark:bg-zinc-800/40">
                   <span className="px-1.5 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wider bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
                     3 năm
                   </span>
                   <span className="text-[10px] text-zinc-400 dark:text-zinc-500">Hợp đồng 36 tháng</span>
                 </header>
-                <div className="p-2 flex flex-wrap gap-1.5">
+                <div className="p-1.5 flex flex-wrap gap-1.5">
                   {PRESET_PACKAGES_3Y.map((preset) => renderPackageChip(preset))}
                 </div>
               </section>
 
               {/* Gói 1 năm */}
               <section className="rounded-xl shrink-0 border border-zinc-200 dark:border-zinc-800 bg-white/70 dark:bg-zinc-900/50 overflow-hidden shadow-sm">
-                <header className="flex items-center justify-between gap-2 px-3 py-2 border-b border-zinc-200/70 dark:border-zinc-800/70 bg-zinc-50/80 dark:bg-zinc-800/40">
+                <header className="flex items-center justify-between gap-2 px-2.5 py-1.5 border-b border-zinc-200/70 dark:border-zinc-800/70 bg-zinc-50/80 dark:bg-zinc-800/40">
                   <span className="px-1.5 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wider bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400">
                     1 năm
                   </span>
                   <span className="text-[10px] text-zinc-400 dark:text-zinc-500">Giá ưu đãi năm đầu</span>
                 </header>
-                <div className="p-2 flex flex-wrap gap-1.5">
+                <div className="p-1.5 flex flex-wrap gap-1.5">
                   {PRESET_PACKAGES_1Y.map((preset) => renderPackageChip(preset))}
                 </div>
               </section>
 
               {/* SIM */}
               <section className="rounded-xl shrink-0 border border-zinc-200 dark:border-zinc-800 bg-white/70 dark:bg-zinc-900/50 overflow-hidden shadow-sm">
-                <header className="flex items-center justify-between gap-2 px-3 py-2 border-b border-zinc-200/70 dark:border-zinc-800/70 bg-zinc-50/80 dark:bg-zinc-800/40">
+                <header className="flex items-center justify-between gap-2 px-2.5 py-1.5 border-b border-zinc-200/70 dark:border-zinc-800/70 bg-zinc-50/80 dark:bg-zinc-800/40">
                   <span className="px-1.5 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wider bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-400">
                     SIM
                   </span>
                   <span className="text-[10px] text-zinc-400 dark:text-zinc-500">Nhà mạng + gói cước</span>
                 </header>
-                <div className="p-2.5 flex flex-col gap-2">
+                <div className="p-1.5 flex flex-col gap-1.5">
                   <select
                     value={simCarrier}
                     onChange={(e) => changeSimCarrier(e.target.value)}
@@ -432,13 +432,13 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
 
               {/* Kiểu nội dung */}
               <section className="rounded-xl shrink-0 border border-zinc-200 dark:border-zinc-800 bg-white/70 dark:bg-zinc-900/50 overflow-hidden shadow-sm">
-                <header className="flex items-center justify-between gap-2 px-3 py-2 border-b border-zinc-200/70 dark:border-zinc-800/70 bg-zinc-50/80 dark:bg-zinc-800/40">
+                <header className="flex items-center justify-between gap-2 px-2.5 py-1.5 border-b border-zinc-200/70 dark:border-zinc-800/70 bg-zinc-50/80 dark:bg-zinc-800/40">
                   <span className="px-1.5 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wider bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400">
                     Kiểu nội dung
                   </span>
                   <span className="text-[10px] text-zinc-400 dark:text-zinc-500">Ngắn gọn / phản hồi</span>
                 </header>
-                <div className="p-2 flex flex-wrap gap-1.5">
+                <div className="p-1.5 flex flex-wrap gap-1.5">
                   {CONTENT_TYPE_BUTTONS.map((btn) => {
                     const isLoading = loadingPackage?.startsWith(`${btn.type}:`) ?? false;
                     const isAnyLoading = loadingPackage !== null;
