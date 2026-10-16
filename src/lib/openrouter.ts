@@ -163,7 +163,7 @@ QUY TẮC CHUNG:
 - Tiếng Việt có dấu đầy đủ
 - KHÔNG dùng Unicode bold math (𝟏, 𝟐, 𝟑...) cho LOẠI 1–4; RIÊNG LOẠI 5 PHẢI dùng
 - Icon dòng 1 phải ĐỔI mỗi lần (dùng từ: 👑 🔥 💎 🚀 ⭐ 🏆 🎯 🌟 🎉 💪 📶 📱)
-- Đơn vị tiền tệ: dùng KRW, 원 hoặc ₩ (ký hiệu won Hàn), KHÔNG dùng "W"
+- Đơn vị tiền tệ: chỉ dùng đơn vị tiền Hàn — KRW, won hoặc ₩ (ký hiệu won Hàn). KHÔNG dùng đồng Việt, ₫, VND, hay "W" đứng riêng
 - KHÔNG dùng markdown, chỉ text thuần
 - PHẢI TẠO NỘI DUNG MỚI, KHÔNG trùng lặp
 - LUÔN LUÔN có số điện thoại: 070-4322-6887 (ở cuối hoặc gần cuối)
@@ -197,9 +197,9 @@ export async function generateContent(
         `- Data: ${sim.data}`,
         `- Gọi: ${sim.calls}`,
         `- SMS: ${sim.texts}`,
-        `- Giá/tháng (sau giảm): ${sim.price}₩`,
-        `- Quà tặng khách đăng ký mới: ${sim.bonusNew || "0"}₩`,
-        `- Quà tặng chuyển mạng giữ số (MNP): ${sim.bonusMnp || "0"}₩`,
+        `- Giá/tháng (sau giảm): ${sim.price}`,
+        `- Quà tặng khách đăng ký mới: ${sim.bonusNew || "0"}`,
+        `- Quà tặng chuyển mạng giữ số (MNP): ${sim.bonusMnp || "0"}`,
       ].join("\n")
     : "";
 

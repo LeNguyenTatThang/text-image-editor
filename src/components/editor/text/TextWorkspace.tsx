@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import RichTextEditor from "./RichTextEditor";
 import TextFormatTool from "./TextFormatTool";
 import { PackageInfo, ContentResponse, ContentType, SimInfo } from "@/types/content";
+import { randomCurrency } from "@/lib/currency";
 import {
   SIM_CARRIERS,
   SimPlan,
@@ -26,9 +27,9 @@ interface PackageForm {
 }
 
 const PRESET_PACKAGES_3Y: PackageForm[] = [
-  { name: "100M", speed: "100Mbps", price: "23.100", bonus: "190.000", contentType: "package" },
-  { name: "500M", speed: "500Mbps", price: "34.100", bonus: "280.000", contentType: "package" },
-  { name: "1G", speed: "1Gbps", price: "39.600", bonus: "280.000", contentType: "package" },
+  { name: "100M", speed: "100Mbps", price: "22.000", bonus: "200.000", contentType: "package" },
+  { name: "500M", speed: "500Mbps", price: "33.000", bonus: "290.000", contentType: "package" },
+  { name: "1G", speed: "1Gbps", price: "38.500", bonus: "360.000", contentType: "package" },
 ];
 
 const PRESET_PACKAGES_1Y: PackageForm[] = [
@@ -52,6 +53,7 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
   const [activeTab, setActiveTab] = useState<"ai" | "format">("format");
   const [simCarrier, setSimCarrier] = useState<string>("SK");
   const [simPlanId, setSimPlanId] = useState<string>(getSimPlans("SK")[0]?.id ?? "");
+  const [currency, setCurrency] = useState(() => randomCurrency());
 
   const simPlans = getSimPlans(simCarrier);
   const selectedSimPlan =
@@ -96,7 +98,7 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
       let t = text;
 
       t = t.replace(
-        /(\d{1,3}(?:\.\d{3})*)\s*(KRW|₫|VND|원|₩|W|w| đồng|đ)/gi,
+        /(\d{1,3}(?:\.\d{3})*)\s*(KRW|won|원|₩|W\b)/gi,
         "<b>$1 $2</b>"
       );
       t = t.replace(
@@ -217,12 +219,18 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
 
   const generateForPackage = useCallback(
     (preset: PackageForm) => {
+      const unit = randomCurrency();
+      setCurrency(unit);
       const packageData: PackageInfo[] = [
         {
           name: preset.name,
           speed: preset.speed,
-          price: preset.price,
-          bonus: preset.bonus || undefined,
+          price: `${preset.price}${unit}`,
+          bonus: preset.bonus
+            ? /^\d/.test(preset.bonus)
+              ? `${preset.bonus}${unit}`
+              : preset.bonus
+            : undefined,
         },
       ];
 
@@ -237,6 +245,8 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
 
   const generateForSim = useCallback(
     (plan: SimPlan) => {
+      const unit = randomCurrency();
+      setCurrency(unit);
       const simData: SimInfo = {
         carrier: plan.carrier,
         plan: plan.name,
@@ -244,9 +254,9 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
         data: plan.data,
         calls: plan.calls,
         texts: plan.texts,
-        price: formatWon(plan.price),
-        bonusNew: plan.bonusNew > 0 ? formatWon(plan.bonusNew) : undefined,
-        bonusMnp: plan.bonusMnp > 0 ? formatWon(plan.bonusMnp) : undefined,
+        price: `${formatWon(plan.price)}${unit}`,
+        bonusNew: plan.bonusNew > 0 ? `${formatWon(plan.bonusNew)}${unit}` : undefined,
+        bonusMnp: plan.bonusMnp > 0 ? `${formatWon(plan.bonusMnp)}${unit}` : undefined,
       };
 
       return runGeneration(`sim:${plan.id}`, "AI đang viết nội dung SIM...", {
@@ -275,7 +285,7 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
               ? "bg-violet-600 hover:bg-violet-600/90 dark:bg-violet-500 dark:hover:bg-violet-500/90"
               : "bg-[#1677FF] hover:bg-[#1677FF]/90 dark:bg-[#00D9FF] dark:text-[#020B2D] dark:hover:bg-[#00D9FF]/90"
         }`}
-        title={`Tạo nội dung ${isOneYear ? "gói 1 năm" : "gói 3 năm"} ${preset.name} (${preset.speed}) – ${preset.price}₩/tháng, ưu đãi ${preset.bonus}`}
+        title={`Tạo nội dung ${isOneYear ? "gói 1 năm" : "gói 3 năm"} ${preset.name} (${preset.speed}) – ${preset.price}${currency}/tháng, ưu đãi ${preset.bonus}${currency}`}
       >
         {isLoading ? (
           <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
@@ -288,7 +298,7 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
           </svg>
         )}
         {preset.name}
-        <span className="text-[10px] font-bold opacity-80">{preset.price}₩</span>
+        <span className="text-[10px] font-bold opacity-80">{preset.price}{currency}</span>
       </button>
     );
   };
