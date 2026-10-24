@@ -57,23 +57,44 @@ Phong cách E – Equation/Icon:
 ═══════════════════════════════════════
 LOẠI 2: CONTENT NGẮN (1-2 dòng)
 ═══════════════════════════════════════
-Chọn NGẪU NHIÊN 1 trong 15 mẫu sau mỗi lần:
+Chọn NGẪU NHIÊN 1 trong 20 mẫu sau mỗi lần. KHÔNG lặp lại mẫu vừa dùng.
+Ưu tiên nêu TÍNH NĂNG (lắp nhanh, an toàn, bảo mật thông tin, thủ tục gọn, hỗ trợ tiếng Việt, tư vấn 24/7) thay vì mẫu nào cũng chỉ nói giá. Mẫu nào không có placeholder thì bỏ qua, KHÔNG bịa thêm số liệu.
 
-Mẫu 1: WiFi [tốc độ] – [giá]원/tháng, tặng [tiền]원. Đăng ký ngay! 📞 070-4322-6887
-Mẫu 2: Gói [tốc độ] giá rẻ – chỉ [giá]원/tháng + nhận [tiền]원. 📞 070-4322-6887
-Mẫu 3: Lắp WiFi [tốc độ] – [giá]원/tháng, modem miễn phí. 📞 070-4322-6887
-Mẫu 4: 📶 [Tốc độ] | [giá]원/tháng | Tặng [tiền]원 | Hotline: 070-4322-6887
-Mẫu 5: WiFi [tốc độ] giá [giá]원/tháng – đăng ký nhận ngay [tiền]원. 📞 070-4322-6887
-Mẫu 6: ⚡ [Tốc độ] chỉ [giá]원/tháng – tặng [tiền]원, lắp trong ngày. 📞 070-4322-6887
-Mẫu 7: 🏆 WiFi [tốc độ] giá tốt nhất – [giá]원/tháng, quà [tiền]원. 📞 070-4322-6887
-Mẫu 8: 🔥 Chốt ngay [tốc độ] – [giá]원/tháng, nhận [tiền]원 + modem miễn phí. 📞 070-4322-6887
-Mẫu 9: 📶 [Tốc độ] – [giá]원/tháng – [tiền]원 quà tặng – hỗ trợ 24/7: 070-4322-6887
-Mẫu 10: 🎁 Đăng ký WiFi [tốc độ] nhận [tiền]원, chỉ [giá]원/tháng. 📞 070-4322-6887
-Mẫu 11: 🇰🇷 WiFi [tốc độ] cho người Việt – [giá]원/tháng, tặng [tiền]원, lắp toàn Hàn. 📞 070-4322-6887
-Mẫu 12: 💎 [Tốc độ] siêu rẻ: [giá]원/tháng, tặng ngay [tiền]원. Gọi 070-4322-6887
-Mẫu 13: 🚀 Lắp WiFi [tốc độ] hôm nay – [giá]원/tháng, quà [tiền]원, không phí lắp. 📞 070-4322-6887
-Mẫu 14: 📞 Gọi ngay 070-4322-6887 – WiFi [tốc độ] [giá]원/tháng, tặng [tiền]원!
-Mẫu 15: ✅ WiFi [tốc độ] – [giá]원/tháng – tặng [tiền]원 – modem miễn phí. 📞 070-4322-6887
+Mẫu 1: ⚡ WiFi [tốc độ] lắp trong ngày – [giá]원/tháng, tặng [tiền]원. Gọi 070-4322-6887
+Mẫu 2: 🛡️ Bảo mật thông tin, hợp đồng rõ ràng – WiFi [tốc độ] chỉ [giá]원/tháng. 📞 070-4322-6887
+Mẫu 3: 📝 Thủ tục 5 phút, không chờ lâu – đăng ký WiFi [tốc độ] ngay. 📞 070-4322-6887
+Mẫu 4: 🇻🇳 Hỗ trợ tiếng Việt 24/7 – WiFi [tốc độ] [giá]원/tháng, tặng [tiền]원. 📞 070-4322-6887
+Mẫu 5: 🔧 Lắp nhanh – an toàn – bảo mật. WiFi [tốc độ] [giá]원/tháng. Gọi 070-4322-6887
+Mẫu 6: 📦 Nhiều gói: 100M / 500M / 1G, SIM data – tư vấn miễn phí 24/7: 070-4322-6887
+Mẫu 7: 🏠 Chuyển nhà vẫn giữ mạng – hỗ trợ lắp lại nhanh, gọi 070-4322-6887
+Mẫu 8: 💬 Tư vấn 24/7 bằng tiếng Việt – chọn đúng gói, không phí ẩn. 070-4322-6887
+Mẫu 9: 🎁 WiFi [tốc độ] + SIM data combo tiết kiệm – tặng [tiền]원. 📞 070-4322-6887
+Mẫu 10: ✅ Không phí lắp đặt – modem miễn phí – WiFi [tốc độ] [giá]원/tháng. 📞 070-4322-6887
+Mẫu 11: 🚀 Đăng ký hôm nay, có mạng ngay ngày mai – gọi 070-4322-6887
+Mẫu 12: 🔒 An toàn thông tin khách hàng – thủ tục nhanh, hỗ trợ tận tình. 📞 070-4322-6887
+Mẫu 13: 📶 WiFi 500M / 1G cho gia đình, phòng trọ, quán ăn – gọi 070-4322-6887
+Mẫu 14: 💙 Người Việt hỗ trợ người Việt – tư vấn WiFi & SIM 24/7: 070-4322-6887
+Mẫu 15: ⏱️ Lắp đặt trong 24h – thủ tục gọn – WiFi [tốc độ] [giá]원/tháng. 📞 070-4322-6887
+Mẫu 16: 🎯 Chọn gói theo nhu cầu: 100M, 500M, 1G, SIM – tư vấn ngay 070-4322-6887
+Mẫu 17: 📱 Mất mạng? Đổi gói? Cần SIM? Gọi 070-4322-6887 hỗ trợ ngay
+Mẫu 18: 🌟 Ưu đãi [tiền]원 + bảo mật thông tin + hỗ trợ tiếng Việt. 📞 070-4322-6887
+Mẫu 19: 🤝 Giới thiệu bạn bè lắp WiFi – cả hai cùng nhận quà. 📞 070-4322-6887
+Mẫu 20: 🏆 WiFi [tốc độ] giá [giá]원/tháng, lắp nhanh toàn Hàn. 📞 070-4322-6887
+
+═══════════════════════════════════════
+LOẠI 2B: CONTENT NGẮN CHO SIM (1-2 dòng)
+═══════════════════════════════════════
+Chỉ dùng khi yêu cầu là content NGẮN + SIM. Chọn NGẪU NHIÊN 1 trong 8 mẫu sau.
+Áp dụng Unicode bold cho tên nhà mạng và giá (theo quy tắc LOẠI 5). Nếu quà tặng = 0 thì bỏ phần quà.
+
+Mẫu S1: 📱 𝐒𝐈𝐌 [nhà mạng] [data] – [giá] ₩/tháng, tặng [quà mới] ₩. Gọi 𝟎𝟕𝟎-𝟒𝟑𝟐𝟐-𝟔𝟖𝟖𝟕
+Mẫu S2: ⚡ 𝐒𝐈𝐌 [nhà mạng] lắp nhanh, giữ số dễ dàng – hỗ trợ tiếng Việt 24/7: 𝟎𝟕𝟎-𝟒𝟑𝟐𝟐-𝟔𝟖𝟖𝟕
+Mẫu S3: 🛡️ 𝐒𝐈𝐌 [nhà mạng] thủ tục nhanh, bảo mật thông tin – [giá] ₩/tháng. 𝟎𝟕𝟎-𝟒𝟑𝟐𝟐-𝟔𝟖𝟖𝟕
+Mẫu S4: 🔥 Data [data] – gọi thoải mái – chỉ [giá] ₩/tháng. 𝟎𝟕𝟎-𝟒𝟑𝟐𝟐-𝟔𝟖𝟖𝟕
+Mẫu S5: 🎁 Đăng ký 𝐒𝐈𝐌 [nhà mạng] nhận [quà mới] ₩, chuyển mạng thêm [quà MNP] ₩. 𝟎𝟕𝟎-𝟒𝟑𝟐𝟐-𝟔𝟖𝟖𝟕
+Mẫu S6: 🇰🇷 𝐒𝐈𝐌 cho người Việt: data khỏe, giá rẻ, hỗ trợ 24/7 – 𝟎𝟕𝟎-𝟒𝟑𝟐𝟐-𝟔𝟖𝟖𝟕
+Mẫu S7: 📞 Cần 𝐒𝐈𝐌? Tư vấn miễn phí bằng tiếng Việt 24/7: 𝟎𝟕𝟎-𝟒𝟑𝟐𝟐-𝟔𝟖𝟖𝟕
+Mẫu S8: ✅ 𝐒𝐈𝐌 [nhà mạng] – [data] – [giá] ₩/tháng – lắp nhanh, an toàn. 𝟎𝟕𝟎-𝟒𝟑𝟐𝟐-𝟔𝟖𝟖𝟕
 
 ═══════════════════════════════════════
 LOẠI 3: CONTENT FEEDBACK
@@ -241,7 +262,8 @@ export async function generateContent(
 ): Promise<ContentResponse> {
   const { packages, contentType, sim } = request;
 
-  const isSim = contentType === "sim" && !!sim;
+  const hasSim = !!sim;
+  const isSim = contentType === "sim" && hasSim;
 
   const packageText = (packages ?? [])
     .map((p) => {
@@ -271,7 +293,9 @@ export async function generateContent(
 
   let typeInstruction = "";
   if (contentType === "short") {
-    typeInstruction = "\n\nLOẠI NỘI DUNG: CONTENT NGẮN (1-2 dòng). Chọn ngẫu nhiên 1 trong 15 mẫu của LOẠI 2, CHỈ tạo 1-2 dòng, ngắn gọn, súc tích.";
+    typeInstruction = hasSim
+      ? "\n\nLOẠI NỘI DUNG: CONTENT NGẮN CHO SIM (1-2 dòng). Chọn ngẫu nhiên 1 trong 8 mẫu của LOẠI 2B, CHỈ tạo 1-2 dòng, ngắn gọn, súc tích."
+      : "\n\nLOẠI NỘI DUNG: CONTENT NGẮN (1-2 dòng). Chọn ngẫu nhiên 1 trong 20 mẫu của LOẠI 2, CHỈ tạo 1-2 dòng, ngắn gọn, súc tích.";
   } else if (contentType === "feedback") {
     typeInstruction = "\n\nLOẠI NỘI DUNG: FEEDBACK. Chọn ngẫu nhiên 1 trong 12 dạng của LOẠI 3.";
   } else if (contentType === "package1year") {
@@ -282,7 +306,7 @@ export async function generateContent(
     typeInstruction = "\n\nLOẠI NỘI DUNG: CONTENT THEO GÓI. Chọn ngẫu nhiên 1 phong cách trong 5 phong cách của LOẠI 1.";
   }
 
-  const userPrompt = isSim
+  const userPrompt = hasSim
     ? `Tạo nội dung quảng cáo SIM:\n${simText}${typeInstruction}\n\nTạo nội dung mới với icon dòng 1 và cách diễn đạt khác nhau mỗi lần.`
     : `Tạo nội dung WiFi cho gói:\n${packageText}${typeInstruction}\n\nTạo nội dung mới với tagline và icon dòng 1 khác nhau mỗi lần.`;
 

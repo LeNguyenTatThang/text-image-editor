@@ -8,6 +8,7 @@ import { PackageInfo, ContentResponse, ContentType, SimInfo } from "@/types/cont
 import { randomCurrency } from "@/lib/currency";
 import {
   SIM_CARRIERS,
+  SIM_PLANS,
   SimPlan,
   formatWon,
   getSimPlans,
@@ -267,6 +268,34 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
     [runGeneration]
   );
 
+  const generateShortRandom = useCallback(() => {
+    if (Math.random() < 0.3) {
+      const plan = SIM_PLANS[Math.floor(Math.random() * SIM_PLANS.length)];
+      const unit = randomCurrency();
+      setCurrency(unit);
+      const simData: SimInfo = {
+        carrier: plan.carrier,
+        plan: plan.name,
+        policy: plan.policy,
+        data: plan.data,
+        calls: plan.calls,
+        texts: plan.texts,
+        price: `${formatWon(plan.price)}${unit}`,
+        bonusNew: plan.bonusNew > 0 ? `${formatWon(plan.bonusNew)}${unit}` : undefined,
+        bonusMnp: plan.bonusMnp > 0 ? `${formatWon(plan.bonusMnp)}${unit}` : undefined,
+      };
+
+      return runGeneration(`short:sim:${plan.id}`, "AI đang viết nội dung SIM...", {
+        contentType: "short",
+        sim: simData,
+      });
+    }
+
+    const preset =
+      PRESET_PACKAGES_3Y[Math.floor(Math.random() * PRESET_PACKAGES_3Y.length)];
+    return generateForPackage({ ...preset, contentType: "short" });
+  }, [generateForPackage, runGeneration]);
+
   const renderPackageChip = (preset: PackageForm) => {
     const loadingKey = `${preset.contentType}:${preset.name}`;
     const isLoading = loadingPackage === loadingKey;
@@ -455,7 +484,11 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
                     return (
                       <button
                         key={btn.type}
-                        onClick={() => generateForPackage({ ...PRESET_PACKAGES_3Y[0], contentType: btn.type })}
+                        onClick={() =>
+                          btn.type === "short"
+                            ? generateShortRandom()
+                            : generateForPackage({ ...PRESET_PACKAGES_3Y[0], contentType: btn.type })
+                        }
                         disabled={isAnyLoading}
                         className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-lg text-white transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm active:scale-[0.97] bg-gradient-to-r ${btn.color} ${
                           isLoading ? "animate-pulse-glow" : ""
