@@ -57,7 +57,7 @@ Phong cách E – Equation/Icon:
 ═══════════════════════════════════════
 LOẠI 2: CONTENT NGẮN (1-2 dòng)
 ═══════════════════════════════════════
-Chọn NGẪU NHIÊN 1 trong 20 mẫu sau mỗi lần. KHÔNG lặp lại mẫu vừa dùng.
+Chọn NGẪU NHIÊN 1 trong 30 mẫu sau mỗi lần. KHÔNG lặp lại mẫu vừa dùng.
 Ưu tiên nêu TÍNH NĂNG (lắp nhanh, an toàn, bảo mật thông tin, thủ tục gọn, hỗ trợ tiếng Việt, tư vấn 24/7) thay vì mẫu nào cũng chỉ nói giá. Mẫu nào không có placeholder thì bỏ qua, KHÔNG bịa thêm số liệu.
 
 Mẫu 1: ⚡ WiFi [tốc độ] lắp trong ngày – [giá]원/tháng, tặng [tiền]원. Gọi 070-4322-6887
@@ -80,6 +80,16 @@ Mẫu 17: 📱 Mất mạng? Đổi gói? Cần SIM? Gọi 070-4322-6887 hỗ tr
 Mẫu 18: 🌟 Ưu đãi [tiền]원 + bảo mật thông tin + hỗ trợ tiếng Việt. 📞 070-4322-6887
 Mẫu 19: 🤝 Giới thiệu bạn bè lắp WiFi – cả hai cùng nhận quà. 📞 070-4322-6887
 Mẫu 20: 🏆 WiFi [tốc độ] giá [giá]원/tháng, lắp nhanh toàn Hàn. 📞 070-4322-6887
+Mẫu 21: 🎓 Du học sinh & người lao động – WiFi [tốc độ] [giá]원/tháng, thủ tục nhanh. 📞 070-4322-6887
+Mẫu 22: 👨‍👩‍👧‍👦 Cả nhà dùng chung – WiFi [tốc độ] ổn định, lắp nhanh tận nhà. 070-4322-6887
+Mẫu 23: 🎮 Chơi game, xem phim 4K mượt – WiFi 500M / 1G, lắp trong ngày. 📞 070-4322-6887
+Mẫu 24: 💼 Làm việc tại nhà cần mạng khỏe? WiFi [tốc độ] [giá]원/tháng. Gọi 070-4322-6887
+Mẫu 25: 🧾 Giá rõ ràng, không phí ẩn – WiFi [tốc độ] [giá]원/tháng, tặng [tiền]원. 📞 070-4322-6887
+Mẫu 26: 🔄 Đổi gói, nâng cấp mạng – hỗ trợ miễn phí 24/7: 070-4322-6887
+Mẫu 27: 🗣️ Không rành tiếng Hàn? Cứ gọi 070-4322-6887 – tư vấn tiếng Việt ngay
+Mẫu 28: 🧑‍🔧 Kỹ thuật viên đến tận nơi, cài đặt gọn gàng – WiFi [tốc độ] [giá]원/tháng. 070-4322-6887
+Mẫu 29: 🎉 Mới chuyển phòng trọ? Lắp WiFi + SIM gọn cho cả phòng – gọi 070-4322-6887
+Mẫu 30: 📅 Hợp đồng linh hoạt 1 năm / 3 năm – WiFi [tốc độ], tư vấn ngay 070-4322-6887
 
 ═══════════════════════════════════════
 LOẠI 2B: CONTENT NGẮN CHO SIM (1-2 dòng)
@@ -295,7 +305,7 @@ export async function generateContent(
   if (contentType === "short") {
     typeInstruction = hasSim
       ? "\n\nLOẠI NỘI DUNG: CONTENT NGẮN CHO SIM (1-2 dòng). Chọn ngẫu nhiên 1 trong 8 mẫu của LOẠI 2B, CHỈ tạo 1-2 dòng, ngắn gọn, súc tích."
-      : "\n\nLOẠI NỘI DUNG: CONTENT NGẮN (1-2 dòng). Chọn ngẫu nhiên 1 trong 20 mẫu của LOẠI 2, CHỈ tạo 1-2 dòng, ngắn gọn, súc tích.";
+      : "\n\nLOẠI NỘI DUNG: CONTENT NGẮN (1-2 dòng). Chọn ngẫu nhiên 1 trong 30 mẫu của LOẠI 2, CHỈ tạo 1-2 dòng, ngắn gọn, súc tích.";
   } else if (contentType === "feedback") {
     typeInstruction = "\n\nLOẠI NỘI DUNG: FEEDBACK. Chọn ngẫu nhiên 1 trong 12 dạng của LOẠI 3.";
   } else if (contentType === "package1year") {
