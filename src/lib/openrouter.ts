@@ -7,6 +7,12 @@ export interface RewriteResponse {
 
 const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
 
+const CONTENT_MODELS = [
+  "xiaomi/mimo-v2.6-flash",
+  "xiaomi/mimo-v2.5",
+  "openai/gpt-4o-mini",
+];
+
 const SYSTEM_PROMPT = `Bạn là chuyên gia tạo nội dung tiếp thị WiFi tại Hàn Quốc cho người Việt.
 
 NHIỆM VỤ: Tạo nội dung quảng cáo WiFi theo yêu cầu.
@@ -51,18 +57,28 @@ Phong cách E – Equation/Icon:
 ═══════════════════════════════════════
 LOẠI 2: CONTENT NGẮN (1-2 dòng)
 ═══════════════════════════════════════
-Chọn NGẪU NHIÊN 1 trong 5 mẫu sau mỗi lần:
+Chọn NGẪU NHIÊN 1 trong 15 mẫu sau mỗi lần:
 
 Mẫu 1: WiFi [tốc độ] – [giá]원/tháng, tặng [tiền]원. Đăng ký ngay! 📞 070-4322-6887
 Mẫu 2: Gói [tốc độ] giá rẻ – chỉ [giá]원/tháng + nhận [tiền]원. 📞 070-4322-6887
 Mẫu 3: Lắp WiFi [tốc độ] – [giá]원/tháng, modem miễn phí. 📞 070-4322-6887
 Mẫu 4: 📶 [Tốc độ] | [giá]원/tháng | Tặng [tiền]원 | Hotline: 070-4322-6887
 Mẫu 5: WiFi [tốc độ] giá [giá]원/tháng – đăng ký nhận ngay [tiền]원. 📞 070-4322-6887
+Mẫu 6: ⚡ [Tốc độ] chỉ [giá]원/tháng – tặng [tiền]원, lắp trong ngày. 📞 070-4322-6887
+Mẫu 7: 🏆 WiFi [tốc độ] giá tốt nhất – [giá]원/tháng, quà [tiền]원. 📞 070-4322-6887
+Mẫu 8: 🔥 Chốt ngay [tốc độ] – [giá]원/tháng, nhận [tiền]원 + modem miễn phí. 📞 070-4322-6887
+Mẫu 9: 📶 [Tốc độ] – [giá]원/tháng – [tiền]원 quà tặng – hỗ trợ 24/7: 070-4322-6887
+Mẫu 10: 🎁 Đăng ký WiFi [tốc độ] nhận [tiền]원, chỉ [giá]원/tháng. 📞 070-4322-6887
+Mẫu 11: 🇰🇷 WiFi [tốc độ] cho người Việt – [giá]원/tháng, tặng [tiền]원, lắp toàn Hàn. 📞 070-4322-6887
+Mẫu 12: 💎 [Tốc độ] siêu rẻ: [giá]원/tháng, tặng ngay [tiền]원. Gọi 070-4322-6887
+Mẫu 13: 🚀 Lắp WiFi [tốc độ] hôm nay – [giá]원/tháng, quà [tiền]원, không phí lắp. 📞 070-4322-6887
+Mẫu 14: 📞 Gọi ngay 070-4322-6887 – WiFi [tốc độ] [giá]원/tháng, tặng [tiền]원!
+Mẫu 15: ✅ WiFi [tốc độ] – [giá]원/tháng – tặng [tiền]원 – modem miễn phí. 📞 070-4322-6887
 
 ═══════════════════════════════════════
 LOẠI 3: CONTENT FEEDBACK
 ═══════════════════════════════════════
-Tạo NGẪU NHIÊN 1 trong 2 dạng (CHỈ trả về nội dung, KHÔNG ghi "Dạng A" hay "Dạng B"):
+Tạo NGẪU NHIÊN 1 trong 12 dạng (CHỈ trả về nội dung, KHÔNG ghi "Dạng A", "Dạng B"...):
 
 Dạng A:
 Anh/Chị khách ở [địa điểm] đăng ký WiFi [tốc độ], được hỗ trợ lắp đặt ngay trong ngày 📶
@@ -72,6 +88,56 @@ Nhanh gọn, thuận tiện, có mạng dùng ngay 💙 nhận [tiền]원
 Dạng B:
 Ưu đãi tháng này vẫn còn – tặng đến [tiền]원!
 Feedback khách vẫn đều đều, lắp đặt vẫn liên tục 📶
+📞 070-4322-6887
+
+Dạng C:
+Khách bên [địa điểm] vừa lắp xong WiFi [tốc độ] trong buổi sáng ☀️
+Dùng thử đã thấy mượt, lại còn nhận [tiền]원 🎁
+📞 070-4322-6887
+
+Dạng D:
+"Lắp nhanh thật, gọi là có ngay!" – khách ở [địa điểm] chia sẻ sau khi dùng WiFi [tốc độ] 🙌
+Ưu đãi [tiền]원 vẫn đang áp dụng
+📞 070-4322-6887
+
+Dạng E:
+Feedback từ khách [địa điểm]: WiFi [tốc độ] ổn định, xem phim không giật 📺
+Đăng ký hôm nay nhận thêm [tiền]원 💰
+📞 070-4322-6887
+
+Dạng F:
+Khách mới ở [địa điểm] chốt gói [tốc độ] chỉ trong 1 cuộc gọi ☎️
+Lắp trong ngày, tặng [tiền]원, modem miễn phí 📶
+📞 070-4322-6887
+
+Dạng G:
+Gia đình anh/chị ở [địa điểm] vừa có WiFi [tốc độ] dùng cho cả nhà 👨‍👩‍👧‍👦
+Ưu đãi [tiền]원 được cộng ngay khi ký hợp đồng
+📞 070-4322-6887
+
+Dạng H:
+Khách [địa điểm] ban đầu phân vân, dùng thử WiFi [tốc độ] là chốt luôn 🤝
+Giá [giá]원/tháng, tặng [tiền]원
+📞 070-4322-6887
+
+Dạng I:
+Feedback thực tế: lắp WiFi [tốc độ] ở [địa điểm] chưa đến 24h ⏱️
+Nhân viên hỗ trợ nhiệt tình, quà [tiền]원 trao tay 🎁
+📞 070-4322-6887
+
+Dạng J:
+Khách ở [địa điểm] vừa gửi lời cảm ơn vì được lắp WiFi [tốc độ] trong ngày 💙
+Còn được tặng [tiền]원, quá hời cho người Việt tại Hàn
+📞 070-4322-6887
+
+Dạng K:
+Hai khách ở [địa điểm] rủ nhau lắp WiFi [tốc độ] cùng lúc 📶
+Ai cũng nhận [tiền]원, lắp gọn trong buổi chiều
+📞 070-4322-6887
+
+Dạng L:
+Khách [địa điểm] đổi sang WiFi [tốc độ], dùng tháng đầu đã hài lòng ✅
+Đăng ký ngay nhận [tiền]원 + hỗ trợ tận nhà
 📞 070-4322-6887
 
 ĐỊA ĐIỂM (chọn ngẫu nhiên): Busan, Incheon, Seoul, Daegu, Daejeon, Gwangju, Ulsan, Suwon, Changwon, Sejong, Goyang, Yongin, Bucheon, Ansan, Anyang, Namyangju, Hwaseong, Pyeongtaek, Siheung, Gimhae
@@ -205,9 +271,9 @@ export async function generateContent(
 
   let typeInstruction = "";
   if (contentType === "short") {
-    typeInstruction = "\n\nLOẠI NỘI DUNG: CONTENT NGẮN (1-2 dòng). CHỈ tạo 1-2 dòng, ngắn gọn, súc tích.";
+    typeInstruction = "\n\nLOẠI NỘI DUNG: CONTENT NGẮN (1-2 dòng). Chọn ngẫu nhiên 1 trong 15 mẫu của LOẠI 2, CHỈ tạo 1-2 dòng, ngắn gọn, súc tích.";
   } else if (contentType === "feedback") {
-    typeInstruction = "\n\nLOẠI NỘI DUNG: FEEDBACK. Chọn ngẫu nhiên dạng feedback khách thật hoặc CTA feedback.";
+    typeInstruction = "\n\nLOẠI NỘI DUNG: FEEDBACK. Chọn ngẫu nhiên 1 trong 12 dạng của LOẠI 3.";
   } else if (contentType === "package1year") {
     typeInstruction = "\n\nLOẠI NỘI DUNG: CONTENT GÓI 1 NĂM. Chọn ngẫu nhiên 1 phong cách trong 5 phong cách của LOẠI 4. BẮT BUỘC nhắc đến \"1 năm\" và dùng ĐÚNG giá, quà tặng đã cung cấp.";
   } else if (isSim) {
@@ -220,8 +286,6 @@ export async function generateContent(
     ? `Tạo nội dung quảng cáo SIM:\n${simText}${typeInstruction}\n\nTạo nội dung mới với icon dòng 1 và cách diễn đạt khác nhau mỗi lần.`
     : `Tạo nội dung WiFi cho gói:\n${packageText}${typeInstruction}\n\nTạo nội dung mới với tagline và icon dòng 1 khác nhau mỗi lần.`;
 
-  const model = "xiaomi/mimo-v2.5";
-
   const response = await fetch(OPENROUTER_API_URL, {
     method: "POST",
     headers: {
@@ -231,7 +295,7 @@ export async function generateContent(
       "X-OpenRouter-Title": "WiFi Content Generator",
     },
     body: JSON.stringify({
-      model,
+      models: CONTENT_MODELS,
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
         { role: "user", content: userPrompt },
@@ -294,8 +358,6 @@ export async function rewriteText(
     ? `Nội dung trong ảnh: ${context}\n\nĐoạn cần viết lại: "${text}"\n\nViết lại 3 phiên bản:`
     : `Đoạn cần viết lại: "${text}"\n\nViết lại 3 phiên bản:`;
 
-  const model = "xiaomi/mimo-v2.5";
-
   const response = await fetch(OPENROUTER_API_URL, {
     method: "POST",
     headers: {
@@ -305,7 +367,7 @@ export async function rewriteText(
       "X-OpenRouter-Title": "WiFi Text Rewriter",
     },
     body: JSON.stringify({
-      model,
+      models: CONTENT_MODELS,
       messages: [
         { role: "system", content: REWRITE_SYSTEM_PROMPT },
         { role: "user", content: userPrompt },
