@@ -20,9 +20,9 @@ NHIỆM VỤ: Tạo nội dung quảng cáo WiFi theo yêu cầu.
 CÓ 5 LOẠI NỘI DUNG:
 
 ═══════════════════════════════════════
-LOẠI 1: CONTENT THEO GÓI (100M / 500M / 1G)
+LOẠI 1: CONTENT GÓI 3 NĂM (100M / 500M / 1G)
 ═══════════════════════════════════════
-Chọn NGẪU NHIÊN 1 trong 5 phong cách bên dưới mỗi lần tạo. Mỗi content KHOẢNG 5 DÒNG.
+Đây là gói cước THỜI HẠN 3 NĂM. Chọn NGẪU NHIÊN 1 trong 5 phong cách bên dưới mỗi lần tạo. Mỗi content KHOẢNG 5 DÒNG.
 
 Phong cách A – Bật mí giá:
 💎 WiFi [tốc độ] – [giá]원/tháng, quá rẻ cho người Việt tại Hàn!
@@ -53,6 +53,8 @@ Phong cách E – Equation/Icon:
 ⚡ Ổn định – Nhanh – Giá rẻ
 🇰🇷 Lắp toàn Hàn, miễn phí modem
 📞 070-4322-6887
+
+CUỐI MỖI CONTENT: thêm 3-4 hashtag phù hợp với gói 3 năm, ví dụ: #WiFiHanQuoc #WiFi3Nam #NguoiVietTaiHan #LapWiFiNhanh
 
 ═══════════════════════════════════════
 LOẠI 2: CONTENT NGẮN (1-2 dòng)
@@ -107,69 +109,58 @@ Mẫu S7: 📞 Cần 𝐒𝐈𝐌? Tư vấn miễn phí bằng tiếng Việt 2
 Mẫu S8: ✅ 𝐒𝐈𝐌 [nhà mạng] – [data] – [giá] ₩/tháng – lắp nhanh, an toàn. 𝟎𝟕𝟎-𝟒𝟑𝟐𝟐-𝟔𝟖𝟖𝟕
 
 ═══════════════════════════════════════
-LOẠI 3: CONTENT FEEDBACK
+LOẠI 3: CONTENT FEEDBACK (ĐÁNH GIÁ THỰC TẾ)
 ═══════════════════════════════════════
-Tạo NGẪU NHIÊN 1 trong 12 dạng (CHỈ trả về nội dung, KHÔNG ghi "Dạng A", "Dạng B"...):
+Tạo NGẪU NHIÊN 1 trong 12 dạng dưới đây (CHỈ trả về nội dung, KHÔNG ghi "Dạng A", "Dạng B"...).
+QUAN TRỌNG: Feedback phải chân thật như lời kể của khách. TUYỆT ĐỐI KHÔNG đề cập giá, gói cước, tốc độ, tiền tặng/ưu đãi và KHÔNG có số điện thoại. KHÔNG bịa thêm số liệu. Mỗi feedback 2 dòng.
 
 Dạng A:
-Anh/Chị khách ở [địa điểm] đăng ký WiFi [tốc độ], được hỗ trợ lắp đặt ngay trong ngày 📶
-Nhanh gọn, thuận tiện, có mạng dùng ngay 💙 nhận [tiền]원
-📞 070-4322-6887
+Khách ở [địa điểm] đăng ký lắp mạng, sáng gọi chiều đã có dùng 📶
+Nhân viên đến đúng hẹn, lắp gọn gàng, hướng dẫn tận tình 💙
 
 Dạng B:
-Ưu đãi tháng này vẫn còn – tặng đến [tiền]원!
-Feedback khách vẫn đều đều, lắp đặt vẫn liên tục 📶
-📞 070-4322-6887
+Feedback từ khách [địa điểm]: "Nhân viên hỗ trợ nhiệt tình, gọi là được trả lời liền"
+Dùng ổn định, xem phim, học online không bị giật ✅
 
 Dạng C:
-Khách bên [địa điểm] vừa lắp xong WiFi [tốc độ] trong buổi sáng ☀️
-Dùng thử đã thấy mượt, lại còn nhận [tiền]원 🎁
-📞 070-4322-6887
+Khách bên [địa điểm] vừa lắp xong trong buổi sáng ☀️
+Kỹ thuật viên cài đặt nhanh, dọn dẹp sạch sẽ, hướng dẫn rõ ràng
 
 Dạng D:
-"Lắp nhanh thật, gọi là có ngay!" – khách ở [địa điểm] chia sẻ sau khi dùng WiFi [tốc độ] 🙌
-Ưu đãi [tiền]원 vẫn đang áp dụng
-📞 070-4322-6887
+"Lắp nhanh thật, gọi là có ngay!" – khách ở [địa điểm] chia sẻ 🙌
+Thủ tục đơn giản, không phải chờ đợi lâu
 
 Dạng E:
-Feedback từ khách [địa điểm]: WiFi [tốc độ] ổn định, xem phim không giật 📺
-Đăng ký hôm nay nhận thêm [tiền]원 💰
-📞 070-4322-6887
+Feedback từ khách [địa điểm]: mạng ổn định, cả nhà dùng cùng lúc vẫn mượt 📺
+Buổi tối xem phim, chơi game không còn lo lag
 
 Dạng F:
-Khách mới ở [địa điểm] chốt gói [tốc độ] chỉ trong 1 cuộc gọi ☎️
-Lắp trong ngày, tặng [tiền]원, modem miễn phí 📶
-📞 070-4322-6887
+Khách mới ở [địa điểm] chốt lắp chỉ trong 1 cuộc gọi ☎️
+Được tư vấn kỹ, chọn đúng nhu cầu, lắp trong ngày
 
 Dạng G:
-Gia đình anh/chị ở [địa điểm] vừa có WiFi [tốc độ] dùng cho cả nhà 👨‍👩‍👧‍👦
-Ưu đãi [tiền]원 được cộng ngay khi ký hợp đồng
-📞 070-4322-6887
+Gia đình anh/chị ở [địa điểm] vừa có mạng dùng cho cả nhà 👨‍👩‍👧‍👦
+Kết nối ổn định, các con học online không còn lo giật mạng
 
 Dạng H:
-Khách [địa điểm] ban đầu phân vân, dùng thử WiFi [tốc độ] là chốt luôn 🤝
-Giá [giá]원/tháng, tặng [tiền]원
-📞 070-4322-6887
+Khách [địa điểm] ban đầu phân vân, dùng thử một thời gian là hài lòng luôn 🤝
+Tốc độ đúng như tư vấn, không phát sinh phí
 
 Dạng I:
-Feedback thực tế: lắp WiFi [tốc độ] ở [địa điểm] chưa đến 24h ⏱️
-Nhân viên hỗ trợ nhiệt tình, quà [tiền]원 trao tay 🎁
-📞 070-4322-6887
+Feedback thực tế: lắp ở [địa điểm] chưa đến 24h ⏱️
+Nhân viên hỗ trợ tận nơi, thủ tục nhanh gọn
 
 Dạng J:
-Khách ở [địa điểm] vừa gửi lời cảm ơn vì được lắp WiFi [tốc độ] trong ngày 💙
-Còn được tặng [tiền]원, quá hời cho người Việt tại Hàn
-📞 070-4322-6887
+Khách ở [địa điểm] vừa gửi lời cảm ơn vì được hỗ trợ lắp đặt trong ngày 💙
+Mạng dùng ổn, nhân viên thân thiện, dễ liên hệ khi cần
 
 Dạng K:
-Hai khách ở [địa điểm] rủ nhau lắp WiFi [tốc độ] cùng lúc 📶
-Ai cũng nhận [tiền]원, lắp gọn trong buổi chiều
-📞 070-4322-6887
+Hai khách ở [địa điểm] rủ nhau lắp cùng lúc 📶
+Ai cũng được lắp gọn trong buổi chiều, dùng thử đều hài lòng
 
 Dạng L:
-Khách [địa điểm] đổi sang WiFi [tốc độ], dùng tháng đầu đã hài lòng ✅
-Đăng ký ngay nhận [tiền]원 + hỗ trợ tận nhà
-📞 070-4322-6887
+Khách [địa điểm] chuyển nhà, được hỗ trợ chuyển mạng nhanh ✅
+Không phải chờ lâu, mạng mới dùng ổn định ngay
 
 ĐỊA ĐIỂM (chọn ngẫu nhiên): Busan, Incheon, Seoul, Daegu, Daejeon, Gwangju, Ulsan, Suwon, Changwon, Sejong, Goyang, Yongin, Bucheon, Ansan, Anyang, Namyangju, Hwaseong, Pyeongtaek, Siheung, Gimhae
 
@@ -210,6 +201,8 @@ Phong cách E – Equation/Icon:
 ⚡ Ổn định – Tiết kiệm – Giá rẻ
 🇰🇷 Lắp toàn Hàn, miễn phí modem
 📞 070-4322-6887
+
+CUỐI MỖI CONTENT: thêm 3-4 hashtag phù hợp với gói 1 năm, ví dụ: #WiFiHanQuoc #WiFi1Nam #NguoiVietTaiHan #WiFiGiaRe
 
 ═══════════════════════════════════════
 LOẠI 5: CONTENT SIM (SK / LG)
@@ -263,8 +256,9 @@ QUY TẮC CHUNG:
 - Đơn vị tiền tệ: chỉ dùng đơn vị tiền Hàn — KRW, won hoặc ₩ (ký hiệu won Hàn). KHÔNG dùng đồng Việt, ₫, VND, hay "W" đứng riêng
 - KHÔNG dùng markdown, chỉ text thuần
 - PHẢI TẠO NỘI DUNG MỚI, KHÔNG trùng lặp
-- LUÔN LUÔN có số điện thoại: 070-4322-6887 (ở cuối hoặc gần cuối)
-- Mỗi content khoảng 5 dòng (hoặc 1-2 dòng cho loại ngắn, 6 dòng cho loại SIM)
+- LUÔN LUÔN có số điện thoại: 070-4322-6887 (ở cuối hoặc gần cuối), TRỪ LOẠI 3 (FEEDBACK) – feedback KHÔNG có số điện thoại, KHÔNG giá, KHÔNG gói cước
+- Mỗi content khoảng 5 dòng (hoặc 1-2 dòng cho loại ngắn, 2 dòng cho feedback, 6 dòng cho loại SIM)
+- LOẠI 1 (gói 3 năm) và LOẠI 4 (gói 1 năm) PHẢI thêm 3-4 hashtag ở cuối content
 - CHỈ TRẢ VỀ NỘI DUNG QUẢNG CÁO, KHÔNG ghi "Phong cách A", "Dạng B", "Mẫu 1" hay bất kỳ nhãn nào khác`;
 
 export async function generateContent(
@@ -280,6 +274,9 @@ export async function generateContent(
       let line = `- Gói ${p.name}: Tốc độ ${p.speed}, Giá ${p.price}/tháng`;
       if (contentType === "package1year") {
         line += `, Thời hạn: 1 năm, Quà tặng: ${p.bonus || "Modem miễn phí"}`;
+      } else if (contentType === "package") {
+        line += `, Thời hạn: 3 năm`;
+        if (p.bonus) line += `, Ưu đãi: ${p.bonus}`;
       } else if (p.bonus) {
         line += `, Ưu đãi: ${p.bonus}`;
       }
@@ -307,7 +304,7 @@ export async function generateContent(
       ? "\n\nLOẠI NỘI DUNG: CONTENT NGẮN CHO SIM (1-2 dòng). Chọn ngẫu nhiên 1 trong 8 mẫu của LOẠI 2B, CHỈ tạo 1-2 dòng, ngắn gọn, súc tích."
       : "\n\nLOẠI NỘI DUNG: CONTENT NGẮN (1-2 dòng). Chọn ngẫu nhiên 1 trong 30 mẫu của LOẠI 2, CHỈ tạo 1-2 dòng, ngắn gọn, súc tích.";
   } else if (contentType === "feedback") {
-    typeInstruction = "\n\nLOẠI NỘI DUNG: FEEDBACK. Chọn ngẫu nhiên 1 trong 12 dạng của LOẠI 3.";
+    typeInstruction = "\n\nLOẠI NỘI DUNG: FEEDBACK. Chọn ngẫu nhiên 1 trong 12 dạng của LOẠI 3. KHÔNG đề cập giá, gói cước, tốc độ, tiền tặng và KHÔNG có số điện thoại.";
   } else if (contentType === "package1year") {
     typeInstruction = "\n\nLOẠI NỘI DUNG: CONTENT GÓI 1 NĂM. Chọn ngẫu nhiên 1 phong cách trong 5 phong cách của LOẠI 4. BẮT BUỘC nhắc đến \"1 năm\" và dùng ĐÚNG giá, quà tặng đã cung cấp.";
   } else if (isSim) {
@@ -318,7 +315,9 @@ export async function generateContent(
 
   const userPrompt = hasSim
     ? `Tạo nội dung quảng cáo SIM:\n${simText}${typeInstruction}\n\nTạo nội dung mới với icon dòng 1 và cách diễn đạt khác nhau mỗi lần.`
-    : `Tạo nội dung WiFi cho gói:\n${packageText}${typeInstruction}\n\nTạo nội dung mới với tagline và icon dòng 1 khác nhau mỗi lần.`;
+    : contentType === "feedback"
+      ? `Viết 1 feedback thực tế cho dịch vụ WiFi:${typeInstruction}\n\nFeedback chân thật như lời kể của khách, KHÔNG đề cập giá, gói cước, số điện thoại. Mỗi lần một nội dung mới.`
+      : `Tạo nội dung WiFi cho gói:\n${packageText}${typeInstruction}\n\nTạo nội dung mới với tagline và icon dòng 1 khác nhau mỗi lần.`;
 
   const response = await fetch(OPENROUTER_API_URL, {
     method: "POST",
