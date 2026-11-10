@@ -13,9 +13,12 @@ const CONTENT_MODELS = [
   "openai/gpt-4o-mini",
 ];
 
-const SYSTEM_PROMPT = `Bạn là chuyên gia tạo nội dung tiếp thị WiFi tại Hàn Quốc cho người Việt.
+const PROMPT_HEADER = `Bạn là chuyên gia tạo nội dung tiếp thị WiFi tại Hàn Quốc cho người Việt.
 
-NHIỆM VỤ: Tạo nội dung quảng cáo WiFi theo yêu cầu.
+NHIỆM VỤ: Tạo nội dung quảng cáo WiFi theo yêu cầu.`;
+
+const TYPE_PROMPTS: Record<string, string> = {
+  package: `
 
 CÓ 5 LOẠI NỘI DUNG:
 
@@ -54,7 +57,8 @@ Phong cách E – Equation/Icon:
 🇰🇷 Lắp toàn Hàn, miễn phí modem
 📞 070-4322-6887
 
-CUỐI MỖI CONTENT: thêm 3-4 hashtag phù hợp với gói 3 năm, ví dụ: #WiFiHanQuoc #WiFi3Nam #NguoiVietTaiHan #LapWiFiNhanh
+CUỐI MỖI CONTENT: thêm 3-4 hashtag phù hợp với gói 3 năm, ví dụ: #WiFiHanQuoc #WiFi3Nam #NguoiVietTaiHan #LapWiFiNhanh`,
+  short: `
 
 ═══════════════════════════════════════
 LOẠI 2: CONTENT NGẮN (1-2 dòng)
@@ -91,7 +95,8 @@ Mẫu 26: 🔄 Đổi gói, nâng cấp mạng – hỗ trợ miễn phí 24/7: 
 Mẫu 27: 🗣️ Không rành tiếng Hàn? Cứ gọi 070-4322-6887 – tư vấn tiếng Việt ngay
 Mẫu 28: 🧑‍🔧 Kỹ thuật viên đến tận nơi, cài đặt gọn gàng – WiFi [tốc độ] [giá]원/tháng. 070-4322-6887
 Mẫu 29: 🎉 Mới chuyển phòng trọ? Lắp WiFi + SIM gọn cho cả phòng – gọi 070-4322-6887
-Mẫu 30: 📅 Hợp đồng linh hoạt 1 năm / 3 năm – WiFi [tốc độ], tư vấn ngay 070-4322-6887
+Mẫu 30: 📅 Hợp đồng linh hoạt 1 năm / 3 năm – WiFi [tốc độ], tư vấn ngay 070-4322-6887`,
+  shortSim: `
 
 ═══════════════════════════════════════
 LOẠI 2B: CONTENT NGẮN CHO SIM (1-2 dòng)
@@ -106,7 +111,8 @@ Mẫu S4: 🔥 Data [data] – gọi thoải mái – chỉ [giá] ₩/tháng. �
 Mẫu S5: 🎁 Đăng ký 𝐒𝐈𝐌 [nhà mạng] nhận [quà mới] ₩, chuyển mạng thêm [quà MNP] ₩. 𝟎𝟕𝟎-𝟒𝟑𝟐𝟐-𝟔𝟖𝟖𝟕
 Mẫu S6: 🇰🇷 𝐒𝐈𝐌 cho người Việt: data khỏe, giá rẻ, hỗ trợ 24/7 – 𝟎𝟕𝟎-𝟒𝟑𝟐𝟐-𝟔𝟖𝟖𝟕
 Mẫu S7: 📞 Cần 𝐒𝐈𝐌? Tư vấn miễn phí bằng tiếng Việt 24/7: 𝟎𝟕𝟎-𝟒𝟑𝟐𝟐-𝟔𝟖𝟖𝟕
-Mẫu S8: ✅ 𝐒𝐈𝐌 [nhà mạng] – [data] – [giá] ₩/tháng – lắp nhanh, an toàn. 𝟎𝟕𝟎-𝟒𝟑𝟐𝟐-𝟔𝟖𝟖𝟕
+Mẫu S8: ✅ 𝐒𝐈𝐌 [nhà mạng] – [data] – [giá] ₩/tháng – lắp nhanh, an toàn. 𝟎𝟕𝟎-𝟒𝟑𝟐𝟐-𝟔𝟖𝟖𝟕`,
+  feedback: `
 
 ═══════════════════════════════════════
 LOẠI 3: CONTENT FEEDBACK (ĐÁNH GIÁ THỰC TẾ)
@@ -162,7 +168,8 @@ Dạng L:
 Khách [địa điểm] chuyển nhà, được hỗ trợ chuyển mạng nhanh ✅
 Không phải chờ lâu, mạng mới dùng ổn định ngay
 
-ĐỊA ĐIỂM (chọn ngẫu nhiên): Busan, Incheon, Seoul, Daegu, Daejeon, Gwangju, Ulsan, Suwon, Changwon, Sejong, Goyang, Yongin, Bucheon, Ansan, Anyang, Namyangju, Hwaseong, Pyeongtaek, Siheung, Gimhae
+ĐỊA ĐIỂM (chọn ngẫu nhiên): Busan, Incheon, Seoul, Daegu, Daejeon, Gwangju, Ulsan, Suwon, Changwon, Sejong, Goyang, Yongin, Bucheon, Ansan, Anyang, Namyangju, Hwaseong, Pyeongtaek, Siheung, Gimhae`,
+  package1year: `
 
 ═══════════════════════════════════════
 LOẠI 4: CONTENT GÓI 1 NĂM (100M / 500M / 1G)
@@ -202,7 +209,8 @@ Phong cách E – Equation/Icon:
 🇰🇷 Lắp toàn Hàn, miễn phí modem
 📞 070-4322-6887
 
-CUỐI MỖI CONTENT: thêm 3-4 hashtag phù hợp với gói 1 năm, ví dụ: #WiFiHanQuoc #WiFi1Nam #NguoiVietTaiHan #WiFiGiaRe
+CUỐI MỖI CONTENT: thêm 3-4 hashtag phù hợp với gói 1 năm, ví dụ: #WiFiHanQuoc #WiFi1Nam #NguoiVietTaiHan #WiFiGiaRe`,
+  sim: `
 
 ═══════════════════════════════════════
 LOẠI 5: CONTENT SIM (SK / LG)
@@ -245,7 +253,10 @@ Phong cách E – Equation/Icon:
 📱 SIM [nhà mạng] | [data] | [giá] ₩/tháng
 ⚡ Gọi thoải mái – Data khỏe – Giá rẻ
 🎁 Tặng [quà mới] ₩ khi đăng ký mới
-☎️ 070-4322-6887
+☎️ 070-4322-6887`,
+};
+
+const COMMON_RULES = `
 
 ═══════════════════════════════════════
 QUY TẮC CHUNG:
@@ -260,6 +271,111 @@ QUY TẮC CHUNG:
 - Mỗi content khoảng 5 dòng (hoặc 1-2 dòng cho loại ngắn, 2 dòng cho feedback, 6 dòng cho loại SIM)
 - LOẠI 1 (gói 3 năm) và LOẠI 4 (gói 1 năm) PHẢI thêm 3-4 hashtag ở cuối content
 - CHỈ TRẢ VỀ NỘI DUNG QUẢNG CÁO, KHÔNG ghi "Phong cách A", "Dạng B", "Mẫu 1" hay bất kỳ nhãn nào khác`;
+
+const MINIMAL_PROMPT = `Bạn là chuyên gia tạo nội dung quảng cáo WiFi tại Hàn Quốc cho người Việt. Tạo nội dung tiếng Việt ngắn gọn, hấp dẫn, đúng thông tin được cung cấp, dùng emoji và kết thúc bằng số 070-4322-6887 (trừ feedback thì không có số điện thoại). Chỉ trả về nội dung quảng cáo, không markdown, không ghi nhãn.`;
+
+function buildSystemPrompt(
+  contentType: ContentRequest["contentType"],
+  hasSim: boolean,
+  isSim: boolean
+): string {
+  let type: keyof typeof TYPE_PROMPTS;
+  if (contentType === "short") {
+    type = hasSim ? "shortSim" : "short";
+  } else if (contentType === "feedback") {
+    type = "feedback";
+  } else if (contentType === "package1year") {
+    type = "package1year";
+  } else if (isSim) {
+    type = "sim";
+  } else {
+    type = "package";
+  }
+
+  return `${PROMPT_HEADER}\n${TYPE_PROMPTS[type]}\n${COMMON_RULES}`;
+}
+
+interface CompletionRequest {
+  systemPrompt: string;
+  userPrompt: string;
+  maxTokens: number;
+  title: string;
+}
+
+interface OpenRouterResponse {
+  model: string;
+  choices?: Array<{
+    message?: { content?: string };
+    delta?: { content?: string };
+  }>;
+  usage?: {
+    prompt_tokens: number;
+    completion_tokens: number;
+    total_tokens: number;
+  };
+}
+
+async function callOpenRouter({
+  systemPrompt,
+  userPrompt,
+  maxTokens,
+  title,
+}: CompletionRequest): Promise<OpenRouterResponse> {
+  let system = systemPrompt;
+  let tokens = maxTokens;
+  let lastError = "";
+
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const response = await fetch(OPENROUTER_API_URL, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+        "Content-Type": "application/json",
+        "HTTP-Referer": "https://text-image-editor.app",
+        "X-OpenRouter-Title": title,
+      },
+      body: JSON.stringify({
+        models: CONTENT_MODELS,
+        messages: [
+          { role: "system", content: system },
+          { role: "user", content: userPrompt },
+        ],
+        temperature: 1.0,
+        max_tokens: tokens,
+      }),
+    });
+
+    if (response.ok) {
+      return response.json();
+    }
+
+    const errorText = await response.text();
+    lastError = `OpenRouter API error: ${response.status} - ${errorText}`;
+
+    if (response.status !== 402) {
+      throw new Error(lastError);
+    }
+
+    if (/Prompt tokens limit exceeded/i.test(errorText)) {
+      if (system === MINIMAL_PROMPT) break;
+      system = MINIMAL_PROMPT;
+      tokens = Math.min(tokens, 256);
+      continue;
+    }
+
+    const affordable = Number(
+      errorText.match(/can only afford (\d+)/i)?.[1] ?? NaN
+    );
+    if (Number.isFinite(affordable) && affordable > 0 && affordable < tokens) {
+      tokens = Math.max(64, Math.floor(affordable * 0.9));
+      continue;
+    }
+
+    break;
+  }
+
+  throw new Error(lastError);
+}
 
 export async function generateContent(
   request: ContentRequest
@@ -319,31 +435,12 @@ export async function generateContent(
       ? `Viết 1 feedback thực tế cho dịch vụ WiFi:${typeInstruction}\n\nFeedback chân thật như lời kể của khách, KHÔNG đề cập giá, gói cước, số điện thoại. Mỗi lần một nội dung mới.`
       : `Tạo nội dung WiFi cho gói:\n${packageText}${typeInstruction}\n\nTạo nội dung mới với tagline và icon dòng 1 khác nhau mỗi lần.`;
 
-  const response = await fetch(OPENROUTER_API_URL, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-      "Content-Type": "application/json",
-      "HTTP-Referer": "https://text-image-editor.app",
-      "X-OpenRouter-Title": "WiFi Content Generator",
-    },
-    body: JSON.stringify({
-      models: CONTENT_MODELS,
-      messages: [
-        { role: "system", content: SYSTEM_PROMPT },
-        { role: "user", content: userPrompt },
-      ],
-      temperature: 1.0,
-      max_tokens: 1024,
-    }),
+  const data = await callOpenRouter({
+    systemPrompt: buildSystemPrompt(contentType, hasSim, isSim),
+    userPrompt,
+    maxTokens: 512,
+    title: "WiFi Content Generator",
   });
-
-  if (!response.ok) {
-    const errorData = await response.text();
-    throw new Error(`OpenRouter API error: ${response.status} - ${errorData}`);
-  }
-
-  const data = await response.json();
 
   if (!data.choices || data.choices.length === 0) {
     throw new Error("No response from OpenRouter");
@@ -391,31 +488,12 @@ export async function rewriteText(
     ? `Nội dung trong ảnh: ${context}\n\nĐoạn cần viết lại: "${text}"\n\nViết lại 3 phiên bản:`
     : `Đoạn cần viết lại: "${text}"\n\nViết lại 3 phiên bản:`;
 
-  const response = await fetch(OPENROUTER_API_URL, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-      "Content-Type": "application/json",
-      "HTTP-Referer": "https://text-image-editor.app",
-      "X-OpenRouter-Title": "WiFi Text Rewriter",
-    },
-    body: JSON.stringify({
-      models: CONTENT_MODELS,
-      messages: [
-        { role: "system", content: REWRITE_SYSTEM_PROMPT },
-        { role: "user", content: userPrompt },
-      ],
-      temperature: 1.0,
-      max_tokens: 512,
-    }),
+  const data = await callOpenRouter({
+    systemPrompt: REWRITE_SYSTEM_PROMPT,
+    userPrompt,
+    maxTokens: 384,
+    title: "WiFi Text Rewriter",
   });
-
-  if (!response.ok) {
-    const errorData = await response.text();
-    throw new Error(`OpenRouter API error: ${response.status} - ${errorData}`);
-  }
-
-  const data = await response.json();
 
   if (!data.choices || data.choices.length === 0) {
     throw new Error("No response from OpenRouter");
