@@ -37,7 +37,7 @@ describe("generateContent model fallback", () => {
     };
 
     const fetchMock = vi.fn();
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 9; i++) {
       fetchMock.mockResolvedValueOnce(errorResponse(402, creditsError));
     }
     fetchMock.mockResolvedValueOnce(
@@ -58,7 +58,6 @@ describe("generateContent model fallback", () => {
       ([, init]) => JSON.parse((init as RequestInit).body as string).model
     );
     expect(models).toEqual([
-      "thinkingmachines/inkling-2-small:free",
       "dots-studio/dots-3-note-preview:free",
       "particle-ai/particle-1:free",
       "cohere/north-mini-code:free",
@@ -82,7 +81,7 @@ describe("generateContent model fallback", () => {
       .mockResolvedValueOnce(errorResponse(402, affordableError))
       .mockResolvedValueOnce(
         okResponse({
-          model: "thinkingmachines/inkling-2-small:free",
+          model: "dots-studio/dots-3-note-preview:free",
           choices: [{ message: { content: "Nội dung" } }],
         })
       );
@@ -98,6 +97,41 @@ describe("generateContent model fallback", () => {
     );
     expect(bodies[0].max_tokens).toBe(512);
     expect(bodies[1].max_tokens).toBe(270);
-    expect(bodies[1].model).toBe("thinkingmachines/inkling-2-small:free");
+    expect(bodies[1].model).toBe("dots-studio/dots-3-note-preview:free");
+  });
+
+  it("skips models gated behind agentic harnesses", async () => {
+    const gatedError = {
+      error: {
+        message:
+          "dots-studio/dots-3-note-preview:free is only available on agentic harnesses.",
+        code: 403,
+      },
+    };
+
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(errorResponse(403, gatedError))
+      .mockResolvedValueOnce(
+        okResponse({
+          model: "particle-ai/particle-1:free",
+          choices: [{ message: { content: "Nội dung mới" } }],
+        })
+      );
+
+    vi.stubGlobal("fetch", fetchMock);
+
+    const result = await generateContent(request);
+
+    expect(result.content).toBe("Nội dung mới");
+    expect(result.model).toBe("particle-ai/particle-1:free");
+
+    const models = fetchMock.mock.calls.map(
+      ([, init]) => JSON.parse((init as RequestInit).body as string).model
+    );
+    expect(models).toEqual([
+      "dots-studio/dots-3-note-preview:free",
+      "particle-ai/particle-1:free",
+    ]);
   });
 });

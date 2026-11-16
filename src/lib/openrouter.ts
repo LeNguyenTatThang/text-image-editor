@@ -8,7 +8,6 @@ export interface RewriteResponse {
 const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
 
 const CONTENT_MODELS = [
-  "thinkingmachines/inkling-2-small:free",
   "dots-studio/dots-3-note-preview:free",
   "particle-ai/particle-1:free",
   "cohere/north-mini-code:free",
@@ -410,7 +409,7 @@ async function callOpenRouter({
         break;
       }
 
-      if (response.status === 401 || response.status === 403) {
+      if (response.status === 401) {
         throw new Error(lastError);
       }
 
