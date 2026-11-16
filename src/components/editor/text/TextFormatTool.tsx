@@ -215,7 +215,7 @@ export default function TextFormatTool() {
                       {style.label}
                     </span>
                   </div>
-                  <div className={`text-sm truncate leading-relaxed font-medium ${result ? "text-zinc-700 dark:text-zinc-300" : "text-zinc-200 dark:text-zinc-700"}`}>
+                  <div className={`text-sm whitespace-pre-wrap break-words max-h-28 overflow-y-auto leading-relaxed font-medium ${result ? "text-zinc-700 dark:text-zinc-300" : "text-zinc-200 dark:text-zinc-700"}`}>
                     {result || "\u2014"}
                   </div>
                 </div>

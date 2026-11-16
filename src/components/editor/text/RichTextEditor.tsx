@@ -4,6 +4,7 @@ import { useCallback, useRef, useState, useEffect } from "react";
 import { toast } from "sonner";
 import FloatingMenu from "./FloatingMenu";
 import RewriteDialog from "./RewriteDialog";
+import { htmlToLines, htmlToPlainText, normalizeHtmlForText } from "@/lib/html-text";
 
 interface RichTextEditorProps {
   initialHtml?: string;
@@ -48,19 +49,16 @@ function extractTextWithUnicodeBold(node: Node): string {
 }
 
 function convertHtmlToUnicodeBold(html: string): string {
-  const tmp = document.createElement("div");
-  tmp.innerHTML = html;
-  const lines: string[] = [];
-  for (const child of Array.from(tmp.childNodes)) {
-    if (child.nodeType === Node.TEXT_NODE) {
-      const t = child.textContent?.trim();
-      if (t) lines.push(t);
-    } else if (child instanceof HTMLElement) {
-      const t = extractTextWithUnicodeBold(child).trim();
-      if (t) lines.push(t);
-    }
-  }
-  return lines.join("\n");
+  const text = extractTextWithUnicodeBold(normalizeHtmlForText(html)).replace(
+    /\u00a0/g,
+    " "
+  );
+
+  return text
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0)
+    .join("\n");
 }
 
 export default function RichTextEditor({ initialHtml, onTextChange }: RichTextEditorProps) {
@@ -79,7 +77,7 @@ export default function RichTextEditor({ initialHtml, onTextChange }: RichTextEd
     const text = editorRef.current.textContent || "";
     const html = editorRef.current.innerHTML || "";
     const charCount = text.length;
-    const lineCount = html.split(/<br\s*\/?>/i).length || 1;
+    const lineCount = htmlToLines(html).length || 1;
     onTextChange({ charCount, lineCount });
   }, [onTextChange]);
 
@@ -140,7 +138,7 @@ export default function RichTextEditor({ initialHtml, onTextChange }: RichTextEd
     const editor = editorRef.current;
     if (!editor) return;
     const html = editor.innerHTML;
-    const text = editor.textContent || "";
+    const text = htmlToPlainText(html);
     try {
       const htmlBlob = new Blob([html], { type: "text/html" });
       const textBlob = new Blob([text], { type: "text/plain" });

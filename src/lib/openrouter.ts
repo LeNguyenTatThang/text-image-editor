@@ -13,6 +13,10 @@ const CONTENT_MODELS = [
   "openai/gpt-4o-mini",
 ];
 
+const FREE_MODEL = "openrouter/free";
+
+const MIN_USABLE_TOKENS = 128;
+
 const PROMPT_HEADER = `Bạn là chuyên gia tạo nội dung tiếp thị WiFi tại Hàn Quốc cho người Việt.
 
 NHIỆM VỤ: Tạo nội dung quảng cáo WiFi theo yêu cầu.`;
@@ -315,63 +319,91 @@ interface OpenRouterResponse {
   };
 }
 
+async function requestCompletion(
+  model: string,
+  system: string,
+  userPrompt: string,
+  tokens: number,
+  title: string
+): Promise<Response> {
+  return fetch(OPENROUTER_API_URL, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+      "Content-Type": "application/json",
+      "HTTP-Referer": "https://text-image-editor.app",
+      "X-OpenRouter-Title": title,
+    },
+    body: JSON.stringify({
+      model,
+      messages: [
+        { role: "system", content: system },
+        { role: "user", content: userPrompt },
+      ],
+      temperature: 1.0,
+      max_tokens: tokens,
+    }),
+  });
+}
+
 async function callOpenRouter({
   systemPrompt,
   userPrompt,
   maxTokens,
   title,
 }: CompletionRequest): Promise<OpenRouterResponse> {
-  let system = systemPrompt;
-  let tokens = maxTokens;
+  const models = [...CONTENT_MODELS, FREE_MODEL];
   let lastError = "";
 
-  for (let attempt = 0; attempt < 3; attempt++) {
-    const response = await fetch(OPENROUTER_API_URL, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-        "Content-Type": "application/json",
-        "HTTP-Referer": "https://text-image-editor.app",
-        "X-OpenRouter-Title": title,
-      },
-      body: JSON.stringify({
-        models: CONTENT_MODELS,
-        messages: [
-          { role: "system", content: system },
-          { role: "user", content: userPrompt },
-        ],
-        temperature: 1.0,
-        max_tokens: tokens,
-      }),
-    });
+  for (const model of models) {
+    let system = systemPrompt;
+    let tokens = maxTokens;
 
-    if (response.ok) {
-      return response.json();
-    }
+    for (let attempt = 0; attempt < 3; attempt++) {
+      const response = await requestCompletion(
+        model,
+        system,
+        userPrompt,
+        tokens,
+        title
+      );
 
-    const errorText = await response.text();
-    lastError = `OpenRouter API error: ${response.status} - ${errorText}`;
+      if (response.ok) {
+        return response.json();
+      }
 
-    if (response.status !== 402) {
+      const errorText = await response.text();
+      lastError = `OpenRouter API error: ${response.status} - ${errorText}`;
+
+      if (response.status === 402) {
+        if (/Prompt tokens limit exceeded/i.test(errorText)) {
+          if (system === MINIMAL_PROMPT) break;
+          system = MINIMAL_PROMPT;
+          tokens = Math.min(tokens, 256);
+          continue;
+        }
+
+        const affordable = Number(
+          errorText.match(/can only afford (\d+)/i)?.[1] ?? NaN
+        );
+        if (
+          Number.isFinite(affordable) &&
+          affordable >= MIN_USABLE_TOKENS &&
+          affordable < tokens
+        ) {
+          tokens = Math.floor(affordable * 0.9);
+          continue;
+        }
+
+        break;
+      }
+
+      if (response.status === 429 || response.status >= 500) {
+        break;
+      }
+
       throw new Error(lastError);
     }
-
-    if (/Prompt tokens limit exceeded/i.test(errorText)) {
-      if (system === MINIMAL_PROMPT) break;
-      system = MINIMAL_PROMPT;
-      tokens = Math.min(tokens, 256);
-      continue;
-    }
-
-    const affordable = Number(
-      errorText.match(/can only afford (\d+)/i)?.[1] ?? NaN
-    );
-    if (Number.isFinite(affordable) && affordable > 0 && affordable < tokens) {
-      tokens = Math.max(64, Math.floor(affordable * 0.9));
-      continue;
-    }
-
-    break;
   }
 
   throw new Error(lastError);

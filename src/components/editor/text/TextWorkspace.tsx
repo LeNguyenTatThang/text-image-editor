@@ -6,6 +6,7 @@ import RichTextEditor from "./RichTextEditor";
 import TextFormatTool from "./TextFormatTool";
 import { PackageInfo, ContentResponse, ContentType, SimInfo } from "@/types/content";
 import { randomCurrency } from "@/lib/currency";
+import { htmlToLines } from "@/lib/html-text";
 import {
   SIM_CARRIERS,
   SIM_PLANS,
@@ -69,31 +70,7 @@ export default function TextWorkspace({ onTextChange }: TextWorkspaceProps) {
     const editor = document.querySelector("[data-rich-editor]");
     if (!editor) return;
 
-    const raw = editor.innerHTML;
-    let lines: string[];
-
-    if (raw.includes("<h1") || raw.includes("<h2") || raw.includes("<p")) {
-      const tmp = document.createElement("div");
-      tmp.innerHTML = raw;
-      lines = [];
-      for (const child of Array.from(tmp.childNodes)) {
-        if (child.nodeType === Node.TEXT_NODE) {
-          const t = child.textContent?.trim();
-          if (t) lines.push(t);
-        } else if (child instanceof HTMLElement) {
-          const t = child.textContent?.trim();
-          if (t) lines.push(t);
-        }
-      }
-    } else {
-      lines = raw.split(/<br\s*\/?>/i).map((l) => {
-        const tmp = document.createElement("div");
-        tmp.innerHTML = l;
-        return tmp.textContent || "";
-      });
-    }
-
-    lines = lines.filter((l) => l.trim().length > 0);
+    const lines = htmlToLines(editor.innerHTML);
 
     const formatted = lines.map((text, index) => {
       let t = text;
