@@ -8,9 +8,16 @@ export interface RewriteResponse {
 const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
 
 const CONTENT_MODELS = [
-  "xiaomi/mimo-v2.6-flash",
-  "xiaomi/mimo-v2.5",
-  "openai/gpt-4o-mini",
+  "thinkingmachines/inkling-2-small:free",
+  "dots-studio/dots-3-note-preview:free",
+  "particle-ai/particle-1:free",
+  "cohere/north-mini-code:free",
+  "recursive/flint-v1.0:free",
+  "inclusionai/ling-3.2-flash:free",
+  "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+  "google/gemma-4-26b-a4b-it:free",
+  "google/gemma-4-31b-it:free",
+  "liquid/lfm-3-1.7b:free",
 ];
 
 const FREE_MODEL = "openrouter/free";
@@ -342,6 +349,7 @@ async function requestCompletion(
       ],
       temperature: 1.0,
       max_tokens: tokens,
+      reasoning: { effort: "low" },
     }),
   });
 }
@@ -402,7 +410,11 @@ async function callOpenRouter({
         break;
       }
 
-      throw new Error(lastError);
+      if (response.status === 401 || response.status === 403) {
+        throw new Error(lastError);
+      }
+
+      break;
     }
   }
 

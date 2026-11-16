@@ -36,32 +36,38 @@ describe("generateContent model fallback", () => {
       },
     };
 
-    const fetchMock = vi
-      .fn()
-      .mockResolvedValueOnce(errorResponse(402, creditsError))
-      .mockResolvedValueOnce(errorResponse(402, creditsError))
-      .mockResolvedValueOnce(errorResponse(402, creditsError))
-      .mockResolvedValueOnce(
-        okResponse({
-          model: "upstage/solar-pro-3:free",
-          choices: [{ message: { content: "⚡ Nội dung\n🎁 Quà tặng" } }],
-        })
-      );
+    const fetchMock = vi.fn();
+    for (let i = 0; i < 10; i++) {
+      fetchMock.mockResolvedValueOnce(errorResponse(402, creditsError));
+    }
+    fetchMock.mockResolvedValueOnce(
+      okResponse({
+        model: "openrouter/free",
+        choices: [{ message: { content: "⚡ Nội dung\n🎁 Quà tặng" } }],
+      })
+    );
 
     vi.stubGlobal("fetch", fetchMock);
 
     const result = await generateContent(request);
 
     expect(result.content).toBe("⚡ Nội dung\n🎁 Quà tặng");
-    expect(result.model).toBe("upstage/solar-pro-3:free");
+    expect(result.model).toBe("openrouter/free");
 
     const models = fetchMock.mock.calls.map(
       ([, init]) => JSON.parse((init as RequestInit).body as string).model
     );
     expect(models).toEqual([
-      "xiaomi/mimo-v2.6-flash",
-      "xiaomi/mimo-v2.5",
-      "openai/gpt-4o-mini",
+      "thinkingmachines/inkling-2-small:free",
+      "dots-studio/dots-3-note-preview:free",
+      "particle-ai/particle-1:free",
+      "cohere/north-mini-code:free",
+      "recursive/flint-v1.0:free",
+      "inclusionai/ling-3.2-flash:free",
+      "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+      "google/gemma-4-26b-a4b-it:free",
+      "google/gemma-4-31b-it:free",
+      "liquid/lfm-3-1.7b:free",
       "openrouter/free",
     ]);
   });
@@ -76,7 +82,7 @@ describe("generateContent model fallback", () => {
       .mockResolvedValueOnce(errorResponse(402, affordableError))
       .mockResolvedValueOnce(
         okResponse({
-          model: "xiaomi/mimo-v2.6-flash",
+          model: "thinkingmachines/inkling-2-small:free",
           choices: [{ message: { content: "Nội dung" } }],
         })
       );
@@ -92,6 +98,6 @@ describe("generateContent model fallback", () => {
     );
     expect(bodies[0].max_tokens).toBe(512);
     expect(bodies[1].max_tokens).toBe(270);
-    expect(bodies[1].model).toBe("xiaomi/mimo-v2.6-flash");
+    expect(bodies[1].model).toBe("thinkingmachines/inkling-2-small:free");
   });
 });
