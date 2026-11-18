@@ -134,4 +134,73 @@ describe("generateContent model fallback", () => {
       "particle-ai/particle-1:free",
     ]);
   });
+
+  it("retries with more tokens when a reasoning model returns no content", async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        okResponse({
+          model: "dots-studio/dots-3-note-preview:free",
+          choices: [
+            {
+              finish_reason: "length",
+              message: { content: null, reasoning: "Thinking Process:\n1. Analyze" },
+            },
+          ],
+        })
+      )
+      .mockResolvedValueOnce(
+        okResponse({
+          model: "dots-studio/dots-3-note-preview:free",
+          choices: [
+            {
+              finish_reason: "stop",
+              message: { content: "💎 WiFi 500M – 27.500₩/tháng\n📞 070-4322-6887" },
+            },
+          ],
+        })
+      );
+
+    vi.stubGlobal("fetch", fetchMock);
+
+    const result = await generateContent(request);
+
+    expect(result.content).toContain("WiFi 500M");
+
+    const bodies = fetchMock.mock.calls.map(([, init]) =>
+      JSON.parse((init as RequestInit).body as string)
+    );
+    expect(bodies[0].max_tokens).toBe(512);
+    expect(bodies[1].max_tokens).toBe(1024);
+  });
+
+  it("skips to the next model when empty content persists", async () => {
+    const fetchMock = vi.fn();
+    for (let i = 0; i < 3; i++) {
+      fetchMock.mockResolvedValueOnce(
+        okResponse({
+          model: "dots-studio/dots-3-note-preview:free",
+          choices: [
+            {
+              finish_reason: "length",
+              message: { content: null, reasoning: "Still thinking" },
+            },
+          ],
+        })
+      );
+    }
+    fetchMock.mockResolvedValueOnce(
+      okResponse({
+        model: "particle-ai/particle-1:free",
+        choices: [{ message: { content: "Nội dung dự phòng" } }],
+      })
+    );
+
+    vi.stubGlobal("fetch", fetchMock);
+
+    const result = await generateContent(request);
+
+    expect(result.content).toBe("Nội dung dự phòng");
+    expect(result.model).toBe("particle-ai/particle-1:free");
+  });
 });

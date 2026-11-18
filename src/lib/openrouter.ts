@@ -23,6 +23,8 @@ const FREE_MODEL = "openrouter/free";
 
 const MIN_USABLE_TOKENS = 128;
 
+const MAX_REASONING_TOKENS = 2048;
+
 const PROMPT_HEADER = `Bạn là chuyên gia tạo nội dung tiếp thị WiFi tại Hàn Quốc cho người Việt.
 
 NHIỆM VỤ: Tạo nội dung quảng cáo WiFi theo yêu cầu.`;
@@ -312,17 +314,26 @@ interface CompletionRequest {
   title: string;
 }
 
+interface OpenRouterChoice {
+  message?: { content?: string | null; reasoning?: string | null };
+  delta?: { content?: string | null; reasoning?: string | null };
+  finish_reason?: string | null;
+}
+
 interface OpenRouterResponse {
   model: string;
-  choices?: Array<{
-    message?: { content?: string };
-    delta?: { content?: string };
-  }>;
+  choices?: OpenRouterChoice[];
   usage?: {
     prompt_tokens: number;
     completion_tokens: number;
     total_tokens: number;
   };
+}
+
+function extractContent(data: OpenRouterResponse): string {
+  const choice = data.choices?.[0];
+  if (!choice) return "";
+  return choice.message?.content ?? choice.delta?.content ?? "";
 }
 
 async function requestCompletion(
@@ -376,7 +387,29 @@ async function callOpenRouter({
       );
 
       if (response.ok) {
-        return response.json();
+        const data = (await response.json()) as OpenRouterResponse;
+
+        if (extractContent(data).trim()) {
+          return data;
+        }
+
+        const choice = data.choices?.[0];
+        lastError = `Model ${model} không trả về nội dung (finish_reason: ${
+          choice?.finish_reason ?? "unknown"
+        })`;
+
+        // Reasoning models can burn the entire token budget on hidden
+        // reasoning and return null content with finish_reason "length".
+        // Give them more room before falling back to the next model.
+        if (
+          choice?.finish_reason === "length" &&
+          tokens < MAX_REASONING_TOKENS
+        ) {
+          tokens = Math.min(tokens * 2, MAX_REASONING_TOKENS);
+          continue;
+        }
+
+        break;
       }
 
       const errorText = await response.text();
@@ -489,9 +522,7 @@ export async function generateContent(
     throw new Error("No response from OpenRouter");
   }
 
-  const content = data.choices[0].message?.content
-    ?? data.choices[0].delta?.content
-    ?? "";
+  const content = extractContent(data);
 
   if (!content) {
     throw new Error(`Model không trả về nội dung. Response: ${JSON.stringify(data).slice(0, 500)}`);
@@ -542,9 +573,7 @@ export async function rewriteText(
     throw new Error("No response from OpenRouter");
   }
 
-  const content = data.choices[0].message?.content
-    ?? data.choices[0].delta?.content
-    ?? "";
+  const content = extractContent(data);
 
   if (!content) {
     throw new Error("Model không trả về nội dung");
