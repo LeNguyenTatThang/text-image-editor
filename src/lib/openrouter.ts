@@ -25,6 +25,59 @@ const MIN_USABLE_TOKENS = 128;
 
 const MAX_REASONING_TOKENS = 2048;
 
+const VARIATION_ANGLES = [
+  "nỗi đau mạng chậm, lag khi xem phim/học online",
+  "tiết kiệm chi phí hằng tháng cho người Việt",
+  "sinh viên & người mới sang Hàn cần mạng gấp",
+  "gia đình đông người dùng chung",
+  "minh bạch giá, không phí ẩn",
+  "lắp đặt nhanh trong ngày",
+  "hỗ trợ tiếng Việt 24/7",
+  "chọn gói theo đúng nhu cầu",
+  "câu chuyện khách hàng thực tế",
+  "chuyển nhà, chuyển phòng trọ vẫn giữ mạng",
+  "chơi game / làm việc tại nhà cần mạng khỏe",
+  "quà tặng hấp dẫn khi đăng ký",
+];
+
+const HOOK_STYLES = [
+  "câu hỏi gợi nhu cầu",
+  "con số gây chú ý",
+  "lời khẳng định ngắn",
+  "câu chuyện 1 dòng",
+  "lời cảnh báo nhẹ về mạng chậm",
+  "lời mời trực tiếp",
+];
+
+const CTA_STYLES = [
+  "gọi ngay để được tư vấn",
+  "để lại số để được gọi lại",
+  "đăng ký hôm nay để lắp trong ngày",
+  "gọi để chọn đúng gói",
+];
+
+function pick<T>(items: T[]): T {
+  return items[Math.floor(Math.random() * items.length)];
+}
+
+function buildVariationInstruction(includeCta: boolean): string {
+  const lines = [
+    "",
+    "",
+    "YÊU CẦU KHÁC BIỆT CHO LẦN NÀY:",
+    `- Góc tiếp cận: ${pick(VARIATION_ANGLES)}`,
+    `- Kiểu mở bài: ${pick(HOOK_STYLES)}`,
+  ];
+  if (includeCta) {
+    lines.push(`- Kiểu kêu gọi: ${pick(CTA_STYLES)}`);
+  }
+  lines.push(
+    "- Viết lại hoàn toàn bằng câu chữ của bạn, KHÔNG sao chép nguyên văn các mẫu ở trên.",
+    "- Không lặp lại y nguyên câu mở đầu và bộ hashtag mặc định nếu có cách diễn đạt khác."
+  );
+  return lines.join("\n");
+}
+
 const PROMPT_HEADER = `Bạn là chuyên gia tạo nội dung tiếp thị WiFi tại Hàn Quốc cho người Việt.
 
 NHIỆM VỤ: Tạo nội dung quảng cáo WiFi theo yêu cầu.`;
@@ -278,6 +331,7 @@ QUY TẮC CHUNG:
 - Icon dòng 1 phải ĐỔI mỗi lần (dùng từ: 👑 🔥 💎 🚀 ⭐ 🏆 🎯 🌟 🎉 💪 📶 📱)
 - Đơn vị tiền tệ: chỉ dùng đơn vị tiền Hàn — KRW, won hoặc ₩ (ký hiệu won Hàn). KHÔNG dùng đồng Việt, ₫, VND, hay "W" đứng riêng
 - KHÔNG dùng markdown, chỉ text thuần
+- Các mẫu/phong cách ở trên chỉ là GỢI Ý CẤU TRÚC, TUYỆT ĐỐI KHÔNG sao chép nguyên văn. Mỗi lần phải viết lại bằng từ ngữ, câu mở đầu và cách diễn đạt khác nhau
 - PHẢI TẠO NỘI DUNG MỚI, KHÔNG trùng lặp
 - LUÔN LUÔN có số điện thoại: 070-4322-6887 (ở cuối hoặc gần cuối), TRỪ LOẠI 3 (FEEDBACK) – feedback KHÔNG có số điện thoại, KHÔNG giá, KHÔNG gói cước
 - Mỗi content khoảng 5 dòng (hoặc 1-2 dòng cho loại ngắn, 2 dòng cho feedback, 6 dòng cho loại SIM)
@@ -505,11 +559,14 @@ export async function generateContent(
     typeInstruction = "\n\nLOẠI NỘI DUNG: CONTENT THEO GÓI. Chọn ngẫu nhiên 1 phong cách trong 5 phong cách của LOẠI 1.";
   }
 
-  const userPrompt = hasSim
+  const baseUserPrompt = hasSim
     ? `Tạo nội dung quảng cáo SIM:\n${simText}${typeInstruction}\n\nTạo nội dung mới với icon dòng 1 và cách diễn đạt khác nhau mỗi lần.`
     : contentType === "feedback"
       ? `Viết 1 feedback thực tế cho dịch vụ WiFi:${typeInstruction}\n\nFeedback chân thật như lời kể của khách, KHÔNG đề cập giá, gói cước, số điện thoại. Mỗi lần một nội dung mới.`
       : `Tạo nội dung WiFi cho gói:\n${packageText}${typeInstruction}\n\nTạo nội dung mới với tagline và icon dòng 1 khác nhau mỗi lần.`;
+
+  const userPrompt =
+    baseUserPrompt + buildVariationInstruction(contentType !== "feedback");
 
   const data = await callOpenRouter({
     systemPrompt: buildSystemPrompt(contentType, hasSim, isSim),
